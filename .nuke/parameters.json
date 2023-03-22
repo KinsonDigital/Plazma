@@ -1,0 +1,8 @@
+{
+    "$schema": "./build.schema.json",
+    "Solution": "[TODO: add project name here].sln",
+    "RepoOwner": "KinsonDigital",
+    "RepoName": "[TODO: add project name here]",
+    "ProjectName": "[TODO: add project name here]",
+    "PreProcessReadMe": true
+}
