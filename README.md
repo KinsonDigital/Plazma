@@ -4,17 +4,17 @@
   
 </div>
 
-<h1 style="border:0;font-weight:bold" align="center">[TODO: add project name here]</h1>
+<h1 style="border:0;font-weight:bold" align="center">Partithyst</h1>
 
 <div align="center">
 
 <!-- TODO: add prev pr status check badge -->
 <!-- TODO: add prod pr status check badge -->
 
-[![Latest Nuget Release](https://img.shields.io/nuget/vpre/[TODO: add nuget package name here]?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/[TODO: add nuget package name here])
-[![Nuget Downloads](https://img.shields.io/nuget/dt/[TODO: add nuget package name here]?color=0094FF&label=nuget%20downloads&logo=nuget)](https://www.nuget.org/stats/packages/[TODO: add nuget package name here]?groupby=Version)
+[![Latest Nuget Release](https://img.shields.io/nuget/vpre/KinsonDigital.Partithyst?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/KinsonDigital.Partithyst)
+[![Nuget Downloads](https://img.shields.io/nuget/dt/KinsonDigital.Partithyst?color=0094FF&label=nuget%20downloads&logo=nuget)](https://www.nuget.org/stats/packages/KinsonDigital.Partithyst?groupby=Version)
 
-[![Good First GitHub Issues](https://img.shields.io/github/issues/kinsondigital/[TODO: add repo name here]/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/[TODO: add repo name here]/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+[![Good First GitHub Issues](https://img.shields.io/github/issues/kinsondigital/Partithyst/good%20first%20issue?color=7057ff&label=Good%20First%20Issues)](https://github.com/KinsonDigital/Partithyst/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 [![Discord](https://img.shields.io/discord/481597721199902720?color=%23575CCB&label=chat%20on%20discord&logo=discord&logoColor=white)](https://discord.gg/qewu6fNgv7)
 </div>
 
@@ -22,13 +22,14 @@
 
 This library is still under development and is not at v1.0.0 yet!!  However, all of the major features are available, so we encourage you to use the project and provide feedback.  That is what open source is all about. 🥳
 
-<h2 style="font-weight:bold;border:0" align="center">📖 About [TODO: add project name here] 📖</h2>
+<h2 style="font-weight:bold;border:0" align="center">📖 About Partithyst 📖</h2>
 
-[TODO: add about section]
+Partithyst is a 2D, cross-platform particle engine that can be used for special effects, games, or just for having fun!!
 
 <h2 style="font-weight:bold;border:0" align="center">✨ Features ✨</h2>
 
-[TODO: add feature section.  If not, remove the entire section]
+- Flexible
+- Cross-platform
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
@@ -48,7 +49,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <div align="center">
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
-[![GitHub](https://img.shields.io/github/license/kinsondigital/CASL)](https://github.com/KinsonDigital/[TODO: add repo name]/blob/release/v1.0.0/LICENSE.md)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/CASL)](https://github.com/KinsonDigital/Partithyst/blob/release/v1.0.0/LICENSE.md)
 </div>
 
 

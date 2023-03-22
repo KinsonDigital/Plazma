@@ -1,24 +1,31 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <LangVersion>11.0</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
-        <RootNamespace>[TODO: add project name here]Tests</RootNamespace>
+        <Platforms>AnyCPU</Platforms>
+        <AssemblyTitle>ParticleEngineTests</AssemblyTitle>
+        <Product>Kinson Digital - Particle Engine Tests</Product>
+        <Copyright>Copyright © 2023 Kinson Digital</Copyright>
+        <Version>1.0.0</Version>
+        <FileVersion>1.0.0</FileVersion>
+        <Company>Kinson Digital</Company>
+        <PackageId>PartithystTests</PackageId>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Remove="stylecop.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="stylecop.json" />
+    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="coverlet.msbuild" Version="3.2.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="FluentAssertions" Version="6.10.0" />
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.1">
-            <PrivateAssets>all</PrivateAssets>
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
+            </PackageReference>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
         <PackageReference Include="Moq" Version="4.18.4" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
@@ -27,22 +34,13 @@
         </PackageReference>
         <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="3.2.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\CSharpLibTemplateRepo\CSharpLibTemplateRepo.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="stylecop.json" />
-      <AdditionalFiles Include="stylecop.json" />
+      <ProjectReference Include="..\..\Partithyst\Partithyst.csproj" />
     </ItemGroup>
 
 </Project>

@@ -61,7 +61,6 @@ public void Ctor_WithNull$PARAM_1$Param_ThrowsException()
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/Description/@EntryValue">Template for creating an object creation method for unit testing</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/Field/=METHOD_005FSUFFIX/@KeyIndexDefined">False</s:Boolean>
-
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/Field/=OBJECT_005FTYPE/@KeyIndexDefined">True</s:Boolean>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/Field/=OBJECT_005FTYPE/Order/@EntryValue">0</s:Int64>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=CD4EA244FF8D2E42AF8B55F15CF641CA/Reformat/@EntryValue">True</s:Boolean>
@@ -77,4 +76,5 @@ public void Ctor_WithNull$PARAM_1$Param_ThrowsException()
 private $OBJECT_TYPE$ CreateSystemUnderTest()
     =&gt; new ($END$);</s:String>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Kinson/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Partithyst/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Usings/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
