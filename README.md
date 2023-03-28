@@ -11,6 +11,8 @@
 <!-- TODO: add prev pr status check badge -->
 <!-- TODO: add prod pr status check badge -->
 
+[![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/Velaptor?color=2F8840&label=Code%20Coverage&logo=codecov)](https://app.codecov.io/gh/KinsonDigital/Partithyst/tree/release%2Fv1.0.0)
+
 [![Latest Nuget Release](https://img.shields.io/nuget/vpre/KinsonDigital.Partithyst?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/KinsonDigital.Partithyst)
 [![Nuget Downloads](https://img.shields.io/nuget/dt/KinsonDigital.Partithyst?color=0094FF&label=nuget%20downloads&logo=nuget)](https://www.nuget.org/stats/packages/KinsonDigital.Partithyst?groupby=Version)
 
