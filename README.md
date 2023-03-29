@@ -8,8 +8,8 @@
 
 <div align="center">
 
-<!-- TODO: add prev pr status check badge -->
-<!-- TODO: add prod pr status check badge -->
+[![Prod PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Partithyst/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Partithyst/actions/workflows/prod-release-pr-status-check.yml)
+[![Prev PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Partithyst/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Partithyst/actions/workflows/prev-release-pr-status-check.yml)
 
 [![Latest Nuget Release](https://img.shields.io/nuget/vpre/KinsonDigital.Partithyst?label=Latest%20Release&logo=nuget)](https://www.nuget.org/packages/KinsonDigital.Partithyst)
 [![Nuget Downloads](https://img.shields.io/nuget/dt/KinsonDigital.Partithyst?color=0094FF&label=nuget%20downloads&logo=nuget)](https://www.nuget.org/stats/packages/KinsonDigital.Partithyst?groupby=Version)
