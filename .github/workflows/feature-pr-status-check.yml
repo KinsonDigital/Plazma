@@ -14,7 +14,6 @@ on:
 
 jobs:
   feature_pr_status_check:
-    if: startsWith(github.head_ref, 'dependabot/nuget/') == false # Do not run with dependabot branches
     name: Feature PR Status Check
     runs-on: ubuntu-latest
     steps:

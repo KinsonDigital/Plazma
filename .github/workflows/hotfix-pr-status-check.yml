@@ -14,7 +14,6 @@ on:
 
 jobs:
   hot_fix_pr_status_check:
-    if: contains(github.ref, 'refs/pull') && startsWith(github.head_ref, 'hotfix/')
     name: Hot Fix PR Status Check
     runs-on: ubuntu-latest
     steps:
