@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>11.0</LangVersion>
+        <Nullable>enable</Nullable>
+
+        <!--Update this for production and preview releases-->
+        <Version>1.0.0-preview.1</Version>
+
+        <!--Update this for production and preview releases-->
+        <FileVersion>1.0.0-preview.1</FileVersion>
+
+        <!--
+          DO NOT UPDATE THIS FOR PREVIEW RELEASES!!
+          Visual Studio does not allow the preview syntax for this tag
+          Example: v1.2.3.preview.1 is not allowed
+        -->
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <PackageId>KinsonDigital.Plazma</PackageId>
+        <Authors>Calvin Wilkinson</Authors>
+        <Company>Kinson Digital</Company>
+        <Product>Plazma</Product>
+        <Description>2D particle engine</Description>
+        <Copyright>Copyright ©2023 Kinson Digital</Copyright>
+        <PackageTags>game games engine 2D particle</PackageTags>
+<!--        <ApplicationIcon>[TODO: add logo .ico file here]</ApplicationIcon>-->
+        <PackageProjectUrl>https://github.com/KinsonDigital/Plazma</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/KinsonDigital/Plazma</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageIcon>[TODO: add logo image here]</PackageIcon>
+        <Platforms>x64</Platforms>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+
+        <!-- Ignore warning CS7035 about version syntax. -->
+        <NoWarn>CS7035</NoWarn>
+        <RootNamespace>Plazma</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="$(AssemblyName)Tests" />
+        <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="stylecop.json" />
+        <AdditionalFiles Include="stylecop.json" />
+    </ItemGroup>
+
+</Project>
