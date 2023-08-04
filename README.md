@@ -8,8 +8,8 @@
 
 <div align="center">
 
-[![Prod PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Plazma/prod-release-pr-status-check.yml?color=2F8840&label=Prod%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Plazma/actions/workflows/prod-release-pr-status-check.yml)
-[![Prev PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Plazma/prev-release-pr-status-check.yml?color=2F8840&label=Preview%20CI%20Build&logo=GitHub)](https://github.com/KinsonDigital/Plazma/actions/workflows/prev-release-pr-status-check.yml)
+[![Build PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Plazma/build-status-check.yml?label=%E2%9A%99%EF%B8%8FBuild)](https://github.com/KinsonDigital/Plazma/actions/workflows/build-status-check.yml)
+[![Test PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Plazma/test-status-check.yml?label=%F0%9F%A7%AATests)](https://github.com/KinsonDigital/Plazma/actions/workflows/test-status-check.yml)
 
 [![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/Plazma?color=2F8840&label=Code%20Coverage&logo=codecov)](https://app.codecov.io/gh/KinsonDigital/Plazma/tree/release%2Fv1.0.0)
 
@@ -43,7 +43,6 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 
 ![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-dark-mode-16x16.svg#gh-dark-mode-only)
 ![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-light-mode-16x16.svg#gh-light-mode-only)[Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)  
-
 ![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-dark-mode-16x16.svg#gh-dark-mode-only)
 ![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-light-mode-16x16.svg#gh-light-mode-only)[Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Project Management, Documentation, Tester)  
 
