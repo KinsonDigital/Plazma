@@ -1,7 +1,7 @@
 <div align="center">
-    <img align="center" src="./Documentation/Images/[TODO: add logo file name here]" height="96">
-    <br />
-  
+
+![logo](./Images/plazma-logo.svg)
+
 </div>
 
 <h1 style="border:0;font-weight:bold" align="center">Plazma</h1>
