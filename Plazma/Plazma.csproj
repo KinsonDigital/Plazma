@@ -24,11 +24,11 @@
         <Description>2D particle engine</Description>
         <Copyright>Copyright ©2023 Kinson Digital</Copyright>
         <PackageTags>game games engine 2D particle</PackageTags>
-<!--        <ApplicationIcon>[TODO: add logo .ico file here]</ApplicationIcon>-->
+        <ApplicationIcon>plazma-logo.ico</ApplicationIcon>
         <PackageProjectUrl>https://github.com/KinsonDigital/Plazma</PackageProjectUrl>
         <RepositoryUrl>https://github.com/KinsonDigital/Plazma</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <PackageIcon>[TODO: add logo image here]</PackageIcon>
+        <PackageIcon>plazma-logo.png</PackageIcon>
         <Platforms>x64</Platforms>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -48,6 +48,13 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="plazma-logo.ico" Pack="true" PackagePath="\" />
+        <None Include="..\Images\plazma-logo.png" Pack="true" PackagePath="\" />
+        <None Include="..\LICENSE.md" Pack="true" PackagePath="\" />
+        <None Include="..\README.md" Pack="true" PackagePath="\" />
     </ItemGroup>
 
     <ItemGroup>
