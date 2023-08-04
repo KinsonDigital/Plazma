@@ -40,10 +40,12 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 
 <h2 style="font-weight:bold;" align="center">🔧 Maintainers 🔧</h2>
 
-[![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)
 
+![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-dark-mode-16x16.svg#gh-dark-mode-only)
+![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-light-mode-16x16.svg#gh-light-mode-only)[Calvin Wilkinson](https://twitter.com/KDCoder) (KinsonDigital GitHub Organization - Owner)  
 
-[![twitter-logo](https://raw.githubusercontent.com/KinsonDigital/.github/master/Images/twitter-logo-16x16.svg)Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Project Management, Documentation, Tester)
+![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-dark-mode-16x16.svg#gh-dark-mode-only)
+![x-logo](https://raw.githubusercontent.com/KinsonDigital/.github/main/Images/x-logo-light-mode-16x16.svg#gh-light-mode-only)[Kristen Wilkinson](https://twitter.com/kswilky) (KinsonDigital GitHub Organization - Project Management, Documentation, Tester)  
 
 <br/>
 
@@ -52,7 +54,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 <div align="center">
 
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
-[![GitHub](https://img.shields.io/github/license/kinsondigital/CASL)](https://github.com/KinsonDigital/Plazma/blob/preview/LICENSE.md)
+[![GitHub](https://img.shields.io/github/license/kinsondigital/Plazma)](https://github.com/KinsonDigital/Plazma/blob/preview/LICENSE.md)
 </div>
 
 
