@@ -1,9 +1,9 @@
 {
     "cSpell.words": [
-        "[TODO: add project name here]",
         "Kinson",
-        "Partithyst",
+        "Plazma",
         "pwsh",
         "runsettings"
-    ]
+    ],
+    "dotnet.defaultSolution": "Plazma.sln"
 }
