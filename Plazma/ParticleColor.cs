@@ -462,7 +462,7 @@ public class ParticleColor
     public static ParticleColor MediumSpringGreen => new ParticleColor(255, 0, 250, 154);
 
     /// <summary>
-    /// Gets get the color MdeiumTurquoise.
+    /// Gets get the color MediumTurquoise.
     /// </summary>
     public static ParticleColor MediumTurquoise => new ParticleColor(255, 72, 209, 204);
 
@@ -717,7 +717,7 @@ public class ParticleColor
     public static ParticleColor Yellow => new ParticleColor(255, 255, 255, 0);
 
     /// <summary>
-    /// Gets get the color YelloGreen.
+    /// Gets get the color YellowGreen.
     /// </summary>
     public static ParticleColor YellowGreen => new ParticleColor(255, 154, 205, 50);
 
