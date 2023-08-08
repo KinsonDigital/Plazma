@@ -10,7 +10,7 @@ using System.Diagnostics.CodeAnalysis;
 /// <summary>
 /// Provides methods for randomizing numbers.
 /// </summary>
-public class PseudoRandomizerService : IRandomizerService
+public sealed class PseudoRandomizerService : IRandomizerService
 {
     private readonly Random random;
     private bool isDisposed;
@@ -52,22 +52,19 @@ public class PseudoRandomizerService : IRandomizerService
 
     /// <inheritdoc/>
     [ExcludeFromCodeCoverage]
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
+    public void Dispose() => Dispose(disposing: true);
 
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     /// <param name="disposing">True to dispose of managed resources.</param>
     [ExcludeFromCodeCoverage]
-    protected virtual void Dispose(bool disposing)
+    [SuppressMessage("ReSharper", "UnusedParameter.Local", Justification = "Not required for this implementation.")]
+    private void Dispose(bool disposing)
     {
-        if (!this.isDisposed)
+        if (this.isDisposed)
         {
-            this.isDisposed = true;
+            return;
         }
+
+        this.isDisposed = true;
     }
 }

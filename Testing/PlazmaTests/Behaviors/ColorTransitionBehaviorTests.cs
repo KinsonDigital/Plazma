@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using System;
 using Plazma;
@@ -16,7 +16,7 @@ public class ColorTransitionBehaviorTests
     public void Value_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
             StartColor = new ParticleColor(255, 62, 125, 200),
@@ -35,7 +35,7 @@ public class ColorTransitionBehaviorTests
     public void ElapsedTime_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
             StartColor = new ParticleColor(255, 62, 125, 200),
@@ -54,7 +54,7 @@ public class ColorTransitionBehaviorTests
     public void ApplyToAttribute_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
             StartColor = new ParticleColor(255, 62, 125, 200),
@@ -73,7 +73,7 @@ public class ColorTransitionBehaviorTests
     public void Enabled_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
             StartColor = new ParticleColor(255, 62, 125, 200),
@@ -111,7 +111,7 @@ public class ColorTransitionBehaviorTests
     public void Update_WhenInvoked_CorrectlySetsValueProperty(EasingFunction easingFunction, byte[] startComponents, byte[] stopComponents, int timeElapsed, string expected)
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
             StartColor = new ParticleColor(startComponents[0], startComponents[1], startComponents[2], startComponents[3]),
@@ -131,7 +131,7 @@ public class ColorTransitionBehaviorTests
     public void Reset_WhenInvoked_ProperlyResetsBehavior()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
             StartColor = new ParticleColor(255, 62, 125, 200),

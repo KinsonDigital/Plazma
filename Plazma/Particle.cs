@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-#pragma warning disable CA1303 // Do not pass literals as localized parameters
 namespace Plazma;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using Behaviors;
@@ -35,7 +35,7 @@ public class Particle
     public float Angle { get; set; }
 
     /// <summary>
-    /// Gets or sets the color that the <see cref="Texture"/> will be tinted to.
+    /// Gets or sets the color that the texture will be tinted to.
     /// </summary>
     public ParticleColor TintColor { get; set; } = ParticleColor.White;
 
@@ -72,13 +72,13 @@ public class Particle
         }
 
         // Apply the behavior values to the particle attributes
-        for (var i = 0; i < this.behaviors.Length; i++)
+        foreach (var behavior in this.behaviors)
         {
-            if (this.behaviors[i].Enabled)
+            if (behavior.Enabled)
             {
                 var value = 0f;
 
-                this.behaviors[i].Update(timeElapsed);
+                behavior.Update(timeElapsed);
                 IsAlive = true;
 
                 /*NOTE:
@@ -86,15 +86,16 @@ public class Particle
                  * point number OR if it is the special color syntax value.  This is because the color value syntax is
                  * not an actual number and cannot be parsed into a float and requires special parsing.
                  */
-                var parseSuccess = this.behaviors[i].ApplyToAttribute == ParticleAttribute.Color
-                                   || float.TryParse(string.IsNullOrEmpty(this.behaviors[i].Value) ? "0" : this.behaviors[i].Value, out value);
+                var parseSuccess = behavior.ApplyToAttribute == ParticleAttribute.Color
+                                   || float.TryParse(string.IsNullOrEmpty(behavior.Value) ? "0" : behavior.Value, out value);
 
                 if (!parseSuccess)
                 {
-                    throw new Exception($"{nameof(Particle)}.{nameof(Particle.Update)} Exception:\n\tParsing the behavior value '{this.behaviors[i].Value}' failed.\n\tValue must be a number.");
+                    // TODO: Create custom exception
+                    throw new Exception($"{nameof(Particle)}.{nameof(Update)} Exception:\n\tParsing the behavior value '{behavior.Value}' failed.\n\tValue must be a number.");
                 }
 
-                switch (this.behaviors[i].ApplyToAttribute)
+                switch (behavior.ApplyToAttribute)
                 {
                     case ParticleAttribute.X:
                         Position = new PointF(value, Position.Y);
@@ -110,13 +111,12 @@ public class Particle
                         break;
                     case ParticleAttribute.Color:
                         // Create the color
-                        var (clrParseSuccess, componentValue, parseFailReason) = TryParse(this.behaviors[i].Value, out var result);
+                        var (clrParseSuccess, _, parseFailReason) = TryParse(behavior.Value, out var result);
 
                         if (!clrParseSuccess)
                         {
-                            var exceptionLocation = $"Particle.Update Exception: {parseFailReason}";
-
-                            throw new Exception($"{exceptionLocation}");
+                            // TODO: Create custom exception
+                            throw new Exception($"Particle.Update Exception: {parseFailReason}");
                         }
 
                         TintColor = result;
@@ -143,12 +143,9 @@ public class Particle
     /// </summary>
     public void Reset()
     {
-        if (!(this.behaviors is null))
+        foreach (var behavior in this.behaviors)
         {
-            for (var i = 0; i < this.behaviors.Length; i++)
-            {
-                this.behaviors[i].Reset();
-            }
+            behavior.Reset();
         }
 
         Size = 1;
@@ -164,15 +161,15 @@ public class Particle
     /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        if (!(obj is Particle particle))
+        if (obj is not Particle particle)
         {
             return false;
         }
 
         return Position == particle.Position &&
-               Angle == particle.Angle &&
+               Math.Abs(Angle - particle.Angle) < 0.0000f &&
                TintColor == particle.TintColor &&
-               Size == particle.Size &&
+               Math.Abs(Size - particle.Size) < 0.0000f &&
                IsAlive == particle.IsAlive &&
                IsDead == particle.IsDead;
     }
@@ -188,7 +185,9 @@ public class Particle
     /// Parses the <paramref name="colorValue"/> string into a <see cref="ParticleColor"/> type.
     /// </summary>
     /// <param name="colorValue">The color string to parse.</param>
+    /// <param name="color">The parsed color.</param>
     /// <returns>True if the parse was successful.</returns>
+    [SuppressMessage("ReSharper", "UnusedTupleComponentInReturnValue", Justification = "Part of the public API.")]
     private static (bool success, string componentValue, string parseFailReason) TryParse(string colorValue, out ParticleColor color)
     {
         color = new ParticleColor(0, 0, 0, 0);

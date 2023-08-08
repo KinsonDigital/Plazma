@@ -1,4 +1,4 @@
-﻿// <copyright file="ISerilizerService.cs" company="KinsonDigital">
+﻿// <copyright file="ISerializerService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,7 +8,7 @@ namespace Plazma.Services;
 /// Serializes and deserializes and object of type <typeparamref name="T"/>.
 /// </summary>
 /// <typeparam name="T">The type of object to serialize.</typeparam>
-public interface ISerializerService<T>
+public interface ISerializerService<in T>
 {
     /// <summary>
     /// Serializes the given <paramref name="obj"/> at the given <paramref name="filePath"/>.

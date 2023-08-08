@@ -17,7 +17,7 @@ public static class Version
     /// <returns>The version string.</returns>
     public static string GetVersion()
     {
-        var versionInfo = Assembly.GetExecutingAssembly()?.GetName().Version;
+        var versionInfo = Assembly.GetExecutingAssembly().GetName().Version;
 
         return versionInfo is null ? "error: version unknown" : $"Particle Engine: v{versionInfo.Major}.{versionInfo.Minor}.{versionInfo.Build}";
     }

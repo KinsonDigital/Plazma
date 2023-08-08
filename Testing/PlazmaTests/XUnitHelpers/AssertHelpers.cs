@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.XUnitHelpers;
+namespace PlazmaTests.XUnitHelpers;
 
 using System;
 using System.Diagnostics.CodeAnalysis;
@@ -14,6 +14,7 @@ using Xunit;
 [ExcludeFromCodeCoverage]
 public static class AssertHelpers
 {
+    // TODO: This can be removed once all code is converted to fluent assertions
     /// <summary>
     /// Verifies that the exact exception is thrown (and not a derived exception type) and that
     /// the exception message matches the given <paramref name="expectedMessage"/>.

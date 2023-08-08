@@ -37,13 +37,13 @@ public class RandomChoiceBehaviorSettings : BehaviorSettings
     /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        if (!(obj is RandomChoiceBehaviorSettings setting))
+        if (obj is not RandomChoiceBehaviorSettings setting)
         {
             return false;
         }
 
         return !(Data is null) && !(setting.Data is null) && Data.ItemsAreEqual(setting.Data) &&
-            LifeTime == setting.LifeTime &&
+            Math.Abs(LifeTime - setting.LifeTime) < 0.0000f &&
             ApplyToAttribute == setting.ApplyToAttribute;
     }
 

@@ -72,7 +72,8 @@ public class ParticleEngine<TTexture> : IDisposable
     /// </summary>
     /// <param name="effect">The particle effect for the pool to use.</param>
     /// <param name="behaviorFactory">The factory used for creating behaviors.</param>
-    public void CreatePool(ParticleEffect effect, IBehaviorFactory behaviorFactory) => this.particlePools.Add(new ParticlePool<TTexture>(behaviorFactory, this.textureLoader, effect, this.randomizer));
+    public void CreatePool(ParticleEffect effect, IBehaviorFactory behaviorFactory) =>
+        this.particlePools.Add(new ParticlePool<TTexture>(behaviorFactory, this.textureLoader, effect, this.randomizer));
 
     /// <summary>
     /// Clears all of the current existing pools.
@@ -131,9 +132,7 @@ public class ParticleEngine<TTexture> : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     /// <param name="disposing">True to dispose of managed resources.</param>
     protected virtual void Dispose(bool disposing)
     {

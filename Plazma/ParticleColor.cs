@@ -747,19 +747,19 @@ public class ParticleColor
     /// <param name="clrA">The left operand.</param>
     /// <param name="clrB">The right operand.</param>
     /// <returns>True if both operands are equal.</returns>
-    public static bool operator ==(ParticleColor clrA, ParticleColor clrB)
+    public static bool operator ==(ParticleColor? clrA, ParticleColor? clrB)
     {
         if (clrA is null && clrB is null)
         {
             return true;
         }
 
-        if ((clrA is null && !(clrB is null)) || (!(clrA is null) && clrB is null))
+        if ((clrA is null && clrB is not null) || (clrA is not null && clrB is null))
         {
             return false;
         }
 
-        if (!(clrA is null) && !(clrB is null))
+        if (clrA is not null && clrB is not null)
         {
             return clrA.Equals(clrB);
         }

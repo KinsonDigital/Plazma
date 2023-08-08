@@ -2,10 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
+using Fakes;
 using Plazma;
-using KDParticleEngineTests.Fakes;
 using Xunit;
 
 public class BehaviorSettingsTests
@@ -30,11 +30,11 @@ public class BehaviorSettingsTests
     public void Equals_WhenInvokedWithSameObjectType_ReturnsTrue(ParticleAttribute attribute, bool expected)
     {
         // Arrange
-        var settingsA = new FakeBehaviorSettings()
+        var settingsA = new FakeBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
         };
-        var settingsB = new FakeBehaviorSettings()
+        var settingsB = new FakeBehaviorSettings
         {
             ApplyToAttribute = attribute,
         };

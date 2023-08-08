@@ -2,16 +2,16 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
 using System.Drawing;
 using System.Globalization;
 using Plazma;
 using Plazma.Behaviors;
-using KDParticleEngineTests.XUnitHelpers;
 using Moq;
 using Xunit;
+using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="Particle"/> class.
@@ -443,6 +443,7 @@ public class ParticleTests
     [Fact]
     public void Equals_WithEqualObjects_ReturnsTrue()
     {
+        // TODO: Convert to fluent assertions
         // Arrange
         var particleA = new Particle(It.IsAny<IBehavior[]>());
         var particleB = new Particle(It.IsAny<IBehavior[]>());
@@ -458,7 +459,7 @@ public class ParticleTests
     public void GetHashCode_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var behaviors = new IBehavior[]
+        var behaviors = new[]
         {
             this.mockBehavior.Object,
         };

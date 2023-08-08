@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using System;
 using System.Collections.ObjectModel;
@@ -55,7 +55,7 @@ public class RandomColorBehaviorTests
         var mockRandomizerService = new Mock<IRandomizerService>();
         mockRandomizerService.Setup(m => m.GetValue(0, 1)).Returns(1);
 
-        var settings = new RandomChoiceBehaviorSettings()
+        var settings = new RandomChoiceBehaviorSettings
         {
             Data = new ReadOnlyCollection<string>(new[] { "clr:255,255,0,0", "clr:255,0,255,0" }),
         };

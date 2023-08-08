@@ -2,17 +2,18 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using Fakes;
 using Plazma;
 using Plazma.Behaviors;
-using KDParticleEngineTests.Fakes;
-using KDParticleEngineTests.XUnitHelpers;
 using Moq;
 using Xunit;
+using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="ExtensionMethods"/> class.
@@ -90,15 +91,14 @@ public class ExtensionMethodsTests
     }
 
     [Fact]
+    [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull", Justification = "Array is meant to be null.")]
     public void Count_WhenInvokingListVersionWithNullItems_ReturnsCorrectResult()
     {
         // Arrange
-        var mockBehavior = new Mock<IBehavior>();
-
         List<Particle> particles = null;
 
         // Act
-        var actual = particles.Count(p => true);
+        var actual = particles.Count(_ => true);
 
         // Assert
         Assert.Equal(0, actual);
@@ -108,8 +108,6 @@ public class ExtensionMethodsTests
     public void Count_WhenInvokingListVersionWithNullPredicate_ThrowsException()
     {
         // Arrange
-        var mockBehavior = new Mock<IBehavior>();
-
         var particles = new List<Particle>();
 
         // Act & Assert
@@ -129,7 +127,7 @@ public class ExtensionMethodsTests
 
         for (var i = 0; i < 20; i++)
         {
-            particles.Add(new Particle(new IBehavior[] { mockBehavior.Object }) { IsAlive = i > 10 });
+            particles.Add(new Particle(new[] { mockBehavior.Object }) { IsAlive = i > 10 });
         }
 
         // Act
@@ -140,26 +138,24 @@ public class ExtensionMethodsTests
     }
 
     [Fact]
+    [SuppressMessage("ReSharper", "ExpressionIsAlwaysNull", Justification = "Array is meant to be null.")]
     public void Count_WhenInvokingArrayVersionWithNullItems_ReturnsCorrectResult()
     {
         // Arrange
-        var mockBehavior = new Mock<IBehavior>();
-
         Particle[] particles = null;
 
         // Act
-        var actual = particles.Count(p => true);
+        var actual = particles.Count(_ => true);
 
         // Assert
         Assert.Equal(0, actual);
     }
 
     [Fact]
+    [SuppressMessage("ReSharper", "AssignNullToNotNullAttribute", Justification = "Null parameter is intended.")]
     public void Count_WhenInvokingArrayVersionWithNullPredicate_ThrowsException()
     {
         // Arrange
-        var mockBehavior = new Mock<IBehavior>();
-
         var particles = Array.Empty<Particle>();
 
         // Act & Assert
@@ -175,15 +171,13 @@ public class ExtensionMethodsTests
         // Arrange
         var mockBehavior = new Mock<IBehavior>();
 
-        Particle[] particles;
-
         var tempList = new List<Particle>();
         for (var i = 0; i < 20; i++)
         {
-            tempList.Add(new Particle(new IBehavior[] { mockBehavior.Object }) { IsAlive = i > 10 });
+            tempList.Add(new Particle(new[] { mockBehavior.Object }) { IsAlive = i > 10 });
         }
 
-        particles = tempList.ToArray();
+        var particles = tempList.ToArray();
 
         // Act
         var actual = particles.Count(p => p.IsAlive);
@@ -197,22 +191,22 @@ public class ExtensionMethodsTests
     [InlineData("-123", false)]
     [InlineData("12T3", true)]
     [InlineData(null, false)]
-    public void ContainsNonNumberCharacters_WhenInvoked_ReturnsCorrectResult(string valueToCheck, bool exepcted)
+    public void ContainsNonNumberCharacters_WhenInvoked_ReturnsCorrectResult(string valueToCheck, bool expected)
     {
         // Act
         var actual = valueToCheck.ContainsNonNumberCharacters();
 
         // Assert
-        Assert.Equal(exepcted, actual);
+        Assert.Equal(expected, actual);
     }
 
     [Theory]
     [InlineData(null, null, true)]
-    [InlineData(null, new string[] { "item" }, false)]
-    [InlineData(new string[] { "item" }, null, false)]
-    [InlineData(new string[] { "item" }, new string[] { "item", "item" }, false)]
-    [InlineData(new string[] { "item" }, new string[] { "item" }, true)]
-    [InlineData(new string[] { "item" }, new string[] { "other-item" }, false)]
+    [InlineData(null, new[] { "item" }, false)]
+    [InlineData(new[] { "item" }, null, false)]
+    [InlineData(new[] { "item" }, new[] { "item", "item" }, false)]
+    [InlineData(new[] { "item" }, new[] { "item" }, true)]
+    [InlineData(new[] { "item" }, new[] { "other-item" }, false)]
     public void ItemsAreEqual_WhenInvoked_ReturnsCorrectResult(string[] listA, string[] listB, bool expected)
     {
         // Act
@@ -228,12 +222,12 @@ public class ExtensionMethodsTests
         // Arrange
         var itemsA = new[]
         {
-            new TestItem() { Number = 10 },
+            new TestItem { Number = 10 },
         };
 
         var itemsB = new[]
         {
-            new TestItem() { Number = 10 },
+            new TestItem { Number = 10 },
         };
 
         // Act
@@ -249,12 +243,12 @@ public class ExtensionMethodsTests
         // Arrange
         var itemsA = new[]
         {
-            new TestItem() { Number = 10 },
+            new TestItem { Number = 10 },
         };
 
         var itemsB = new[]
         {
-            new TestItem() { Number = 20 },
+            new TestItem { Number = 20 },
         };
 
         // Act

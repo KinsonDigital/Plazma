@@ -2,11 +2,11 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Services;
+namespace PlazmaTests.Services;
 
 using Plazma.Services;
-using KDParticleEngineTests.XUnitHelpers;
 using Xunit;
+using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="PseudoRandomizerService"/> class.

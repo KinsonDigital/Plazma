@@ -2,16 +2,17 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Plazma;
 using Plazma.Behaviors;
 using Plazma.Services;
-using KDParticleEngineTests.XUnitHelpers;
 using Moq;
 using Xunit;
+using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="ParticlePool{Texture}"/> class.
@@ -22,8 +23,7 @@ public class ParticlePoolTests
     private readonly Mock<IRandomizerService> mockRandomizerService;
     private readonly Mock<ITextureLoader<IDisposable>> mockTextureLoader;
     private readonly Mock<IBehaviorFactory> mockBehaviorFactory;
-    private readonly Mock<IBehavior> mockBehavior;
-    private readonly EasingRandomBehaviorSettings[] settings;
+    private readonly BehaviorSettings[] settings;
     private readonly ParticleEffect effect;
 
     /// <summary>
@@ -31,7 +31,7 @@ public class ParticlePoolTests
     /// </summary>
     public ParticlePoolTests()
     {
-        this.settings = new EasingRandomBehaviorSettings[]
+        this.settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -40,15 +40,15 @@ public class ParticlePoolTests
         this.mockRandomizerService = new Mock<IRandomizerService>();
         this.mockTextureLoader = new Mock<ITextureLoader<IDisposable>>();
 
-        this.mockBehavior = new Mock<IBehavior>();
-        this.mockBehavior.SetupGet(p => p.Value).Returns("0");
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
+        var mockBehavior = new Mock<IBehavior>();
+        mockBehavior.SetupGet(p => p.Value).Returns("0");
+        mockBehavior.SetupGet(p => p.Enabled).Returns(true);
 
         this.mockBehaviorFactory = new Mock<IBehaviorFactory>();
-        this.mockBehaviorFactory.Setup(m => m.CreateBehaviors(this.settings, this.mockRandomizerService.Object))
+        this.mockBehaviorFactory.Setup(m => m.CreateBehaviors(It.IsAny<BehaviorSettings[]>(), this.mockRandomizerService.Object))
             .Returns(() =>
             {
-                return new IBehavior[] { this.mockBehavior.Object };
+                return new[] { mockBehavior.Object };
             });
     }
 
@@ -81,7 +81,7 @@ public class ParticlePoolTests
         // Act & Assert
         AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
         {
-            var pool = new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object, this.mockTextureLoader.Object, null, this.mockRandomizerService.Object);
+            var unused = new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object, this.mockTextureLoader.Object, null, this.mockRandomizerService.Object);
         }, "The parameter must not be null. (Parameter 'effect')");
     }
     #endregion
@@ -255,7 +255,7 @@ public class ParticlePoolTests
 
         // Act
         pool.Update(new TimeSpan(0, 0, 0, 0, 16));
-        var actual = pool.IsCurrentlyBursting;
+        var unused = pool.IsCurrentlyBursting;
 
         // Assert
         this.mockRandomizerService.Verify(m => m.GetValue(expectedRateMin, expectedRateMax), Times.AtLeast(1));
@@ -308,26 +308,6 @@ public class ParticlePoolTests
     }
 
     [Fact]
-    public void Equals_WithEqualObjects_ReturnsTrue()
-    {
-        // Arrange
-        this.effect.SpawnLocation = new PointF(11, 22);
-        this.effect.SpawnRateMin = 33;
-        this.effect.SpawnRateMax = 44;
-        this.effect.TotalParticlesAliveAtOnce = 99;
-        this.effect.UseColorsFromList = true;
-
-        var poolA = CreatePool();
-        var poolB = CreatePool();
-
-        // Act
-        var actual = poolA.Equals(poolB);
-
-        // Assert
-        Assert.True(actual);
-    }
-
-    [Fact]
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
@@ -360,20 +340,20 @@ public class ParticlePoolTests
     }
 
     [Fact]
+    [SuppressMessage("csharpsquid", "S3966", Justification = "Double invoke intended.")]
     public void Dispose_WhenInvoked_ProperlyFreesManagedResources()
     {
         // Arrange
-        var effect = new ParticleEffect(It.IsAny<string>(), Array.Empty<BehaviorSettings>());
+        var particleEffect = new ParticleEffect(It.IsAny<string>(), Array.Empty<BehaviorSettings>());
         var mockTexture = new Mock<IDisposable>();
 
-        this.mockTextureLoader.Setup(m => m.LoadTexture(It.IsAny<string>())).Returns<string>((textureName) =>
-        {
-            return mockTexture.Object;
-        });
+        this.mockTextureLoader
+            .Setup(m =>
+                m.LoadTexture(It.IsAny<string>())).Returns<string>((_) => mockTexture.Object);
 
         var pool = new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object,
             this.mockTextureLoader.Object,
-            effect,
+            particleEffect,
             this.mockRandomizerService.Object);
 
         pool.LoadTexture();

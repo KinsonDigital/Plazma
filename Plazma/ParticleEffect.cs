@@ -34,13 +34,8 @@ public class ParticleEffect
     /// <param name="settings">The settings used to setup the particle effect.</param>
     public ParticleEffect(string particleTextureName, BehaviorSettings[] settings)
     {
-        if (settings is null)
-        {
-            throw new ArgumentNullException(nameof(settings), "Parameter must not be null.");
-        }
-
+        this.behaviorSettings = settings ?? throw new ArgumentNullException(nameof(settings), "Parameter must not be null.");
         ParticleTextureName = particleTextureName;
-        this.behaviorSettings = settings;
     }
 
     /// <summary>
@@ -131,7 +126,7 @@ public class ParticleEffect
     /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        if (!(obj is ParticleEffect effect))
+        if (obj is not ParticleEffect effect)
         {
             return false;
         }

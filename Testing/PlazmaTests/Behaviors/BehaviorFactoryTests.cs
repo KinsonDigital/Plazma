@@ -2,14 +2,14 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using System;
 using Plazma.Behaviors;
 using Plazma.Services;
-using KDParticleEngineTests.XUnitHelpers;
 using Moq;
 using Xunit;
+using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="BehaviorFactory"/> class.

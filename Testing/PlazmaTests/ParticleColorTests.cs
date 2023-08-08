@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
 using System.Drawing;
@@ -33,7 +33,6 @@ public class ParticleColorTests
             Assert.True(expected.G == actual.G, $"Clr Name: {prop} | Expected: {expected.G} | Actual: {actual.G}");
             Assert.True(expected.B == actual.B, $"Clr Name: {prop} | Expected: {expected.B} | Actual: {actual.B}");
         }
-
     }
     #endregion
 
@@ -200,8 +199,8 @@ public class ParticleColorTests
     /// </returns>
     private static ParticleColor GetColorPropValue(string name)
     {
-        var foundProp = typeof(ParticleColor).GetProperties(BindingFlags.Public | BindingFlags.Static)
-            .Where(p => p.PropertyType == typeof(ParticleColor) && p.Name == name).FirstOrDefault();
+        var foundProp = typeof(ParticleColor)
+            .GetProperties(BindingFlags.Public | BindingFlags.Static).FirstOrDefault(p => p.PropertyType == typeof(ParticleColor) && p.Name == name);
 
         return foundProp.GetValue(null, null) as ParticleColor;
     }

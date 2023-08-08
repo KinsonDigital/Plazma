@@ -1,27 +1,27 @@
-﻿// <copyright file="PlazmaTests.cs" company="KinsonDigital">
+﻿// <copyright file="ParticleEngineTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 #pragma warning disable CA1724 // The type name conflicts in whole or in part with the namespace name
 #pragma warning disable CA1031 // Do not catch general exception types
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Plazma;
 using Plazma.Behaviors;
 using Plazma.Services;
-using KDParticleEngineTests.XUnitHelpers;
 using Moq;
 using Xunit;
+using XUnitHelpers;
 
 /// <summary>
-/// Tests the <see cref="ParticleEngine"/> class.
+/// Tests the <see cref="ParticleEngine{TTexture}"/> class.
 /// </summary>
 public class ParticleEngineTests : IDisposable
 {
     private readonly Mock<ITextureLoader<IDisposable>> mockTextureLoader;
     private readonly Mock<IBehaviorFactory> mockBehaviorFactory;
-    private readonly Mock<IDisposable> fakeTexture;
     private Mock<IRandomizerService> mockRandomizerService;
     private ParticleEngine<IDisposable> engine;
 
@@ -32,26 +32,14 @@ public class ParticleEngineTests : IDisposable
     {
         this.mockRandomizerService = new Mock<IRandomizerService>();
 
-        this.fakeTexture = new Mock<IDisposable>();
+        var fakeTexture = new Mock<IDisposable>();
         this.mockTextureLoader = new Mock<ITextureLoader<IDisposable>>();
-        this.mockTextureLoader.Setup(m => m.LoadTexture(It.IsAny<string>())).Returns(this.fakeTexture.Object);
+        this.mockTextureLoader.Setup(m => m.LoadTexture(It.IsAny<string>())).Returns(fakeTexture.Object);
 
         this.mockBehaviorFactory = new Mock<IBehaviorFactory>();
 
         this.engine = new ParticleEngine<IDisposable>(this.mockTextureLoader.Object, this.mockRandomizerService.Object);
     }
-
-    #region Constructor Tests
-    [Fact]
-    public void Ctor_WhenInvokedWithNullFactory_ThrowsException()
-    {
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            var pool = new ParticlePool<IDisposable>(null, null, null, null);
-        }, "The parameter must not be null. (Parameter 'behaviorFactory')");
-    }
-    #endregion
 
     #region Prop Tests
     [Fact]
@@ -68,7 +56,7 @@ public class ParticleEngineTests : IDisposable
     public void ParticlePools_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -89,7 +77,7 @@ public class ParticleEngineTests : IDisposable
     public void TexturesLoaded_WhenGettingValueAfterTexturesAreLoaded_ReturnsTrue()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -114,45 +102,47 @@ public class ParticleEngineTests : IDisposable
         var mockPool2Texture = new Mock<IDisposable>();
         var textureALoaded = false;
 
-        this.mockTextureLoader.Setup(m => m.LoadTexture(It.IsAny<string>())).Returns<string>((textureName) =>
-        {
-            // Load the correct texture depending on the pool.
-            // All pools use the same instance of texture loader so we have
-            // to mock out the correct texture to go with the correct pool,
-            // so we can verify that each pool is disposing of there textures
-            if (textureALoaded)
-            {
-                return mockPool2Texture.Object;
-            }
-            else
-            {
-                textureALoaded = true;
-                return mockPool1Texture.Object;
-            }
-        });
+        this.mockTextureLoader
+            .Setup(m =>
+                m.LoadTexture(It.IsAny<string>())).Returns<string>((_) =>
+                {
+                    // Load the correct texture depending on the pool.
+                    // All pools use the same instance of texture loader so we have
+                    // to mock out the correct texture to go with the correct pool,
+                    // so we can verify that each pool is disposing of there textures
+                    if (textureALoaded)
+                    {
+                        return mockPool2Texture.Object;
+                    }
+                    else
+                    {
+                        textureALoaded = true;
+                        return mockPool1Texture.Object;
+                    }
+                });
 
         var effect = new ParticleEffect(It.IsAny<string>(), Array.Empty<BehaviorSettings>());
-        var engine = new ParticleEngine<IDisposable>(this.mockTextureLoader.Object, this.mockRandomizerService.Object);
+        var sut = new ParticleEngine<IDisposable>(this.mockTextureLoader.Object, this.mockRandomizerService.Object);
 
         // Create 2 pools
-        engine.CreatePool(effect, this.mockBehaviorFactory.Object);
-        engine.CreatePool(effect, this.mockBehaviorFactory.Object);
-        engine.LoadTextures();
+        sut.CreatePool(effect, this.mockBehaviorFactory.Object);
+        sut.CreatePool(effect, this.mockBehaviorFactory.Object);
+        sut.LoadTextures();
 
         // Act
-        engine.ClearPools();
+        sut.ClearPools();
 
         // Assert
         mockPool1Texture.Verify(m => m.Dispose(), Times.Once());
         mockPool2Texture.Verify(m => m.Dispose(), Times.Once());
-        Assert.Empty(engine.ParticlePools);
+        Assert.Empty(sut.ParticlePools);
     }
 
     [Fact]
     public void LoadTextures_WhenInvoked_LoadsParticlePoolTextures()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -162,7 +152,7 @@ public class ParticleEngineTests : IDisposable
         this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
 
         // Act
-        var actual = this.engine.ParticlePools;
+        var unused = this.engine.ParticlePools;
 
         // Assert
         this.mockTextureLoader.Verify(m => m.LoadTexture("texture-name"), Times.Once());
@@ -185,7 +175,7 @@ public class ParticleEngineTests : IDisposable
     public void Update_WhenDisabled_DoesNotUpdateParticles()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -193,7 +183,7 @@ public class ParticleEngineTests : IDisposable
         var mockBehavior = new Mock<IBehavior>();
 
         this.mockBehaviorFactory.Setup(m => m.CreateBehaviors(settings, this.mockRandomizerService.Object))
-            .Returns(new IBehavior[] { mockBehavior.Object });
+            .Returns(new[] { mockBehavior.Object });
         this.engine.Enabled = false;
         this.engine.CreatePool(effect, this.mockBehaviorFactory.Object);
         this.engine.LoadTextures();
@@ -209,7 +199,7 @@ public class ParticleEngineTests : IDisposable
     public void Update_WhenEnabled_UpdatesAllParticles()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -222,8 +212,8 @@ public class ParticleEngineTests : IDisposable
         mockBehavior.SetupGet(p => p.Value).Returns("0");
 
         this.mockRandomizerService.Setup(m => m.GetValue(It.IsAny<int>(), It.IsAny<int>())).Returns(16);
-        this.mockBehaviorFactory.Setup(m => m.CreateBehaviors(settings, this.mockRandomizerService.Object))
-            .Returns(new IBehavior[] { mockBehavior.Object });
+        this.mockBehaviorFactory.Setup(m => m.CreateBehaviors(It.IsAny<BehaviorSettings[]>(), this.mockRandomizerService.Object))
+            .Returns(new[] { mockBehavior.Object });
 
         this.engine.CreatePool(effect, this.mockBehaviorFactory.Object);
         this.engine.LoadTextures();
@@ -237,6 +227,7 @@ public class ParticleEngineTests : IDisposable
     }
 
     [Fact]
+    [SuppressMessage("csharpsquid", "S3966", Justification = "Double invoke intended.")]
     public void Dispose_WhenInvoked_DisposesOfManagedResources()
     {
         // Arrange
@@ -244,34 +235,37 @@ public class ParticleEngineTests : IDisposable
         var mockPool2Texture = new Mock<IDisposable>();
         var textureALoaded = false;
 
-        this.mockTextureLoader.Setup(m => m.LoadTexture(It.IsAny<string>())).Returns<string>((textureName) =>
-        {
-            // Load the correct texture depending on the pool.
-            // All pools use the same instance of texture loader so we have
-            // to mock out the correct texture to go with the correct pool,
-            // so we can verify that each pool is disposing of there textures
-            if (textureALoaded)
-            {
-                return mockPool2Texture.Object;
-            }
-            else
-            {
-                textureALoaded = true;
-                return mockPool1Texture.Object;
-            }
-        });
+        this.mockTextureLoader
+            .Setup(m =>
+                m.LoadTexture(It.IsAny<string>())).Returns<string>((_) =>
+                {
+                    // Load the correct texture depending on the pool.
+                    // All pools use the same instance of texture loader so we have
+                    // to mock out the correct texture to go with the correct pool,
+                    // so we can verify that each pool is disposing of there textures
+                    if (textureALoaded)
+                    {
+                        return mockPool2Texture.Object;
+                    }
+                    else
+                    {
+                        textureALoaded = true;
+                        return mockPool1Texture.Object;
+                    }
+                });
 
         var effect = new ParticleEffect(It.IsAny<string>(), Array.Empty<BehaviorSettings>());
-        var engine = new ParticleEngine<IDisposable>(this.mockTextureLoader.Object, this.mockRandomizerService.Object);
+        var sut = new ParticleEngine<IDisposable>(this.mockTextureLoader.Object, this.mockRandomizerService.Object);
 
         // Create 2 pools
-        engine.CreatePool(effect, this.mockBehaviorFactory.Object);
-        engine.CreatePool(effect, this.mockBehaviorFactory.Object);
-        engine.LoadTextures();
+        sut.CreatePool(effect, this.mockBehaviorFactory.Object);
+        sut.CreatePool(effect, this.mockBehaviorFactory.Object);
+        sut.LoadTextures();
 
         // Act
-        engine.Dispose();
-        engine.Dispose();
+        sut.Dispose();
+
+        sut.Dispose();
 
         // Assert
         mockPool1Texture.Verify(m => m.Dispose(), Times.Once());
@@ -286,28 +280,5 @@ public class ParticleEngineTests : IDisposable
         this.engine.Dispose();
         this.engine = null;
         GC.SuppressFinalize(this);
-    }
-
-    /// <summary>
-    /// Asserts if an action does not throw a null reference exception.
-    /// </summary>
-    /// <param name="action">The action to catch the exception against.</param>
-    private static void DoesNotThrowNullReference(Action action)
-    {
-        try
-        {
-            action();
-        }
-        catch (Exception ex)
-        {
-            if (ex.GetType() == typeof(NullReferenceException))
-            {
-                Assert.True(false, $"Expected not to raise a {nameof(NullReferenceException)} exception.");
-            }
-            else
-            {
-                Assert.True(true);
-            }
-        }
     }
 }

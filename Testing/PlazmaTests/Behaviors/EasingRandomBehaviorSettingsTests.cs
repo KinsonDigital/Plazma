@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using Plazma;
 using Plazma.Behaviors;
@@ -118,7 +118,7 @@ public class EasingRandomBehaviorSettingsTests
     public void Equals_WithDifferentObjectTypes_ReturnsFalse()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings()
+        var setting = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -141,7 +141,7 @@ public class EasingRandomBehaviorSettingsTests
     public void Equals_WithEqualObjects_ReturnsTrue()
     {
         // Arrange
-        var settingA = new EasingRandomBehaviorSettings()
+        var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -152,7 +152,7 @@ public class EasingRandomBehaviorSettingsTests
             TotalTimeMax = 60,
         };
 
-        var settingB = new EasingRandomBehaviorSettings()
+        var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -174,7 +174,7 @@ public class EasingRandomBehaviorSettingsTests
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
-        var settingA = new EasingRandomBehaviorSettings()
+        var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.BlueColorComponent,
             ChangeMin = 100,
@@ -185,7 +185,7 @@ public class EasingRandomBehaviorSettingsTests
             TotalTimeMax = 600,
         };
 
-        var settingB = new EasingRandomBehaviorSettings()
+        var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -207,7 +207,7 @@ public class EasingRandomBehaviorSettingsTests
     public void GetHashCode_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var settingA = new EasingRandomBehaviorSettings()
+        var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -218,7 +218,7 @@ public class EasingRandomBehaviorSettingsTests
             TotalTimeMax = 60,
         };
 
-        var settingB = new EasingRandomBehaviorSettings()
+        var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,

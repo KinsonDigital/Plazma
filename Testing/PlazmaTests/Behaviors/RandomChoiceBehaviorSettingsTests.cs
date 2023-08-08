@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -18,7 +18,7 @@ public class RandomChoiceBehaviorSettingsTests
     /// unit test for testing the <see cref="RandomChoiceBehaviorSettings.Equals(object?)"/> method.
     /// </summary>
     public static List<object[]> EqualsTestData =>
-        new List<object[]>()
+        new List<object[]>
         {
             //           lifeTime           attribute                           data                                  expected
             new object[] { 123,     ParticleAttribute.Angle,    new ReadOnlyCollection<string>(new[] { "item-1" }),     true },
@@ -80,13 +80,13 @@ public class RandomChoiceBehaviorSettingsTests
         bool expected)
     {
         // Arrange
-        var settingsA = new RandomChoiceBehaviorSettings()
+        var settingsA = new RandomChoiceBehaviorSettings
         {
             LifeTime = 123,
             ApplyToAttribute = ParticleAttribute.Angle,
             Data = new ReadOnlyCollection<string>(new[] { "item-1" }),
         };
-        var settingsB = new RandomChoiceBehaviorSettings()
+        var settingsB = new RandomChoiceBehaviorSettings
         {
             LifeTime = lifeTime,
             ApplyToAttribute = attribute,

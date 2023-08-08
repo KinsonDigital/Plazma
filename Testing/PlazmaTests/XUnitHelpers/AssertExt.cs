@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.XUnitHelpers;
+namespace PlazmaTests.XUnitHelpers;
 
 using Xunit;
 

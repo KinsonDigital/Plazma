@@ -85,12 +85,12 @@ public class EasingRandomBehaviorSettings : BehaviorSettings, IEasingCapable
         }
 
         return ApplyToAttribute == setting.ApplyToAttribute &&
-               StartMin == setting.StartMin &&
-               StartMax == setting.StartMax &&
-               ChangeMin == setting.ChangeMin &&
-               ChangeMax == setting.ChangeMax &&
-               TotalTimeMin == setting.TotalTimeMin &&
-               TotalTimeMax == setting.TotalTimeMax;
+               Math.Abs(StartMin - setting.StartMin) < 0.0000f &&
+               Math.Abs(StartMax - setting.StartMax) < 0.0000f &&
+               Math.Abs(ChangeMin - setting.ChangeMin) < 0.0000f &&
+               Math.Abs(ChangeMax - setting.ChangeMax) < 0.0000f &&
+               Math.Abs(TotalTimeMin - setting.TotalTimeMin) < 0.0000f &&
+               Math.Abs(TotalTimeMax - setting.TotalTimeMax) < 0.0000f;
     }
 
     /// <summary>

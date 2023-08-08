@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
 using System.Drawing;
@@ -31,9 +31,9 @@ public class ParticleEffectTests
     public void Ctor_WhenInvoked_SetsBehaviorSettings()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -131,9 +131,9 @@ public class ParticleEffectTests
     public void Equals_WithDifferentObjects_ReturnsFalse()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -166,9 +166,9 @@ public class ParticleEffectTests
     public void Equals_WithEqualObjects_ReturnsTrue()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -209,9 +209,9 @@ public class ParticleEffectTests
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -252,9 +252,9 @@ public class ParticleEffectTests
     public void Equals_WithDifferentTintColorTotals_ReturnsFalse()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,

@@ -4,7 +4,7 @@
 
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 #pragma warning disable CA1062 // Validate arguments of public methods
-namespace KDParticleEngineTests.Fakes;
+namespace PlazmaTests.Fakes;
 
 using System;
 using System.Collections.Generic;

@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using System;
 using Plazma;
@@ -28,7 +28,7 @@ public class EasingRandomBehaviorTests : IDisposable
     public void Ctor_WhenInvoked_SetsSetting()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings()
+        var setting = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
         };
@@ -86,7 +86,7 @@ public class EasingRandomBehaviorTests : IDisposable
         this.mockRandomizerService.Setup(m => m.GetValue(22f, 22f)).Returns(change);
         this.mockRandomizerService.Setup(m => m.GetValue(33f, 33f)).Returns(lifeTime);
 
-        var settings = new EasingRandomBehaviorSettings()
+        var settings = new EasingRandomBehaviorSettings
         {
             EasingFunctionType = easingFunction,
             StartMin = 11,
