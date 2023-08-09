@@ -4,6 +4,8 @@
 
 namespace Plazma.Behaviors;
 
+using System.Drawing;
+
 /// <summary>
 /// Transitions from one color to another over a specific amount of time
 /// using an easing function.
@@ -28,12 +30,12 @@ public class ColorTransitionBehaviorSettings : BehaviorSettings, IEasingCapable
     /// <summary>
     /// Gets or sets the color that the transition will start from.
     /// </summary>
-    public ParticleColor StartColor { get; set; } = new ParticleColor(255, 255, 255, 255);
+    public Color StartColor { get; set; } = Color.White;
 
     /// <summary>
     /// Gets or sets the desired color to transition to.
     /// </summary>
-    public ParticleColor StopColor { get; set; } = new ParticleColor(255, 255, 255, 255);
+    public Color StopColor { get; set; } = Color.White;
 
     /// <summary>
     /// Gets or sets the amount of time the behavior will run.

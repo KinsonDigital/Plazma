@@ -5,6 +5,7 @@
 namespace Plazma;
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
@@ -37,7 +38,7 @@ public class Particle
     /// <summary>
     /// Gets or sets the color that the texture will be tinted to.
     /// </summary>
-    public ParticleColor TintColor { get; set; } = ParticleColor.White;
+    public Color TintColor { get; set; } = Color.White;
 
     /// <summary>
     /// Gets or sets the size of the <see cref="Particle"/>.
@@ -121,18 +122,21 @@ public class Particle
 
                         TintColor = result;
                         break;
+                    case ParticleAttribute.AlphaColorComponent:
+                        TintColor = Color.FromArgb(ClampClrValue(value), TintColor.R, TintColor.G, TintColor.B);
+                        break;
                     case ParticleAttribute.RedColorComponent:
-                        TintColor.R = ClampClrValue(value);
+                        TintColor = Color.FromArgb(TintColor.A, ClampClrValue(value), TintColor.G, TintColor.B);
                         break;
                     case ParticleAttribute.GreenColorComponent:
-                        TintColor.G = ClampClrValue(value);
+                        TintColor = Color.FromArgb(TintColor.A, TintColor.R, ClampClrValue(value), TintColor.B);
                         break;
                     case ParticleAttribute.BlueColorComponent:
-                        TintColor.B = ClampClrValue(value);
+                        TintColor = Color.FromArgb(TintColor.A, TintColor.R, TintColor.G, ClampClrValue(value));
                         break;
-                    case ParticleAttribute.AlphaColorComponent:
-                        TintColor.A = ClampClrValue(value);
-                        break;
+                    default:
+                        const string exceptionMsg = $"The '{nameof(ParticleAttribute)}' enum value is invalid.";
+                        throw new InvalidEnumArgumentException(exceptionMsg, (int)behavior.ApplyToAttribute, typeof(ParticleAttribute));
                 }
             }
         }
@@ -150,7 +154,7 @@ public class Particle
 
         Size = 1;
         Angle = 0;
-        TintColor = ParticleColor.White;
+        TintColor = Color.White;
         IsAlive = true;
     }
 
@@ -188,9 +192,9 @@ public class Particle
     /// <param name="color">The parsed color.</param>
     /// <returns>True if the parse was successful.</returns>
     [SuppressMessage("ReSharper", "UnusedTupleComponentInReturnValue", Justification = "Part of the public API.")]
-    private static (bool success, string componentValue, string parseFailReason) TryParse(string colorValue, out ParticleColor color)
+    private static (bool success, string componentValue, string parseFailReason) TryParse(string colorValue, out Color color)
     {
-        color = new ParticleColor(0, 0, 0, 0);
+        color = Color.FromArgb(0, 0, 0, 0);
 
         /*Parse the string data into color components to create a color from
          * Example Data: clr:10,20,30,40
@@ -275,7 +279,7 @@ public class Particle
         }
 
         // Create the color
-        color = new ParticleColor(alpha, red, green, blue);
+        color = Color.FromArgb(alpha, red, green, blue);
 
         return (true, string.Empty, string.Empty);
     }

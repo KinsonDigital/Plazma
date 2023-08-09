@@ -25,11 +25,6 @@ public class TestItem : IEquatable<TestItem>
 
     public override bool Equals(object? obj)
     {
-        if (!(obj is TestItem item))
-        {
-            return false;
-        }
-
-        return Equals(item);
+        return obj is TestItem item && Equals(item);
     }
 }

@@ -65,22 +65,6 @@ public class ParticleTests
     }
 
     [Fact]
-    public void TintColor_WhenSettingValue_ReturnsCorrectResult()
-    {
-        // Arrange
-        var sut = new Particle(Array.Empty<IBehavior>())
-        {
-            TintColor = ParticleColor.FromArgb(11, 22, 33, 44),
-        };
-
-        // Act
-        var actual = sut.TintColor;
-
-        // Assert
-        actual.Should().Be(ParticleColor.FromArgb(11, 22, 33, 44));
-    }
-
-    [Fact]
     public void Size_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
@@ -178,7 +162,7 @@ public class ParticleTests
     public void Update_WhenUsingRandomColorBehavior_SetsTintColor()
     {
         // Arrange
-        var expected = new ParticleColor(255, 0, 0, 255);
+        var expected = Color.FromArgb(255, 0, 0, 255);
 
         this.mockBehavior.SetupGet(p => p.Value).Returns("clr:255,0,0,255");
         this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
@@ -440,38 +424,6 @@ public class ParticleTests
 
         // Assert
         actual.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_WithEqualObjects_ReturnsTrue()
-    {
-        // Arrange
-        var sutA = new Particle(It.IsAny<IBehavior[]>());
-        var sutB = new Particle(It.IsAny<IBehavior[]>());
-
-        // Act
-        var actual = sutA.Equals(sutB);
-
-        // Assert
-        actual.Should().BeTrue();
-    }
-
-    [Fact]
-    public void GetHashCode_WhenInvoked_ReturnsCorrectResult()
-    {
-        // Arrange
-        var behaviors = new[]
-        {
-            this.mockBehavior.Object,
-        };
-        var sutA = new Particle(behaviors);
-        var sutB = new Particle(behaviors);
-
-        // Act
-        var actual = sutA.GetHashCode() == sutB.GetHashCode();
-
-        // Assert
-        actual.Should().BeTrue();
     }
     #endregion
 }

@@ -5,6 +5,7 @@
 namespace PlazmaTests.Behaviors;
 
 using System;
+using System.Drawing;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
@@ -20,8 +21,8 @@ public class ColorTransitionBehaviorTests
         var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -39,8 +40,8 @@ public class ColorTransitionBehaviorTests
         var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -58,8 +59,8 @@ public class ColorTransitionBehaviorTests
         var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -77,8 +78,8 @@ public class ColorTransitionBehaviorTests
         var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -115,8 +116,8 @@ public class ColorTransitionBehaviorTests
         var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(startComponents[0], startComponents[1], startComponents[2], startComponents[3]),
-            StopColor = new ParticleColor(stopComponents[0], stopComponents[1], stopComponents[2], stopComponents[3]),
+            StartColor = Color.FromArgb(startComponents[0], startComponents[1], startComponents[2], startComponents[3]),
+            StopColor = Color.FromArgb(stopComponents[0], stopComponents[1], stopComponents[2], stopComponents[3]),
             EasingFunctionType = easingFunction,
         };
         var behavior = new ColorTransitionBehavior(settings);
@@ -135,8 +136,8 @@ public class ColorTransitionBehaviorTests
         var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 

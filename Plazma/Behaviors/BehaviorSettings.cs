@@ -24,7 +24,7 @@ public abstract class BehaviorSettings
     /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
     public override bool Equals(object? obj)
     {
-        if (!(obj is BehaviorSettings setting))
+        if (obj is not BehaviorSettings setting)
         {
             return false;
         }
