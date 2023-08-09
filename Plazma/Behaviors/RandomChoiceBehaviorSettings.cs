@@ -4,9 +4,7 @@
 
 namespace Plazma.Behaviors;
 
-using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// Various settings for behaviors that choose values randomly from a list of choices.
@@ -29,28 +27,4 @@ public class RandomChoiceBehaviorSettings : BehaviorSettings
     /// Gets or sets the amount of time that the behavior should be enabled.
     /// </summary>
     public double LifeTime { get; set; }
-
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
-    public override bool Equals(object? obj)
-    {
-        if (obj is not RandomChoiceBehaviorSettings setting)
-        {
-            return false;
-        }
-
-        return !(Data is null) && !(setting.Data is null) && Data.ItemsAreEqual(setting.Data) &&
-            Math.Abs(LifeTime - setting.LifeTime) < 0.0000f &&
-            ApplyToAttribute == setting.ApplyToAttribute;
-    }
-
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    [ExcludeFromCodeCoverage]
-    public override int GetHashCode() => HashCode.Combine(Data);
 }

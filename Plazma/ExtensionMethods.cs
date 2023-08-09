@@ -7,6 +7,7 @@ namespace Plazma;
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 
@@ -80,6 +81,7 @@ public static class ExtensionMethods
     /// <param name="items">The list of items to count based on the predicate.</param>
     /// <param name="predicate">The predicate that when returns true, counts the item.</param>
     /// <returns>The number of items that match the predicate..</returns>
+    [SuppressMessage("csharpsquid", "S3267", Justification = "Not needed.")]
     public static int Count<T>(this List<T>? items, Predicate<T> predicate)
     {
         if (items is null)
@@ -94,7 +96,6 @@ public static class ExtensionMethods
 
         var result = 0;
 
-        // ReSharper disable once ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
         foreach (var t in items)
         {
             if (predicate(t))
@@ -113,6 +114,7 @@ public static class ExtensionMethods
     /// <param name="items">The list of items to count based on the predicate.</param>
     /// <param name="predicate">The predicate that when returns true, counts the item.</param>
     /// <returns>The number of items that match the predicate..</returns>
+    [SuppressMessage("csharpsquid", "S3267", Justification = "Not needed.")]
     public static int Count<T>(this T[]? items, Predicate<T> predicate)
     {
         if (items is null)
@@ -127,7 +129,6 @@ public static class ExtensionMethods
 
         var result = 0;
 
-        // ReSharper disable once LoopCanBeConvertedToQuery
         foreach (var t in items)
         {
             if (predicate(t))
