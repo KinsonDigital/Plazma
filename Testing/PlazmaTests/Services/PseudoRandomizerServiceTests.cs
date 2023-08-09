@@ -16,7 +16,6 @@ using Xunit;
 public class PseudoRandomizerServiceTests
 {
     #region Method Tests
-
     [Theory]
     [InlineData(1, 2)]
     [InlineData(1, 4)]

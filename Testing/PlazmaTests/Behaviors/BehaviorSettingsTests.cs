@@ -7,8 +7,12 @@ namespace PlazmaTests.Behaviors;
 using Fakes;
 using FluentAssertions;
 using Plazma;
+using Plazma.Behaviors;
 using Xunit;
 
+/// <summary>
+/// Tests the <see cref="BehaviorSettings"/> class.
+/// </summary>
 public class BehaviorSettingsTests
 {
     #region Method Tests

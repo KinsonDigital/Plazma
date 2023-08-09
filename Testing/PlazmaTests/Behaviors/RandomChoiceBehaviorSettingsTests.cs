@@ -10,6 +10,9 @@ using FluentAssertions;
 using Plazma.Behaviors;
 using Xunit;
 
+/// <summary>
+/// Tests the <see cref="RandomChoiceBehaviorSettings"/> class.
+/// </summary>
 public class RandomChoiceBehaviorSettingsTests
 {
     #region Prop Tests

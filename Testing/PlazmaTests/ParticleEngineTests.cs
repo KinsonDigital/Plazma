@@ -2,8 +2,6 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-#pragma warning disable CA1724 // The type name conflicts in whole or in part with the namespace name
-#pragma warning disable CA1031 // Do not catch general exception types
 namespace PlazmaTests;
 
 using System;
@@ -18,12 +16,12 @@ using Xunit;
 /// <summary>
 /// Tests the <see cref="ParticleEngine{TTexture}"/> class.
 /// </summary>
-public class ParticleEngineTests : IDisposable
+public class ParticleEngineTests
 {
     private readonly Mock<ITextureLoader<IDisposable>> mockTextureLoader;
     private readonly Mock<IBehaviorFactory> mockBehaviorFactory;
-    private Mock<IRandomizerService> mockRandomizerService;
-    private ParticleEngine<IDisposable> engine;
+    private readonly Mock<IRandomizerService> mockRandomizerService;
+    private readonly ParticleEngine<IDisposable> engine;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEngineTests"/> class.
@@ -42,7 +40,6 @@ public class ParticleEngineTests : IDisposable
     }
 
     #region Prop Tests
-
     [Fact]
     public void Enabled_WhenSettingValue_ReturnsCorrectResult()
     {
@@ -86,11 +83,9 @@ public class ParticleEngineTests : IDisposable
         // Assert
         actual.Should().BeTrue();
     }
-
     #endregion
 
     #region Method Tests
-
     [Fact]
     public void ClearPools_WhenInvoked_DisposesOfManagedResources()
     {
@@ -254,15 +249,5 @@ public class ParticleEngineTests : IDisposable
         mockPool1Texture.Verify(m => m.Dispose(), Times.Once());
         mockPool2Texture.Verify(m => m.Dispose(), Times.Once());
     }
-
     #endregion
-
-    /// <inheritdoc/>
-    public void Dispose()
-    {
-        this.mockRandomizerService = null;
-        this.engine.Dispose();
-        this.engine = null;
-        GC.SuppressFinalize(this);
-    }
 }
