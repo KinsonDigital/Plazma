@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable AssignNullToNotNullAttribute
 namespace PlazmaTests;
 
 using System;
@@ -9,11 +10,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Fakes;
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Moq;
 using Xunit;
-using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="ExtensionMethods"/> class.
@@ -25,13 +26,14 @@ public class ExtensionMethodsTests
     public void Next_WhenInvokedWithNullRandomParam_ThrowsException()
     {
         // Arrange
-        Random random = null;
+        Random? random = null;
 
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            random.Next(It.IsAny<float>(), It.IsAny<float>());
-        }, "The parameter must not be null. (Parameter 'random')");
+        // Act
+        var act = () => random.Next(It.IsAny<float>(), It.IsAny<float>());
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'random')");
     }
 
     [Fact]
@@ -39,14 +41,14 @@ public class ExtensionMethodsTests
     {
         // Arrange
         var random = new Random();
-        var expected = true;
+        const bool expected = true;
 
         // Act
         var randomNum = random.Next(50f, 100f);
-        var actual = randomNum >= 50f && randomNum <= 100f;
+        var actual = randomNum is >= 50f and <= 100f;
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Fact]
@@ -54,13 +56,13 @@ public class ExtensionMethodsTests
     {
         // Arrange
         var random = new Random();
-        var expected = 98f;
+        const float expected = 98f;
 
         // Act
         var actual = random.Next(124f, 98f);
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Fact]
@@ -74,7 +76,7 @@ public class ExtensionMethodsTests
         var result = pointA.Add(pointB);
 
         // Assert
-        Assert.Equal(new PointF(15f, 23f), result);
+        result.Should().Be(new PointF(15f, 23f));
     }
 
     [Fact]
@@ -87,7 +89,7 @@ public class ExtensionMethodsTests
         var result = point.Mult(2);
 
         // Assert
-        Assert.Equal(new PointF(20f, 40f), result);
+        result.Should().Be(new PointF(20f, 40f));
     }
 
     [Fact]
@@ -95,13 +97,13 @@ public class ExtensionMethodsTests
     public void Count_WhenInvokingListVersionWithNullItems_ReturnsCorrectResult()
     {
         // Arrange
-        List<Particle> particles = null;
+        List<Particle>? particles = null;
 
         // Act
         var actual = particles.Count(_ => true);
 
         // Assert
-        Assert.Equal(0, actual);
+        actual.Should().Be(0);
     }
 
     [Fact]
@@ -110,11 +112,12 @@ public class ExtensionMethodsTests
         // Arrange
         var particles = new List<Particle>();
 
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            particles.Count(null);
-        }, "The parameter must not be null. (Parameter 'predicate')");
+        // Act
+        var act = () => particles.Count(null);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'predicate')");
     }
 
     [Fact]
@@ -134,7 +137,7 @@ public class ExtensionMethodsTests
         var actual = particles.Count(p => p.IsAlive);
 
         // Assert
-        Assert.Equal(9, actual);
+        actual.Should().Be(9);
     }
 
     [Fact]
@@ -142,13 +145,13 @@ public class ExtensionMethodsTests
     public void Count_WhenInvokingArrayVersionWithNullItems_ReturnsCorrectResult()
     {
         // Arrange
-        Particle[] particles = null;
+        Particle[]? particles = null;
 
         // Act
         var actual = particles.Count(_ => true);
 
         // Assert
-        Assert.Equal(0, actual);
+        actual.Should().Be(0);
     }
 
     [Fact]
@@ -158,11 +161,12 @@ public class ExtensionMethodsTests
         // Arrange
         var particles = Array.Empty<Particle>();
 
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            particles.Count(null);
-        }, "The parameter must not be null. (Parameter 'predicate')");
+        // Act
+        var act = () => particles.Count(null);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'predicate')");
     }
 
     [Fact]
@@ -183,7 +187,7 @@ public class ExtensionMethodsTests
         var actual = particles.Count(p => p.IsAlive);
 
         // Assert
-        Assert.Equal(9, actual);
+        actual.Should().Be(9);
     }
 
     [Theory]
@@ -197,7 +201,7 @@ public class ExtensionMethodsTests
         var actual = valueToCheck.ContainsNonNumberCharacters();
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Theory]
@@ -213,7 +217,7 @@ public class ExtensionMethodsTests
         var actual = listA.ItemsAreEqual(listB);
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Fact]
@@ -234,7 +238,7 @@ public class ExtensionMethodsTests
         var actual = itemsA.ItemsAreEqual(itemsB);
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
 
     [Fact]
@@ -255,7 +259,7 @@ public class ExtensionMethodsTests
         var actual = itemsA.ItemsAreEqual(itemsB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
     #endregion
 }

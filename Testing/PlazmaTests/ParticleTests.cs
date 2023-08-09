@@ -7,11 +7,11 @@ namespace PlazmaTests;
 using System;
 using System.Drawing;
 using System.Globalization;
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Moq;
 using Xunit;
-using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="Particle"/> class.
@@ -36,90 +36,90 @@ public class ParticleTests
     public void Position_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var particle = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle(Array.Empty<IBehavior>())
         {
             Position = new PointF(11, 22),
         };
 
         // Act
-        var actual = particle.Position;
+        var actual = sut.Position;
 
         // Assert
-        Assert.Equal(new PointF(11, 22), actual);
+        actual.Should().Be(new PointF(11, 22));
     }
 
     [Fact]
     public void Angle_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var particle = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle(Array.Empty<IBehavior>())
         {
             Angle = 1234f,
         };
 
         // Act
-        var actual = particle.Angle;
+        var actual = sut.Angle;
 
         // Assert
-        Assert.Equal(1234f, actual);
+        actual.Should().Be(1234f);
     }
 
     [Fact]
     public void TintColor_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var particle = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle(Array.Empty<IBehavior>())
         {
             TintColor = ParticleColor.FromArgb(11, 22, 33, 44),
         };
 
         // Act
-        var actual = particle.TintColor;
+        var actual = sut.TintColor;
 
         // Assert
-        Assert.Equal(ParticleColor.FromArgb(11, 22, 33, 44), actual);
+        actual.Should().Be(ParticleColor.FromArgb(11, 22, 33, 44));
     }
 
     [Fact]
     public void Size_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var particle = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle(Array.Empty<IBehavior>())
         {
             Size = 1019f,
         };
 
         // Act
-        var actual = particle.Size;
+        var actual = sut.Size;
 
         // Assert
-        Assert.Equal(1019f, actual);
+        actual.Should().Be(1019f);
     }
 
     [Fact]
     public void IsAlive_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var particle = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle(Array.Empty<IBehavior>())
         {
             IsAlive = true,
         };
 
         // Assert
-        Assert.True(particle.IsAlive);
+        sut.IsAlive.Should().BeTrue();
     }
 
     [Fact]
     public void IsDead_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var particle = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle(Array.Empty<IBehavior>())
         {
             IsDead = false,
         };
 
         // Assert
-        Assert.False(particle.IsDead);
+        sut.IsDead.Should().BeFalse();
     }
     #endregion
 
@@ -130,13 +130,14 @@ public class ParticleTests
         // Arrange
         this.mockBehavior.SetupGet(p => p.Value).Returns("12z3");
         this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<Exception>(() =>
-        {
-            particle.Update(this.frameTime);
-        }, $"Particle.Update Exception:\n\tParsing the behavior value '12z3' failed.\n\tValue must be a number.");
+        // Act
+        var act = () => sut.Update(this.frameTime);
+
+        // Assert
+        act.Should().Throw<Exception>()
+            .WithMessage($"Particle.Update Exception:\n\tParsing the behavior value '12z3' failed.\n\tValue must be a number.");
     }
 
     [Theory]
@@ -163,13 +164,14 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(attribute);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<Exception>(() =>
-        {
-            particle.Update(this.frameTime);
-        }, expectedMessage);
+        // Act
+        var act = () => sut.Update(this.frameTime);
+
+        // Assert
+        act.Should().Throw<Exception>()
+            .WithMessage(expectedMessage);
     }
 
     [Fact]
@@ -182,13 +184,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Color);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal(expected, particle.TintColor);
+        sut.TintColor.Should().Be(expected);
     }
 
     [Fact]
@@ -197,10 +199,10 @@ public class ParticleTests
         // Arrange
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.Enabled).Returns(false);
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
         this.mockBehavior.Verify(m => m.Update(It.IsAny<TimeSpan>()), Times.Never);
@@ -212,10 +214,10 @@ public class ParticleTests
         // Arrange
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
         this.mockBehavior.Verify(m => m.Update(It.IsAny<TimeSpan>()), Times.Once());
@@ -228,13 +230,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.X);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.Position.X.ToString(CultureInfo.InvariantCulture));
+        sut.Position.X.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
@@ -244,13 +246,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Y);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.Position.Y.ToString(CultureInfo.InvariantCulture));
+        sut.Position.Y.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
@@ -260,13 +262,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Angle);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.Angle.ToString(CultureInfo.InvariantCulture));
+        sut.Angle.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
@@ -276,13 +278,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Size);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.Size.ToString(CultureInfo.InvariantCulture));
+        sut.Size.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
@@ -292,13 +294,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.RedColorComponent);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.TintColor.R.ToString(CultureInfo.InvariantCulture));
+        sut.TintColor.R.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
@@ -308,13 +310,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.GreenColorComponent);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.TintColor.G.ToString(CultureInfo.InvariantCulture));
+        sut.TintColor.G.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
@@ -324,13 +326,13 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.BlueColorComponent);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.TintColor.B.ToString(CultureInfo.InvariantCulture));
+        sut.TintColor.B.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
@@ -340,23 +342,23 @@ public class ParticleTests
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.AlphaColorComponent);
 
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
+        sut.Update(this.frameTime);
 
         // Assert
-        Assert.Equal("123", particle.TintColor.A.ToString(CultureInfo.InvariantCulture));
+        sut.TintColor.A.ToString(CultureInfo.InvariantCulture).Should().Be("123");
     }
 
     [Fact]
     public void Reset_WhenInvoked_ResetsAllBehaviors()
     {
         // Arrange
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Reset();
+        sut.Reset();
 
         // Assert
         this.mockBehavior.Verify(m => m.Reset(), Times.Once());
@@ -368,14 +370,14 @@ public class ParticleTests
         // Arrange
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Angle);
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
-        particle.Reset();
+        sut.Update(this.frameTime);
+        sut.Reset();
 
         // Assert
-        Assert.Equal(0, particle.Angle);
+        sut.Angle.Should().Be(0);
     }
 
     [Fact]
@@ -384,14 +386,14 @@ public class ParticleTests
         // Arrange
         this.mockBehavior.SetupGet(p => p.Value).Returns("123");
         this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.RedColorComponent);
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(this.frameTime);
-        particle.Reset();
+        sut.Update(this.frameTime);
+        sut.Reset();
 
         // Assert
-        Assert.Equal(255, particle.TintColor.R);
+        sut.TintColor.R.Should().Be(255);
     }
 
     [Fact]
@@ -399,60 +401,59 @@ public class ParticleTests
     {
         // Arrange
         this.mockBehavior.SetupGet(p => p.Enabled).Returns(false);
-        var particle = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { this.mockBehavior.Object });
 
         // Act
-        particle.Update(new TimeSpan(0, 0, 0, 10, 0));
-        particle.Reset();
+        sut.Update(new TimeSpan(0, 0, 0, 10, 0));
+        sut.Reset();
 
         // Assert
-        Assert.True(particle.IsAlive);
+        sut.IsAlive.Should().BeTrue();
     }
 
     [Fact]
     public void Equals_WithDifferentObjects_ReturnsFalse()
     {
         // Arrange
-        var particle = new Particle(It.IsAny<IBehavior[]>());
+        var sut = new Particle(It.IsAny<IBehavior[]>());
         var obj = new object();
 
         // Act
-        var actual = particle.Equals(obj);
+        var actual = sut.Equals(obj);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
-        var particleA = new Particle(It.IsAny<IBehavior[]>())
+        var sutA = new Particle(It.IsAny<IBehavior[]>())
         {
             Size = 123f,
         };
-        var particleB = new Particle(It.IsAny<IBehavior[]>());
+        var sutB = new Particle(It.IsAny<IBehavior[]>());
 
         // Act
-        var actual = particleA.Equals(particleB);
+        var actual = sutA.Equals(sutB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
     public void Equals_WithEqualObjects_ReturnsTrue()
     {
-        // TODO: Convert to fluent assertions
         // Arrange
-        var particleA = new Particle(It.IsAny<IBehavior[]>());
-        var particleB = new Particle(It.IsAny<IBehavior[]>());
+        var sutA = new Particle(It.IsAny<IBehavior[]>());
+        var sutB = new Particle(It.IsAny<IBehavior[]>());
 
         // Act
-        var actual = particleA.Equals(particleB);
+        var actual = sutA.Equals(sutB);
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
 
     [Fact]
@@ -463,14 +464,14 @@ public class ParticleTests
         {
             this.mockBehavior.Object,
         };
-        var particleA = new Particle(behaviors);
-        var particleB = new Particle(behaviors);
+        var sutA = new Particle(behaviors);
+        var sutB = new Particle(behaviors);
 
         // Act
-        var actual = particleA.GetHashCode() == particleB.GetHashCode();
+        var actual = sutA.GetHashCode() == sutB.GetHashCode();
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
     #endregion
 }

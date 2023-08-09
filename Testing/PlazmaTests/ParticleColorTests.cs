@@ -8,6 +8,8 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+using FluentAssertions;
+using FluentAssertions.Execution;
 using Plazma;
 using Xunit;
 
@@ -28,10 +30,10 @@ public class ParticleColorTests
             var expected = Color.FromName(prop);
             var actual = GetColorPropValue(prop);
 
-            Assert.True(expected.A == actual.A, $"Clr Name: {prop} | Expected: {expected.A} | Actual: {actual.A}");
-            Assert.True(expected.R == actual.R, $"Clr Name: {prop} | Expected: {expected.R} | Actual: {actual.R}");
-            Assert.True(expected.G == actual.G, $"Clr Name: {prop} | Expected: {expected.G} | Actual: {actual.G}");
-            Assert.True(expected.B == actual.B, $"Clr Name: {prop} | Expected: {expected.B} | Actual: {actual.B}");
+            actual.A.Should().Be(expected.A, $"Clr Name: {prop} | Expected: {expected.A} | Actual: {actual.A}");
+            actual.R.Should().Be(expected.R, $"Clr Name: {prop} | Expected: {expected.R} | Actual: {actual.R}");
+            actual.G.Should().Be(expected.G, $"Clr Name: {prop} | Expected: {expected.G} | Actual: {actual.G}");
+            actual.B.Should().Be(expected.B, $"Clr Name: {prop} | Expected: {expected.B} | Actual: {actual.B}");
         }
     }
     #endregion
@@ -47,7 +49,7 @@ public class ParticleColorTests
         var actual = color.GetBrightness();
 
         // Assert
-        Assert.Equal(27.843138f, actual);
+        actual.Should().Be(27.843138f);
     }
 
     [Theory]
@@ -64,7 +66,7 @@ public class ParticleColorTests
         var actual = color.GetHue();
 
         // Assert
-        Assert.Equal(result, actual);
+        actual.Should().Be(result);
     }
 
     [Fact]
@@ -77,7 +79,7 @@ public class ParticleColorTests
         var actual = color.GetSaturation();
 
         // Assert
-        Assert.Equal(66.19718, Math.Round(actual, 5));
+        Math.Round(actual, 5).Should().Be(66.19718);
     }
 
     [Theory]
@@ -93,7 +95,7 @@ public class ParticleColorTests
         var actual = colorA == colorB;
 
         // Assert
-        Assert.Equal(expectedResult, actual);
+        actual.Should().Be(expectedResult);
     }
 
     [Theory]
@@ -109,7 +111,7 @@ public class ParticleColorTests
         var actual = colorA != colorB;
 
         // Assert
-        Assert.Equal(expectedResult, actual);
+        actual.Should().Be(expectedResult);
     }
 
     [Fact]
@@ -123,7 +125,7 @@ public class ParticleColorTests
         var actual = color.Equals(otherObj);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
@@ -137,7 +139,7 @@ public class ParticleColorTests
         var actual = clrA.Equals(clrB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
@@ -151,7 +153,7 @@ public class ParticleColorTests
         var actual = clrA.Equals(clrB);
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
 
     [Fact]
@@ -165,7 +167,7 @@ public class ParticleColorTests
         var actual = colorA.GetHashCode() == colorB.GetHashCode();
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
 
     [Fact]
@@ -178,7 +180,7 @@ public class ParticleColorTests
         var actual = color.ToString();
 
         // Assert
-        Assert.Equal("A = 10, R = 20, G = 30, B = 40", actual);
+        actual.Should().Be("A = 10, R = 20, G = 30, B = 40");
     }
     #endregion
 
@@ -199,9 +201,21 @@ public class ParticleColorTests
     /// </returns>
     private static ParticleColor GetColorPropValue(string name)
     {
-        var foundProp = typeof(ParticleColor)
-            .GetProperties(BindingFlags.Public | BindingFlags.Static).FirstOrDefault(p => p.PropertyType == typeof(ParticleColor) && p.Name == name);
+        var props = typeof(ParticleColor)
+            .GetProperties(BindingFlags.Public | BindingFlags.Static);
 
-        return foundProp.GetValue(null, null) as ParticleColor;
+        var foundProp = Array.Find(props, p => p.PropertyType == typeof(ParticleColor) && p.Name == name);
+
+        if (foundProp is null)
+        {
+            throw new AssertionFailedException($"Could not find the property '{name}'.");
+        }
+
+        if (foundProp.GetValue(null, null) is not ParticleColor value)
+        {
+            throw new AssertionFailedException("The value of the property is null.");
+        }
+
+        return value;
     }
 }

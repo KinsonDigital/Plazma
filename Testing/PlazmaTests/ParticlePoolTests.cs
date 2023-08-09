@@ -7,12 +7,12 @@ namespace PlazmaTests;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Plazma.Services;
 using Moq;
 using Xunit;
-using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="ParticlePool{Texture}"/> class.
@@ -60,7 +60,7 @@ public class ParticlePoolTests
         var pool = CreatePool();
 
         // Assert
-        Assert.Equal(this.effect, pool.Effect);
+        pool.Effect.Should().Be(this.effect);
     }
 
     [Fact]
@@ -72,17 +72,18 @@ public class ParticlePoolTests
         var pool = CreatePool();
 
         // Assert
-        Assert.Equal(10, pool.Particles.Count);
+        pool.Particles.Count.Should().Be(10);
     }
 
     [Fact]
     public void Ctor_WithNullParticleEffect_ThrowsException()
     {
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            var unused = new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object, this.mockTextureLoader.Object, null, this.mockRandomizerService.Object);
-        }, "The parameter must not be null. (Parameter 'effect')");
+        // Act
+        var act = () => new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object, this.mockTextureLoader.Object, null, this.mockRandomizerService.Object);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'effect')");
     }
     #endregion
 
@@ -98,7 +99,7 @@ public class ParticlePoolTests
         var actual = pool.TotalLivingParticles;
 
         // Assert
-        Assert.Equal(1, actual);
+        actual.Should().Be(1);
     }
 
     [Fact]
@@ -113,7 +114,7 @@ public class ParticlePoolTests
         var actual = pool.TotalDeadParticles;
 
         // Assert
-        Assert.Equal(9, actual);
+        actual.Should().Be(9);
     }
 
     [Fact]
@@ -152,8 +153,11 @@ public class ParticlePoolTests
         var totalLivingWithSpawnRateDisabled = pool.TotalLivingParticles;
 
         // Assert
-        Assert.True(totalLivingWithSpawnRateDisabled > totalLivingWithSpawnRateEnabled,
-            $"Total living particles when spawn rate is disabled, is not greater then when spawn rate is enabled.\nTotal Living With Spawn Rate Enabled: {totalLivingWithSpawnRateEnabled}\nTotal Living With Spawn Rate Disabled: {totalLivingWithSpawnRateDisabled}");
+        var becauseMsg = "Total living particles when spawn rate is disabled, is not greater then when spawn rate is enabled.\n";
+        becauseMsg += $"Total Living With Spawn Rate Enabled: {totalLivingWithSpawnRateEnabled}\n";
+        becauseMsg += "Total Living With Spawn Rate Disabled: {totalLivingWithSpawnRateDisabled}";
+        totalLivingWithSpawnRateDisabled.Should()
+            .BeGreaterThan(totalLivingWithSpawnRateEnabled, becauseMsg);
     }
 
     [Fact]
@@ -167,7 +171,7 @@ public class ParticlePoolTests
         var actual = pool.BurstEnabled;
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
 
     [Theory]
@@ -187,7 +191,7 @@ public class ParticlePoolTests
         var actual = pool.IsCurrentlyBursting;
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Fact]
@@ -202,7 +206,7 @@ public class ParticlePoolTests
         pool.LoadTexture();
 
         // Assert
-        Assert.True(pool.TextureLoaded);
+        pool.TextureLoaded.Should().BeTrue();
     }
     #endregion
 
@@ -234,7 +238,7 @@ public class ParticlePoolTests
         pool.Update(new TimeSpan(0, 0, 0, 0, 16));
 
         // Assert
-        Assert.Equal(1, pool.TotalLivingParticles);
+        pool.TotalLivingParticles.Should().Be(1);
     }
 
     [Theory]
@@ -271,7 +275,7 @@ public class ParticlePoolTests
         pool.KillAllParticles();
 
         // Assert
-        Assert.Equal(0, pool.TotalLivingParticles);
+        pool.TotalLivingParticles.Should().Be(0);
     }
 
     [Fact]
@@ -304,7 +308,7 @@ public class ParticlePoolTests
         var actual = poolA.Equals(otherObj);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
@@ -336,7 +340,7 @@ public class ParticlePoolTests
         var actual = poolA.Equals(poolB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]

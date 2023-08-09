@@ -2,9 +2,11 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable UseObjectOrCollectionInitializer
 namespace PlazmaTests.Behaviors;
 
 using System;
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Plazma.Services;
@@ -14,9 +16,9 @@ using Xunit;
 /// <summary>
 /// Tests testing the <see cref="EasingRandomBehavior"/> abstract class.
 /// </summary>
-public class EasingRandomBehaviorTests : IDisposable
+public class EasingRandomBehaviorTests
 {
-    private Mock<IRandomizerService> mockRandomizerService;
+    private readonly Mock<IRandomizerService> mockRandomizerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EasingRandomBehaviorTests"/> class.
@@ -38,7 +40,7 @@ public class EasingRandomBehaviorTests : IDisposable
         var actual = behavior.ApplyToAttribute;
 
         // Assert
-        Assert.Equal(ParticleAttribute.Angle, actual);
+        actual.Should().Be(ParticleAttribute.Angle);
     }
     #endregion
 
@@ -55,7 +57,7 @@ public class EasingRandomBehaviorTests : IDisposable
         var actual = behavior.Start;
 
         // Assert
-        Assert.Equal(123, actual);
+        actual.Should().Be(123);
     }
 
     [Fact]
@@ -70,7 +72,7 @@ public class EasingRandomBehaviorTests : IDisposable
         var actual = behavior.Change;
 
         // Assert
-        Assert.Equal(123, actual);
+        actual.Should().Be(123);
     }
     #endregion
 
@@ -102,7 +104,7 @@ public class EasingRandomBehaviorTests : IDisposable
         behavior.Update(new TimeSpan(0, 0, 0, 0, elapsedTime));
 
         // Assert
-        Assert.Equal(expected, behavior.Value);
+        behavior.Value.Should().Be(expected);
     }
 
     [Fact]
@@ -116,7 +118,7 @@ public class EasingRandomBehaviorTests : IDisposable
         behavior.Update(new TimeSpan(0, 0, 0, 0, 16));
 
         // Assert
-        Assert.Equal(16, behavior.ElapsedTime);
+        behavior.ElapsedTime.Should().Be(16);
     }
 
     [Theory]
@@ -133,7 +135,7 @@ public class EasingRandomBehaviorTests : IDisposable
         behavior.Update(new TimeSpan(0, 0, 0, 0, timeElapsed));
 
         // Assert
-        Assert.Equal(expected, behavior.Enabled);
+        behavior.Enabled.Should().Be(expected);
     }
 
     [Fact]
@@ -148,7 +150,7 @@ public class EasingRandomBehaviorTests : IDisposable
         behavior.Reset();
 
         // Assert
-        Assert.Equal(123, behavior.Start);
+        behavior.Start.Should().Be(123);
     }
 
     [Fact]
@@ -163,7 +165,7 @@ public class EasingRandomBehaviorTests : IDisposable
         behavior.Reset();
 
         // Assert
-        Assert.Equal(123, behavior.Change);
+        behavior.Change.Should().Be(123);
     }
 
     [Fact]
@@ -178,7 +180,7 @@ public class EasingRandomBehaviorTests : IDisposable
         behavior.Reset();
 
         // Assert
-        Assert.Equal(0, behavior.ElapsedTime);
+        behavior.ElapsedTime.Should().Be(0);
     }
 
     [Fact]
@@ -193,16 +195,7 @@ public class EasingRandomBehaviorTests : IDisposable
         behavior.Reset();
 
         // Assert
-        Assert.True(behavior.Enabled);
+        behavior.Enabled.Should().BeTrue();
     }
     #endregion
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    public void Dispose()
-    {
-        this.mockRandomizerService = null;
-        GC.SuppressFinalize(this);
-    }
 }

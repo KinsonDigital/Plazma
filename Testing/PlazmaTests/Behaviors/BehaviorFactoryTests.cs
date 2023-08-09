@@ -5,11 +5,11 @@
 namespace PlazmaTests.Behaviors;
 
 using System;
+using FluentAssertions;
 using Plazma.Behaviors;
 using Plazma.Services;
 using Moq;
 using Xunit;
-using XUnitHelpers;
 
 /// <summary>
 /// Tests the <see cref="BehaviorFactory"/> class.
@@ -20,13 +20,15 @@ public class BehaviorFactoryTests
     [Fact]
     public void CreateBehaviors_WhenSettingsParamIsNull_ThrowsException()
     {
-        // Act & Assert
-        var factory = new BehaviorFactory();
+        // Arrange
+        var sut = new BehaviorFactory();
 
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            factory.CreateBehaviors(null, new Mock<IRandomizerService>().Object);
-        }, "The parameter must not be null. (Parameter 'settings')");
+        // Act
+        var act = () => sut.CreateBehaviors(null, new Mock<IRandomizerService>().Object);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'settings')");
     }
 
     [Fact]
@@ -38,14 +40,14 @@ public class BehaviorFactoryTests
         {
             new EasingRandomBehaviorSettings(),
         };
-        var factory = new BehaviorFactory();
+        var sut = new BehaviorFactory();
 
         // Act
-        var actual = factory.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
 
         // Assert
-        Assert.Single(actual);
-        Assert.Equal(typeof(EasingRandomBehavior), actual[0].GetType());
+        actual.Should().ContainSingle();
+        actual[0].Should().BeOfType<EasingRandomBehavior>();
     }
 
     [Fact]
@@ -57,14 +59,14 @@ public class BehaviorFactoryTests
         {
             new ColorTransitionBehaviorSettings(),
         };
-        var factory = new BehaviorFactory();
+        var sut = new BehaviorFactory();
 
         // Act
-        var actual = factory.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
 
         // Assert
-        Assert.Single(actual);
-        Assert.Equal(typeof(ColorTransitionBehavior), actual[0].GetType());
+        actual.Should().ContainSingle();
+        actual[0].Should().BeOfType<ColorTransitionBehavior>();
     }
 
     [Fact]
@@ -76,14 +78,14 @@ public class BehaviorFactoryTests
         {
             new RandomChoiceBehaviorSettings(),
         };
-        var factory = new BehaviorFactory();
+        var sut = new BehaviorFactory();
 
         // Act
-        var actual = factory.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
 
         // Assert
-        Assert.Single(actual);
-        Assert.Equal(typeof(RandomColorBehavior), actual[0].GetType());
+        actual.Should().ContainSingle();
+        actual[0].Should().BeOfType<RandomColorBehavior>();
     }
     #endregion
 }

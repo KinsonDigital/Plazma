@@ -6,6 +6,7 @@ namespace PlazmaTests.Behaviors;
 
 using System;
 using System.Collections.ObjectModel;
+using FluentAssertions;
 using Plazma.Behaviors;
 using Plazma.Services;
 using Moq;
@@ -45,7 +46,7 @@ public class RandomColorBehaviorTests
         behavior.Update(It.IsAny<TimeSpan>());
 
         // Assert
-        Assert.Equal("clr:255,255,255,255", behavior.Value);
+        behavior.Value.Should().Be("clr:255,255,255,255");
     }
 
     [Fact]
@@ -66,7 +67,7 @@ public class RandomColorBehaviorTests
         behavior.Update(It.IsAny<TimeSpan>());
 
         // Assert
-        Assert.Equal("clr:255,0,255,0", behavior.Value);
+        behavior.Value.Should().Be("clr:255,0,255,0");
     }
 
     [Fact]

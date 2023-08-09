@@ -23,7 +23,7 @@ public class TestItem : IEquatable<TestItem>
 
     public bool Equals([AllowNull] TestItem other) => Number == other.Number;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (!(obj is TestItem item))
         {

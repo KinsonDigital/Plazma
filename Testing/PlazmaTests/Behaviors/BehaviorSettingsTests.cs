@@ -5,6 +5,7 @@
 namespace PlazmaTests.Behaviors;
 
 using Fakes;
+using FluentAssertions;
 using Plazma;
 using Xunit;
 
@@ -22,7 +23,7 @@ public class BehaviorSettingsTests
         var actual = settingsA.Equals(settingsB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Theory]
@@ -43,7 +44,7 @@ public class BehaviorSettingsTests
         var actual = settingsA.Equals(settingsB);
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
     #endregion
 }

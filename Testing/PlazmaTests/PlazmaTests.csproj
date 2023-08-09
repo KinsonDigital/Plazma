@@ -12,6 +12,7 @@
         <Company>Kinson Digital</Company>
         <PackageId>PlazmaTests</PackageId>
         <RootNamespace>PlazmaTests</RootNamespace>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -44,5 +45,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Plazma\Plazma.csproj" />
     </ItemGroup>
+
 
 </Project>
