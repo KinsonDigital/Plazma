@@ -71,39 +71,4 @@ public class EasingRandomBehaviorSettings : BehaviorSettings, IEasingCapable
     /// </summary>
     /// <remarks>A value less then or equal to 0 will result in the behavior not working.</remarks>
     public float TotalTimeMax { get; set; }
-
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
-    public override bool Equals(object? obj)
-    {
-        if (!(obj is EasingRandomBehaviorSettings setting))
-        {
-            return false;
-        }
-
-        return ApplyToAttribute == setting.ApplyToAttribute &&
-               StartMin == setting.StartMin &&
-               StartMax == setting.StartMax &&
-               ChangeMin == setting.ChangeMin &&
-               ChangeMax == setting.ChangeMax &&
-               TotalTimeMin == setting.TotalTimeMin &&
-               TotalTimeMax == setting.TotalTimeMax;
-    }
-
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode() =>
-        HashCode.Combine(
-            ApplyToAttribute,
-            StartMin,
-            StartMax,
-            ChangeMin,
-            ChangeMax,
-            TotalTimeMin,
-            TotalTimeMax);
 }

@@ -2,12 +2,17 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
+using Fakes;
+using FluentAssertions;
 using Plazma;
-using KDParticleEngineTests.Fakes;
+using Plazma.Behaviors;
 using Xunit;
 
+/// <summary>
+/// Tests the <see cref="BehaviorSettings"/> class.
+/// </summary>
 public class BehaviorSettingsTests
 {
     #region Method Tests
@@ -22,7 +27,7 @@ public class BehaviorSettingsTests
         var actual = settingsA.Equals(settingsB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Theory]
@@ -30,11 +35,11 @@ public class BehaviorSettingsTests
     public void Equals_WhenInvokedWithSameObjectType_ReturnsTrue(ParticleAttribute attribute, bool expected)
     {
         // Arrange
-        var settingsA = new FakeBehaviorSettings()
+        var settingsA = new FakeBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
         };
-        var settingsB = new FakeBehaviorSettings()
+        var settingsB = new FakeBehaviorSettings
         {
             ApplyToAttribute = attribute,
         };
@@ -43,7 +48,7 @@ public class BehaviorSettingsTests
         var actual = settingsA.Equals(settingsB);
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
     #endregion
 }

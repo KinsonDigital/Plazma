@@ -2,10 +2,11 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
 using System.Drawing;
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Moq;
@@ -24,16 +25,16 @@ public class ParticleEffectTests
         var effect = new ParticleEffect("effect-name", Array.Empty<BehaviorSettings>());
 
         // Assert
-        Assert.Equal("effect-name", effect.ParticleTextureName);
+        effect.ParticleTextureName.Should().Be("effect-name");
     }
 
     [Fact]
     public void Ctor_WhenInvoked_SetsBehaviorSettings()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -50,7 +51,7 @@ public class ParticleEffectTests
         var actual = effect.BehaviorSettings;
 
         // Assert
-        Assert.Equal(settings[0], actual[0]);
+        settings[0].Should().Be(actual[0]);
     }
     #endregion
 
@@ -66,7 +67,7 @@ public class ParticleEffectTests
         var actual = effect.SpawnLocation;
 
         // Assert
-        Assert.Equal(new PointF(11, 22), actual);
+        actual.Should().Be(new PointF(11, 22));
     }
 
     [Fact]
@@ -80,7 +81,7 @@ public class ParticleEffectTests
         var actual = effect.TotalParticlesAliveAtOnce;
 
         // Assert
-        Assert.Equal(1234, actual);
+        actual.Should().Be(1234);
     }
 
     [Fact]
@@ -94,7 +95,7 @@ public class ParticleEffectTests
         var actual = effect.SpawnRateMin;
 
         // Assert
-        Assert.Equal(1234, actual);
+        actual.Should().Be(1234);
     }
 
     [Fact]
@@ -108,7 +109,7 @@ public class ParticleEffectTests
         var actual = effect.SpawnRateMax;
 
         // Assert
-        Assert.Equal(1234, actual);
+        actual.Should().Be(1234);
     }
 
     [Fact]
@@ -122,7 +123,7 @@ public class ParticleEffectTests
         var actual = effect.UseColorsFromList;
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
     #endregion
 
@@ -131,9 +132,9 @@ public class ParticleEffectTests
     public void Equals_WithDifferentObjects_ReturnsFalse()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -159,16 +160,16 @@ public class ParticleEffectTests
         var actual = effect.Equals(otherObj);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
     public void Equals_WithEqualObjects_ReturnsTrue()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -202,16 +203,16 @@ public class ParticleEffectTests
         var actual = effectA.Equals(effectB);
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
 
     [Fact]
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -245,16 +246,16 @@ public class ParticleEffectTests
         var actual = effectA.Equals(effectB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
     public void Equals_WithDifferentTintColorTotals_ReturnsFalse()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
+        var settings = new BehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings()
+            new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 ChangeMin = 11,
@@ -288,7 +289,7 @@ public class ParticleEffectTests
         var actual = effectA.Equals(effectB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
     #endregion
 

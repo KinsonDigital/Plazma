@@ -13,7 +13,8 @@ using System.Security.Cryptography;
 /// </summary>
 public class TrueRandomizerService : IRandomizerService
 {
-    private readonly RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
+    // TODO: Create an issue to swap this for the 'RandomNumberGenerator' static methods instead
+    private readonly RNGCryptoServiceProvider provider = new ();
     private readonly byte[] uint32Buffer = new byte[4];
     private bool isDisposed;
 
@@ -55,9 +56,7 @@ public class TrueRandomizerService : IRandomizerService
         // swap the values.
         if (minValue > maxValue)
         {
-            var valueTemp = minValue;
-            minValue = maxValue;
-            maxValue = valueTemp;
+            (minValue, maxValue) = (maxValue, minValue);
         }
 
         if (minValue == maxValue)
@@ -92,21 +91,21 @@ public class TrueRandomizerService : IRandomizerService
         GC.SuppressFinalize(this);
     }
 
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     /// <param name="disposing">True to dispose of managed resources.</param>
     [ExcludeFromCodeCoverage]
     protected virtual void Dispose(bool disposing)
     {
-        if (!this.isDisposed)
+        if (this.isDisposed)
         {
-            if (disposing)
-            {
-                this.provider.Dispose();
-            }
-
-            this.isDisposed = true;
+            return;
         }
+
+        if (disposing)
+        {
+            this.provider.Dispose();
+        }
+
+        this.isDisposed = true;
     }
 }

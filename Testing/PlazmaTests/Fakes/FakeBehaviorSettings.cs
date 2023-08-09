@@ -2,7 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Fakes;
+namespace PlazmaTests.Fakes;
 
 using Plazma.Behaviors;
 

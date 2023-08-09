@@ -2,14 +2,15 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Plazma.Services;
-using KDParticleEngineTests.XUnitHelpers;
 using Moq;
 using Xunit;
 
@@ -22,8 +23,7 @@ public class ParticlePoolTests
     private readonly Mock<IRandomizerService> mockRandomizerService;
     private readonly Mock<ITextureLoader<IDisposable>> mockTextureLoader;
     private readonly Mock<IBehaviorFactory> mockBehaviorFactory;
-    private readonly Mock<IBehavior> mockBehavior;
-    private readonly EasingRandomBehaviorSettings[] settings;
+    private readonly BehaviorSettings[] settings;
     private readonly ParticleEffect effect;
 
     /// <summary>
@@ -31,7 +31,7 @@ public class ParticlePoolTests
     /// </summary>
     public ParticlePoolTests()
     {
-        this.settings = new EasingRandomBehaviorSettings[]
+        this.settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -40,15 +40,15 @@ public class ParticlePoolTests
         this.mockRandomizerService = new Mock<IRandomizerService>();
         this.mockTextureLoader = new Mock<ITextureLoader<IDisposable>>();
 
-        this.mockBehavior = new Mock<IBehavior>();
-        this.mockBehavior.SetupGet(p => p.Value).Returns("0");
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
+        var mockBehavior = new Mock<IBehavior>();
+        mockBehavior.SetupGet(p => p.Value).Returns("0");
+        mockBehavior.SetupGet(p => p.Enabled).Returns(true);
 
         this.mockBehaviorFactory = new Mock<IBehaviorFactory>();
-        this.mockBehaviorFactory.Setup(m => m.CreateBehaviors(this.settings, this.mockRandomizerService.Object))
+        this.mockBehaviorFactory.Setup(m => m.CreateBehaviors(It.IsAny<BehaviorSettings[]>(), this.mockRandomizerService.Object))
             .Returns(() =>
             {
-                return new IBehavior[] { this.mockBehavior.Object };
+                return new[] { mockBehavior.Object };
             });
     }
 
@@ -60,7 +60,7 @@ public class ParticlePoolTests
         var pool = CreatePool();
 
         // Assert
-        Assert.Equal(this.effect, pool.Effect);
+        pool.Effect.Should().Be(this.effect);
     }
 
     [Fact]
@@ -72,17 +72,18 @@ public class ParticlePoolTests
         var pool = CreatePool();
 
         // Assert
-        Assert.Equal(10, pool.Particles.Count);
+        pool.Particles.Count.Should().Be(10);
     }
 
     [Fact]
     public void Ctor_WithNullParticleEffect_ThrowsException()
     {
-        // Act & Assert
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            var pool = new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object, this.mockTextureLoader.Object, null, this.mockRandomizerService.Object);
-        }, "The parameter must not be null. (Parameter 'effect')");
+        // Act
+        var act = () => new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object, this.mockTextureLoader.Object, null, this.mockRandomizerService.Object);
+
+        // Assert
+        act.Should().Throw<ArgumentNullException>()
+            .WithMessage("The parameter must not be null. (Parameter 'effect')");
     }
     #endregion
 
@@ -98,7 +99,7 @@ public class ParticlePoolTests
         var actual = pool.TotalLivingParticles;
 
         // Assert
-        Assert.Equal(1, actual);
+        actual.Should().Be(1);
     }
 
     [Fact]
@@ -113,7 +114,7 @@ public class ParticlePoolTests
         var actual = pool.TotalDeadParticles;
 
         // Assert
-        Assert.Equal(9, actual);
+        actual.Should().Be(9);
     }
 
     [Fact]
@@ -152,8 +153,11 @@ public class ParticlePoolTests
         var totalLivingWithSpawnRateDisabled = pool.TotalLivingParticles;
 
         // Assert
-        Assert.True(totalLivingWithSpawnRateDisabled > totalLivingWithSpawnRateEnabled,
-            $"Total living particles when spawn rate is disabled, is not greater then when spawn rate is enabled.\nTotal Living With Spawn Rate Enabled: {totalLivingWithSpawnRateEnabled}\nTotal Living With Spawn Rate Disabled: {totalLivingWithSpawnRateDisabled}");
+        var becauseMsg = "Total living particles when spawn rate is disabled, is not greater then when spawn rate is enabled.\n";
+        becauseMsg += $"Total Living With Spawn Rate Enabled: {totalLivingWithSpawnRateEnabled}\n";
+        becauseMsg += "Total Living With Spawn Rate Disabled: {totalLivingWithSpawnRateDisabled}";
+        totalLivingWithSpawnRateDisabled.Should()
+            .BeGreaterThan(totalLivingWithSpawnRateEnabled, becauseMsg);
     }
 
     [Fact]
@@ -167,7 +171,7 @@ public class ParticlePoolTests
         var actual = pool.BurstEnabled;
 
         // Assert
-        Assert.True(actual);
+        actual.Should().BeTrue();
     }
 
     [Theory]
@@ -176,8 +180,8 @@ public class ParticlePoolTests
     public void IsCurrentlyBursting_WhenGettingValue_ReturnsCorrectResult(bool burstingEnabled, bool expected)
     {
         // Arrange
-        this.effect.BurstOffTime = 10;
-        this.effect.BurstOnTime = 10;
+        this.effect.BurstOffMilliseconds = 10;
+        this.effect.BurstOnMilliseconds = 10;
         this.effect.BurstEnabled = burstingEnabled;
 
         var pool = CreatePool();
@@ -187,7 +191,7 @@ public class ParticlePoolTests
         var actual = pool.IsCurrentlyBursting;
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Fact]
@@ -202,7 +206,7 @@ public class ParticlePoolTests
         pool.LoadTexture();
 
         // Assert
-        Assert.True(pool.TextureLoaded);
+        pool.TextureLoaded.Should().BeTrue();
     }
     #endregion
 
@@ -234,7 +238,7 @@ public class ParticlePoolTests
         pool.Update(new TimeSpan(0, 0, 0, 0, 16));
 
         // Assert
-        Assert.Equal(1, pool.TotalLivingParticles);
+        pool.TotalLivingParticles.Should().Be(1);
     }
 
     [Theory]
@@ -243,8 +247,8 @@ public class ParticlePoolTests
     public void Update_WhenCurrentlyBursting_ReturnsCorrectSpawnRate(bool burstingEnabled, int expectedRateMin, int expectedRateMax)
     {
         // Arrange
-        this.effect.BurstOffTime = 10;
-        this.effect.BurstOnTime = 10;
+        this.effect.BurstOffMilliseconds = 10;
+        this.effect.BurstOnMilliseconds = 10;
         this.effect.SpawnRateMin = 111;
         this.effect.SpawnRateMax = 222;
         this.effect.BurstSpawnRateMin = 333;
@@ -255,7 +259,7 @@ public class ParticlePoolTests
 
         // Act
         pool.Update(new TimeSpan(0, 0, 0, 0, 16));
-        var actual = pool.IsCurrentlyBursting;
+        var unused = pool.IsCurrentlyBursting;
 
         // Assert
         this.mockRandomizerService.Verify(m => m.GetValue(expectedRateMin, expectedRateMax), Times.AtLeast(1));
@@ -271,7 +275,7 @@ public class ParticlePoolTests
         pool.KillAllParticles();
 
         // Assert
-        Assert.Equal(0, pool.TotalLivingParticles);
+        pool.TotalLivingParticles.Should().Be(0);
     }
 
     [Fact]
@@ -304,27 +308,7 @@ public class ParticlePoolTests
         var actual = poolA.Equals(otherObj);
 
         // Assert
-        Assert.False(actual);
-    }
-
-    [Fact]
-    public void Equals_WithEqualObjects_ReturnsTrue()
-    {
-        // Arrange
-        this.effect.SpawnLocation = new PointF(11, 22);
-        this.effect.SpawnRateMin = 33;
-        this.effect.SpawnRateMax = 44;
-        this.effect.TotalParticlesAliveAtOnce = 99;
-        this.effect.UseColorsFromList = true;
-
-        var poolA = CreatePool();
-        var poolB = CreatePool();
-
-        // Act
-        var actual = poolA.Equals(poolB);
-
-        // Assert
-        Assert.True(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
@@ -356,24 +340,24 @@ public class ParticlePoolTests
         var actual = poolA.Equals(poolB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
+    [SuppressMessage("csharpsquid", "S3966", Justification = "Double invoke intended.")]
     public void Dispose_WhenInvoked_ProperlyFreesManagedResources()
     {
         // Arrange
-        var effect = new ParticleEffect(It.IsAny<string>(), Array.Empty<BehaviorSettings>());
+        var particleEffect = new ParticleEffect(It.IsAny<string>(), Array.Empty<BehaviorSettings>());
         var mockTexture = new Mock<IDisposable>();
 
-        this.mockTextureLoader.Setup(m => m.LoadTexture(It.IsAny<string>())).Returns<string>((textureName) =>
-        {
-            return mockTexture.Object;
-        });
+        this.mockTextureLoader
+            .Setup(m =>
+                m.LoadTexture(It.IsAny<string>())).Returns<string>((_) => mockTexture.Object);
 
         var pool = new ParticlePool<IDisposable>(this.mockBehaviorFactory.Object,
             this.mockTextureLoader.Object,
-            effect,
+            particleEffect,
             this.mockRandomizerService.Object);
 
         pool.LoadTexture();

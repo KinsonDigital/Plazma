@@ -4,7 +4,7 @@
 
 #pragma warning disable CS0659 // Type overrides Object.Equals(object o) but does not override Object.GetHashCode()
 #pragma warning disable CA1062 // Validate arguments of public methods
-namespace KDParticleEngineTests.Fakes;
+namespace PlazmaTests.Fakes;
 
 using System;
 using System.Collections.Generic;
@@ -23,13 +23,8 @@ public class TestItem : IEquatable<TestItem>
 
     public bool Equals([AllowNull] TestItem other) => Number == other.Number;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (!(obj is TestItem item))
-        {
-            return false;
-        }
-
-        return Equals(item);
+        return obj is TestItem item && Equals(item);
     }
 }

@@ -10,9 +10,8 @@ using System.IO;
 using Newtonsoft.Json;
 
 /// <summary>
-/// Serializes and deserializes and object of type <typeparamref name="T"/>.
+/// Serializes and deserializes and <see cref="ParticleEffect"/> objects.
 /// </summary>
-/// <typeparam name="T">The type of object to serialize.</typeparam>
 [ExcludeFromCodeCoverage]
 public class ParticleEffectSerializerService : ISerializerService<ParticleEffect>
 {
@@ -21,7 +20,7 @@ public class ParticleEffectSerializerService : ISerializerService<ParticleEffect
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffectSerializerService"/> class.
     /// </summary>
-    public ParticleEffectSerializerService() => this.jsonSettings = new JsonSerializerSettings()
+    public ParticleEffectSerializerService() => this.jsonSettings = new JsonSerializerSettings
     {
         Formatting = Formatting.Indented,
         TypeNameHandling = TypeNameHandling.Objects,

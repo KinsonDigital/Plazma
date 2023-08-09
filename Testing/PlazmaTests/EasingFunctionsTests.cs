@@ -2,8 +2,9 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests;
+namespace PlazmaTests;
 
+using FluentAssertions;
 using Plazma;
 using Xunit;
 
@@ -24,7 +25,7 @@ public class EasingFunctionsTests
         var actual = EasingFunctions.EaseOutBounce(t, b, c, d);
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Fact]
@@ -37,7 +38,7 @@ public class EasingFunctionsTests
         var actual = EasingFunctions.EaseInQuad(16, 2.0, 4.0, 6.0);
 
         // Assert
-        Assert.Equal(expected, actual);
+        actual.Should().Be(expected);
     }
 
     [Fact]
@@ -50,7 +51,7 @@ public class EasingFunctionsTests
         var secondValue = EasingFunctions.EaseInQuad(32, 2.0, -1.0, 6.0);
 
         // Assert
-        Assert.True(secondValue < firstValue);
+        secondValue.Should().BeLessThan(firstValue);
     }
     #endregion
 }

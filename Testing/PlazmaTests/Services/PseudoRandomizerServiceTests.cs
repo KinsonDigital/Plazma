@@ -2,15 +2,17 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Services;
+namespace PlazmaTests.Services;
 
+using System.Diagnostics.CodeAnalysis;
+using FluentAssertions;
 using Plazma.Services;
-using KDParticleEngineTests.XUnitHelpers;
 using Xunit;
 
 /// <summary>
 /// Tests the <see cref="PseudoRandomizerService"/> class.
 /// </summary>
+[SuppressMessage("csharpsquid", "S2234", Justification = "Param order is intended.")]
 public class PseudoRandomizerServiceTests
 {
     #region Method Tests
@@ -30,7 +32,7 @@ public class PseudoRandomizerServiceTests
             var result = randomizer.GetValue(minValue, maxValue);
 
             // Assert
-            AssertExt.WithinRange(result, minValue, maxValue);
+            result.Should().BeInRange(minValue, maxValue);
         }
     }
 
@@ -50,7 +52,7 @@ public class PseudoRandomizerServiceTests
             var result = randomizer.GetValue(maxValue, minValue);
 
             // Assert
-            AssertExt.WithinRange(result, minValue, maxValue);
+            result.Should().BeInRange(minValue, maxValue);
         }
     }
 
@@ -71,7 +73,7 @@ public class PseudoRandomizerServiceTests
 
             // Assert
             // Assert with accuracy of +/- 0.001
-            Assert.InRange(result, minValue - 0.001f, maxValue + 0.001f);
+            result.Should().BeInRange(minValue - 0.001f, maxValue + 0.001f);
         }
     }
 
@@ -92,7 +94,7 @@ public class PseudoRandomizerServiceTests
 
             // Assert
             // Assert with accuracy of +/- 0.001
-            Assert.InRange(result, minValue - 0.001f, maxValue + 0.001f);
+            result.Should().BeInRange(minValue - 0.001f, maxValue + 0.001f);
         }
     }
 
@@ -113,7 +115,7 @@ public class PseudoRandomizerServiceTests
 
             // Assert
             // Assert with accuracy of +/- 0.001
-            Assert.InRange(result, minValue - 0.001, maxValue + 0.001);
+            result.Should().BeInRange(minValue - 0.001, maxValue + 0.001);
         }
     }
 
@@ -134,7 +136,7 @@ public class PseudoRandomizerServiceTests
 
             // Assert
             // Assert with accuracy of +/- 0.001
-            Assert.InRange(result, minValue - 0.001, maxValue + 0.001);
+            result.Should().BeInRange(minValue - 0.001, maxValue + 0.001);
         }
     }
     #endregion

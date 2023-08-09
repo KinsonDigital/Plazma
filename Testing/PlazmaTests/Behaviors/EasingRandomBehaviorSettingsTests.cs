@@ -2,8 +2,10 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+// ReSharper disable UseObjectOrCollectionInitializer
+namespace PlazmaTests.Behaviors;
 
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Xunit;
@@ -25,7 +27,7 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.ApplyToAttribute;
 
         // Assert
-        Assert.Equal(ParticleAttribute.Angle, actual);
+        actual.Should().Be(ParticleAttribute.Angle);
     }
 
     [Fact]
@@ -39,7 +41,7 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.StartMin;
 
         // Assert
-        Assert.Equal(1234f, actual);
+        actual.Should().Be(1234f);
     }
 
     [Fact]
@@ -53,7 +55,7 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.StartMax;
 
         // Assert
-        Assert.Equal(1234f, actual);
+        actual.Should().Be(1234f);
     }
 
     [Fact]
@@ -67,7 +69,7 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.ChangeMin;
 
         // Assert
-        Assert.Equal(1234f, actual);
+        actual.Should().Be(1234f);
     }
 
     [Fact]
@@ -81,7 +83,7 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.ChangeMax;
 
         // Assert
-        Assert.Equal(1234f, actual);
+        actual.Should().Be(1234f);
     }
 
     [Fact]
@@ -95,7 +97,7 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.TotalTimeMin;
 
         // Assert
-        Assert.Equal(1234f, actual);
+        actual.Should().Be(1234f);
     }
 
     [Fact]
@@ -109,7 +111,7 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.TotalTimeMax;
 
         // Assert
-        Assert.Equal(1234f, actual);
+        actual.Should().Be(1234f);
     }
     #endregion
 
@@ -118,7 +120,7 @@ public class EasingRandomBehaviorSettingsTests
     public void Equals_WithDifferentObjectTypes_ReturnsFalse()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings()
+        var setting = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -134,14 +136,14 @@ public class EasingRandomBehaviorSettingsTests
         var actual = setting.Equals(otherObj);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
     public void Equals_WithEqualObjects_ReturnsTrue()
     {
         // Arrange
-        var settingA = new EasingRandomBehaviorSettings()
+        var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -152,7 +154,7 @@ public class EasingRandomBehaviorSettingsTests
             TotalTimeMax = 60,
         };
 
-        var settingB = new EasingRandomBehaviorSettings()
+        var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -163,18 +165,21 @@ public class EasingRandomBehaviorSettingsTests
             TotalTimeMax = 60,
         };
 
-        // Act
-        var actual = settingA.Equals(settingB);
-
-        // Assert
-        Assert.True(actual);
+        // Act & Assert
+        settingA.ApplyToAttribute.Should().Be(settingB.ApplyToAttribute);
+        settingA.ChangeMin.Should().Be(settingB.ChangeMin);
+        settingA.ChangeMax.Should().Be(settingB.ChangeMax);
+        settingA.StartMin.Should().Be(settingB.StartMin);
+        settingA.StartMax.Should().Be(settingB.StartMax);
+        settingA.TotalTimeMin.Should().Be(settingB.TotalTimeMin);
+        settingA.TotalTimeMax.Should().Be(settingB.TotalTimeMax);
     }
 
     [Fact]
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
-        var settingA = new EasingRandomBehaviorSettings()
+        var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.BlueColorComponent,
             ChangeMin = 100,
@@ -185,7 +190,7 @@ public class EasingRandomBehaviorSettingsTests
             TotalTimeMax = 600,
         };
 
-        var settingB = new EasingRandomBehaviorSettings()
+        var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -200,14 +205,14 @@ public class EasingRandomBehaviorSettingsTests
         var actual = settingA.Equals(settingB);
 
         // Assert
-        Assert.False(actual);
+        actual.Should().BeFalse();
     }
 
     [Fact]
     public void GetHashCode_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var settingA = new EasingRandomBehaviorSettings()
+        var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -218,7 +223,7 @@ public class EasingRandomBehaviorSettingsTests
             TotalTimeMax = 60,
         };
 
-        var settingB = new EasingRandomBehaviorSettings()
+        var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
             ChangeMin = 10,
@@ -234,7 +239,7 @@ public class EasingRandomBehaviorSettingsTests
         var settingBHashCode = settingB.GetHashCode();
 
         // Assert
-        Assert.Equal(settingAHashCode, settingBHashCode);
+        settingBHashCode.Should().Be(settingAHashCode);
     }
     #endregion
 }

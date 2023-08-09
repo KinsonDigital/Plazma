@@ -12,7 +12,7 @@ using Services;
 public interface IBehaviorFactory
 {
     /// <summary>
-    /// Creates all of the behaviors using the given <paramref name="settings"/> and <paramref name="randomizerService"/>.
+    /// Creates all of the behaviors using the given <paramref name="settings"/> and <paramref name="randomService"/>.
     /// </summary>
     /// <param name="settings">The list of settings used to create each behavior.</param>
     /// <param name="randomService">Used to generate random values from the given <paramref name="settings"/> parameter.</param>

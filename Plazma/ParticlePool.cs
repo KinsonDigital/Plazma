@@ -17,12 +17,12 @@ using Services;
 /// Contains a number of reusable particles with a given particle effect applied to them.
 /// </summary>
 /// <typeparam name="TTexture">The texture for the particles in the pool.</typeparam>
-public class ParticlePool<TTexture> : IDisposable
+public sealed class ParticlePool<TTexture> : IDisposable
     where TTexture : class, IDisposable
 {
     private readonly IRandomizerService randomService;
     private readonly ITextureLoader<TTexture> textureLoader;
-    private List<Particle> particles = new List<Particle>();
+    private List<Particle> particles = new ();
     private bool isDisposed;
     private int spawnRate;
     private double spawnRateElapsed;
@@ -43,13 +43,9 @@ public class ParticlePool<TTexture> : IDisposable
             throw new ArgumentNullException(nameof(behaviorFactory), "The parameter must not be null.");
         }
 
-        if (effect is null)
-        {
-            throw new ArgumentNullException(nameof(effect), "The parameter must not be null.");
-        }
+        Effect = effect ?? throw new ArgumentNullException(nameof(effect), "The parameter must not be null.");
 
         this.textureLoader = textureLoader;
-        Effect = effect;
         this.randomService = randomizer;
 
         CreateAllParticles(behaviorFactory);
@@ -59,9 +55,8 @@ public class ParticlePool<TTexture> : IDisposable
     /// <summary>
     /// Occurs every time the total amount of living particles has changed.
     /// </summary>
-#pragma warning disable CS0067 // The event is never used
+    [SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = "Part of the public API.")]
     public event EventHandler<EventArgs>? LivingParticlesCountChanged;
-#pragma warning restore CS0067
 
     /// <summary>
     /// Gets current total number of living <see cref="Particle"/>s.
@@ -87,7 +82,7 @@ public class ParticlePool<TTexture> : IDisposable
     /// </summary>
     /// <remarks>
     ///     If enabled, the engine will spawn particles in a bursting fashion at intervals based on the timings between
-    ///     the <see cref="ParticleEffect.BurstOnTime"/> and <see cref="ParticleEffect.BurstOffTime"/> timing values.
+    ///     the <see cref="ParticleEffect.BurstOnMilliseconds"/> and <see cref="ParticleEffect.BurstOffMilliseconds"/> timing values.
     ///     If the bursting effect is in its on cycle, the particles will use the
     ///     <see cref="ParticleEffect.BurstSpawnRateMin"/> and <see cref="ParticleEffect.BurstSpawnRateMax"/>
     ///     values and if the spawn effect is in its off cycle, it will use the <see cref="ParticleEffect.SpawnRateMin"/>
@@ -121,6 +116,7 @@ public class ParticlePool<TTexture> : IDisposable
     /// <summary>
     /// Gets the texture of the particles in the pool.
     /// </summary>
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Part of the public API.")]
     public TTexture? PoolTexture { get; private set; }
 
     /// <summary>
@@ -148,14 +144,14 @@ public class ParticlePool<TTexture> : IDisposable
             this.spawnRateElapsed = 0;
         }
 
-        for (var i = 0; i < this.particles.Count; i++)
+        foreach (var t in this.particles)
         {
-            if (this.particles[i].IsDead)
+            if (t.IsDead)
             {
                 continue;
             }
 
-            this.particles[i].Update(timeElapsed);
+            t.Update(timeElapsed);
         }
     }
 
@@ -170,45 +166,13 @@ public class ParticlePool<TTexture> : IDisposable
     public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
 
     /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
-    public override bool Equals(object? obj)
-    {
-        if (!(obj is ParticlePool<TTexture> pool))
-        {
-            return false;
-        }
-
-        return TotalLivingParticles == pool.TotalLivingParticles &&
-               TotalDeadParticles == pool.TotalDeadParticles &&
-               this.particles.Count == pool.Particles.Count &&
-               Effect == pool.Effect;
-    }
-
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    [ExcludeFromCodeCoverage]
-    public override int GetHashCode() =>
-        HashCode.Combine(TotalLivingParticles.GetHashCode(), TotalDeadParticles.GetHashCode(), Effect.GetHashCode(), PoolTexture?.GetHashCode());
-
-    /// <summary>
     /// <inheritdoc/>
     /// </summary>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
+    public void Dispose() => Dispose(true);
 
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
     /// <param name="disposing">True to dispose of managed resources.</param>
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (this.isDisposed)
         {
@@ -218,10 +182,7 @@ public class ParticlePool<TTexture> : IDisposable
         // Dispose of managed resources
         if (disposing)
         {
-            if (!(PoolTexture is null))
-            {
-                PoolTexture.Dispose();
-            }
+            PoolTexture?.Dispose();
 
             this.isDisposed = false;
             this.spawnRate = 0;
@@ -245,13 +206,13 @@ public class ParticlePool<TTexture> : IDisposable
 
         this.burstOffTimeElapsed += (int)timeElapsed.TotalMilliseconds;
 
-        if (this.burstOffTimeElapsed >= Effect.BurstOffTime)
+        if (this.burstOffTimeElapsed >= Effect.BurstOffMilliseconds)
         {
             this.burstOnTimeElapsed += (int)timeElapsed.TotalMilliseconds;
 
             IsCurrentlyBursting = false;
 
-            if (this.burstOnTimeElapsed >= Effect.BurstOnTime)
+            if (this.burstOnTimeElapsed >= Effect.BurstOnMilliseconds)
             {
                 IsCurrentlyBursting = true;
                 this.burstOffTimeElapsed = 0;
@@ -265,14 +226,19 @@ public class ParticlePool<TTexture> : IDisposable
     /// </summary>
     private void SpawnNewParticle()
     {
-        for (var i = 0; i < this.particles.Count; i++)
+        foreach (var t in this.particles)
         {
-            if (this.particles[i].IsDead)
+            if (!t.IsDead)
             {
-                this.particles[i].Position = Effect.SpawnLocation;
-                this.particles[i].Reset();
-                break;
+                continue;
             }
+
+            t.Position = Effect.SpawnLocation;
+            t.Reset();
+
+            this.LivingParticlesCountChanged?.Invoke(this, EventArgs.Empty);
+
+            break;
         }
     }
 

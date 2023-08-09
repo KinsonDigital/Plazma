@@ -2,9 +2,11 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using System;
+using System.Drawing;
+using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
 using Xunit;
@@ -16,11 +18,11 @@ public class ColorTransitionBehaviorTests
     public void Value_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -28,18 +30,18 @@ public class ColorTransitionBehaviorTests
         behavior.Update(new TimeSpan(0, 0, 0, 0, 1500));
 
         // Assert
-        Assert.Equal("clr:255,62,125,200", behavior.Value);
+        behavior.Value.Should().Be("clr:255,62,125,200");
     }
 
     [Fact]
     public void ElapsedTime_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -47,18 +49,18 @@ public class ColorTransitionBehaviorTests
         behavior.Update(new TimeSpan(0, 0, 0, 0, 1500));
 
         // Assert
-        Assert.Equal(1500, behavior.ElapsedTime);
+        behavior.ElapsedTime.Should().Be(1500);
     }
 
     [Fact]
     public void ApplyToAttribute_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -66,18 +68,18 @@ public class ColorTransitionBehaviorTests
         behavior.Update(new TimeSpan(0, 0, 0, 0, 1500));
 
         // Assert
-        Assert.Equal(ParticleAttribute.Color, behavior.ApplyToAttribute);
+        behavior.ApplyToAttribute.Should().Be(ParticleAttribute.Color);
     }
 
     [Fact]
     public void Enabled_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -85,7 +87,7 @@ public class ColorTransitionBehaviorTests
         behavior.Update(new TimeSpan(0, 0, 0, 0, 800));
 
         // Assert
-        Assert.True(behavior.Enabled);
+        behavior.Enabled.Should().BeTrue();
     }
     #endregion
 
@@ -111,11 +113,11 @@ public class ColorTransitionBehaviorTests
     public void Update_WhenInvoked_CorrectlySetsValueProperty(EasingFunction easingFunction, byte[] startComponents, byte[] stopComponents, int timeElapsed, string expected)
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(startComponents[0], startComponents[1], startComponents[2], startComponents[3]),
-            StopColor = new ParticleColor(stopComponents[0], stopComponents[1], stopComponents[2], stopComponents[3]),
+            StartColor = Color.FromArgb(startComponents[0], startComponents[1], startComponents[2], startComponents[3]),
+            StopColor = Color.FromArgb(stopComponents[0], stopComponents[1], stopComponents[2], stopComponents[3]),
             EasingFunctionType = easingFunction,
         };
         var behavior = new ColorTransitionBehavior(settings);
@@ -124,18 +126,18 @@ public class ColorTransitionBehaviorTests
         behavior.Update(new TimeSpan(0, 0, 0, 0, timeElapsed));
 
         // Assert
-        Assert.Equal(expected, behavior.Value);
+        behavior.Value.Should().Be(expected);
     }
 
     [Fact]
     public void Reset_WhenInvoked_ProperlyResetsBehavior()
     {
         // Arrange
-        var settings = new ColorTransitionBehaviorSettings()
+        var settings = new ColorTransitionBehaviorSettings
         {
             LifeTime = 1000,
-            StartColor = new ParticleColor(255, 62, 125, 200),
-            StopColor = new ParticleColor(255, 62, 125, 200),
+            StartColor = Color.FromArgb(255, 62, 125, 200),
+            StopColor = Color.FromArgb(255, 62, 125, 200),
         };
         var behavior = new ColorTransitionBehavior(settings);
 
@@ -146,9 +148,9 @@ public class ColorTransitionBehaviorTests
         behavior.Reset();
 
         // Assert
-        Assert.Equal(string.Empty, behavior.Value);
-        Assert.Equal(0, behavior.ElapsedTime);
-        Assert.True(behavior.Enabled);
+        behavior.Value.Should().BeEmpty();
+        behavior.ElapsedTime.Should().Be(0);
+        behavior.Enabled.Should().BeTrue();
     }
     #endregion
 }

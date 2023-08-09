@@ -2,12 +2,13 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-namespace KDParticleEngineTests.Behaviors;
+namespace PlazmaTests.Behaviors;
 
 using System;
+using Fakes;
+using FluentAssertions;
 using Plazma.Behaviors;
 using Plazma.Services;
-using KDParticleEngineTests.XUnitHelpers;
 using Moq;
 using Xunit;
 
@@ -18,15 +19,18 @@ public class BehaviorFactoryTests
 {
     #region Method Tests
     [Fact]
-    public void CreateBehaviors_WhenSettingsParamIsNull_ThrowsException()
+    public void CreateBehaviors_WithNullSettingsArgument_ThrowsException()
     {
-        // Act & Assert
-        var factory = new BehaviorFactory();
+        // Arrange
+        var sut = new BehaviorFactory();
 
-        AssertHelpers.ThrowsWithMessage<ArgumentNullException>(() =>
-        {
-            factory.CreateBehaviors(null, new Mock<IRandomizerService>().Object);
-        }, "The parameter must not be null. (Parameter 'settings')");
+        // Act
+        var act = () => { sut.CreateBehaviors(null, null); };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'settings')");
     }
 
     [Fact]
@@ -38,14 +42,14 @@ public class BehaviorFactoryTests
         {
             new EasingRandomBehaviorSettings(),
         };
-        var factory = new BehaviorFactory();
+        var sut = new BehaviorFactory();
 
         // Act
-        var actual = factory.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
 
         // Assert
-        Assert.Single(actual);
-        Assert.Equal(typeof(EasingRandomBehavior), actual[0].GetType());
+        actual.Should().ContainSingle();
+        actual[0].Should().BeOfType<EasingRandomBehavior>();
     }
 
     [Fact]
@@ -57,14 +61,14 @@ public class BehaviorFactoryTests
         {
             new ColorTransitionBehaviorSettings(),
         };
-        var factory = new BehaviorFactory();
+        var sut = new BehaviorFactory();
 
         // Act
-        var actual = factory.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
 
         // Assert
-        Assert.Single(actual);
-        Assert.Equal(typeof(ColorTransitionBehavior), actual[0].GetType());
+        actual.Should().ContainSingle();
+        actual[0].Should().BeOfType<ColorTransitionBehavior>();
     }
 
     [Fact]
@@ -76,14 +80,52 @@ public class BehaviorFactoryTests
         {
             new RandomChoiceBehaviorSettings(),
         };
-        var factory = new BehaviorFactory();
+        var sut = new BehaviorFactory();
 
         // Act
-        var actual = factory.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
 
         // Assert
-        Assert.Single(actual);
-        Assert.Equal(typeof(RandomColorBehavior), actual[0].GetType());
+        actual.Should().ContainSingle();
+        actual[0].Should().BeOfType<RandomColorBehavior>();
+    }
+
+    [Fact]
+    public void CreateBehaviors_WithNullRandomizerServiceArgument_ThrowsException()
+    {
+        // Arrange
+        var sut = new BehaviorFactory();
+
+        // Act
+        var act = () =>
+        {
+            var settings = new BehaviorSettings[] { new ColorTransitionBehaviorSettings(), };
+            sut.CreateBehaviors(settings, null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'RandomizerService')");
+    }
+
+    [Fact]
+    public void CreateBehaviors_WhenUsingUnknownBehaviorSettingsType_ThrowsException()
+    {
+        // Arrange
+        var mockRandomizerService = new Mock<IRandomizerService>();
+        var unknownSettingsType = new BehaviorSettings[]
+        {
+            new FakeBehaviorSettings(),
+        };
+        var sut = new BehaviorFactory();
+
+        // Act
+        var act = () => sut.CreateBehaviors(unknownSettingsType, mockRandomizerService.Object);
+
+        // Assert
+        act.Should().Throw<Exception>()
+            .WithMessage($"Unknown behavior settings of type '{nameof(FakeBehaviorSettings)}'.");
     }
     #endregion
 }
