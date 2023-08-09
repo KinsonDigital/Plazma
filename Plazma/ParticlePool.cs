@@ -82,7 +82,7 @@ public sealed class ParticlePool<TTexture> : IDisposable
     /// </summary>
     /// <remarks>
     ///     If enabled, the engine will spawn particles in a bursting fashion at intervals based on the timings between
-    ///     the <see cref="ParticleEffect.BurstOnTime"/> and <see cref="ParticleEffect.BurstOffTime"/> timing values.
+    ///     the <see cref="ParticleEffect.BurstOnMilliseconds"/> and <see cref="ParticleEffect.BurstOffMilliseconds"/> timing values.
     ///     If the bursting effect is in its on cycle, the particles will use the
     ///     <see cref="ParticleEffect.BurstSpawnRateMin"/> and <see cref="ParticleEffect.BurstSpawnRateMax"/>
     ///     values and if the spawn effect is in its off cycle, it will use the <see cref="ParticleEffect.SpawnRateMin"/>
@@ -206,13 +206,13 @@ public sealed class ParticlePool<TTexture> : IDisposable
 
         this.burstOffTimeElapsed += (int)timeElapsed.TotalMilliseconds;
 
-        if (this.burstOffTimeElapsed >= Effect.BurstOffTime)
+        if (this.burstOffTimeElapsed >= Effect.BurstOffMilliseconds)
         {
             this.burstOnTimeElapsed += (int)timeElapsed.TotalMilliseconds;
 
             IsCurrentlyBursting = false;
 
-            if (this.burstOnTimeElapsed >= Effect.BurstOnTime)
+            if (this.burstOnTimeElapsed >= Effect.BurstOnMilliseconds)
             {
                 IsCurrentlyBursting = true;
                 this.burstOffTimeElapsed = 0;

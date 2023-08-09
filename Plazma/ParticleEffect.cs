@@ -75,7 +75,7 @@ public class ParticleEffect
     /// </summary>
     /// <remarks>
     ///     If enabled, the engine will spawn particles in a bursting fashion at intervals based on the timings between
-    ///     the <see cref="ParticleEffect.BurstOnTime"/> and <see cref="ParticleEffect.BurstOffTime"/> timing values.
+    ///     the <see cref="BurstOnMilliseconds"/> and <see cref="BurstOffMilliseconds"/> timing values.
     ///     If the bursting effect is in its on cycle, the particles will use the
     ///     <see cref="ParticleEffect.BurstSpawnRateMin"/> and <see cref="ParticleEffect.BurstSpawnRateMax"/>
     ///     values and if the spawn effect is in its off cycle, it will use the <see cref="ParticleEffect.SpawnRateMin"/>
@@ -98,12 +98,12 @@ public class ParticleEffect
     /// <summary>
     /// Gets or sets the amount of time that the bursting effect will run in it's on cycle.
     /// </summary>
-    public int BurstOnTime { get; set; } = 3000;
+    public int BurstOnMilliseconds { get; set; } = 3000;
 
     /// <summary>
     /// Gets or sets the amount of time that the bursting effect will run in it's off cycle.
     /// </summary>
-    public int BurstOffTime { get; set; } = 1000;
+    public int BurstOffMilliseconds { get; set; } = 1000;
 
     /// <summary>
     /// Gets or sets a value indicating whether the colors will be randomly chosen from a list.

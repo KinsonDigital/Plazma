@@ -180,8 +180,8 @@ public class ParticlePoolTests
     public void IsCurrentlyBursting_WhenGettingValue_ReturnsCorrectResult(bool burstingEnabled, bool expected)
     {
         // Arrange
-        this.effect.BurstOffTime = 10;
-        this.effect.BurstOnTime = 10;
+        this.effect.BurstOffMilliseconds = 10;
+        this.effect.BurstOnMilliseconds = 10;
         this.effect.BurstEnabled = burstingEnabled;
 
         var pool = CreatePool();
@@ -247,8 +247,8 @@ public class ParticlePoolTests
     public void Update_WhenCurrentlyBursting_ReturnsCorrectSpawnRate(bool burstingEnabled, int expectedRateMin, int expectedRateMax)
     {
         // Arrange
-        this.effect.BurstOffTime = 10;
-        this.effect.BurstOnTime = 10;
+        this.effect.BurstOffMilliseconds = 10;
+        this.effect.BurstOnMilliseconds = 10;
         this.effect.SpawnRateMin = 111;
         this.effect.SpawnRateMax = 222;
         this.effect.BurstSpawnRateMin = 333;
