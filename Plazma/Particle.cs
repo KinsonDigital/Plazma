@@ -167,9 +167,9 @@ public class Particle
         }
 
         return Position == particle.Position &&
-               Math.Abs(Angle - particle.Angle) < 0.0000f &&
+               Math.Abs(Angle - particle.Angle) <= 0.0000f &&
                TintColor == particle.TintColor &&
-               Math.Abs(Size - particle.Size) < 0.0000f &&
+               Math.Abs(Size - particle.Size) <= 0.0000f &&
                IsAlive == particle.IsAlive &&
                IsDead == particle.IsDead;
     }
