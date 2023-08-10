@@ -145,7 +145,11 @@ public class ParticleEngineTests
     [Fact]
     public void Update_WithTexturesNotLoaded_ThrowsException()
     {
-        // Arrange & Act
+        // Arrange
+        var effect = new ParticleEffect();
+        this.engine.CreatePool(effect, this.mockBehaviorFactory);
+
+        // Act
         var act = () => this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
 
         // Assert

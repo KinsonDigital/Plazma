@@ -112,6 +112,11 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     /// <param name="timeElapsed">The amount of time that has passed since the last frame.</param>
     public void Update(TimeSpan timeElapsed)
     {
+        if (this.particlePools.Count <= 0)
+        {
+            return;
+        }
+
         if (!TexturesLoaded)
         {
             throw new Exception("The textures must be loaded first.");
