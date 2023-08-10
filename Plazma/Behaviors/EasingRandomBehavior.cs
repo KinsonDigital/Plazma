@@ -46,35 +46,19 @@ public class EasingRandomBehavior : Behavior
     /// <param name="timeElapsed">The amount of time that has elapsed for this update of the behavior.</param>
     public override void Update(TimeSpan timeElapsed)
     {
-        switch (this.settings.EasingFunctionType)
+        // TODO: Using 'ToString()' for the value provides tons of allocations and is not ideal.  Need to change how this works.
+        Value = this.settings.EasingFunctionType switch
         {
-            case EasingFunction.EaseOutBounce:
-                Value = EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture);
-                break;
-            case EasingFunction.EaseIn:
-                Value = EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture);
-                break;
-        }
+            EasingFunction.EaseOutBounce => EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime)
+                .ToString(CultureInfo.InvariantCulture),
+            EasingFunction.EaseIn => EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture),
+            _ => Value
+        };
 
-        if (!(this.settings.UpdateStartMin is null))
-        {
-            this.settings.StartMin = this.settings.UpdateStartMin.Invoke();
-        }
-
-        if (!(this.settings.UpdateStartMax is null))
-        {
-            this.settings.StartMax = this.settings.UpdateStartMax.Invoke();
-        }
-
-        if (!(this.settings.UpdateChangeMin is null))
-        {
-            this.settings.ChangeMin = this.settings.UpdateChangeMin.Invoke();
-        }
-
-        if (!(this.settings.UpdateChangeMax is null))
-        {
-            this.settings.ChangeMax = this.settings.UpdateChangeMax.Invoke();
-        }
+        this.settings.StartMin = this.settings.UpdateStartMin?.Invoke() ?? 0f;
+        this.settings.StartMax = this.settings.UpdateStartMax?.Invoke() ?? 0f;
+        this.settings.ChangeMin = this.settings.UpdateChangeMin?.Invoke() ?? 0f;
+        this.settings.ChangeMax = this.settings.UpdateChangeMax?.Invoke() ?? 0f;
 
         base.Update(timeElapsed);
     }
