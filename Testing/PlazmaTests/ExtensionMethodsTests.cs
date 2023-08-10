@@ -11,9 +11,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using Fakes;
 using FluentAssertions;
+using NSubstitute;
 using Plazma;
 using Plazma.Behaviors;
-using Moq;
 using Xunit;
 
 /// <summary>
@@ -29,7 +29,7 @@ public class ExtensionMethodsTests
         Random? random = null;
 
         // Act
-        var act = () => random.Next(It.IsAny<float>(), It.IsAny<float>());
+        var act = () => random.Next(0f, 0f);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -124,13 +124,13 @@ public class ExtensionMethodsTests
     public void Count_WhenInvokingListVersion_ReturnsCorrectResult()
     {
         // Arrange
-        var mockBehavior = new Mock<IBehavior>();
+        var mockBehavior = Substitute.For<IBehavior>();
 
         var particles = new List<Particle>();
 
         for (var i = 0; i < 20; i++)
         {
-            particles.Add(new Particle(new[] { mockBehavior.Object }) { IsAlive = i > 10 });
+            particles.Add(new Particle(new[] { mockBehavior }) { IsAlive = i > 10 });
         }
 
         // Act
@@ -173,12 +173,12 @@ public class ExtensionMethodsTests
     public void Count_WhenInvokingArrayVersion_ReturnsCorrectResult()
     {
         // Arrange
-        var mockBehavior = new Mock<IBehavior>();
+        var mockBehavior = Substitute.For<IBehavior>();
 
         var tempList = new List<Particle>();
         for (var i = 0; i < 20; i++)
         {
-            tempList.Add(new Particle(new[] { mockBehavior.Object }) { IsAlive = i > 10 });
+            tempList.Add(new Particle(new[] { mockBehavior }) { IsAlive = i > 10 });
         }
 
         var particles = tempList.ToArray();

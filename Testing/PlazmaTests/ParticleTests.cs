@@ -10,7 +10,7 @@ using System.Globalization;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -19,17 +19,11 @@ using Xunit;
 public class ParticleTests
 {
     private readonly TimeSpan frameTime;
-    private readonly Mock<IBehavior> mockBehavior;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleTests"/> class.
     /// </summary>
-    public ParticleTests()
-    {
-        this.frameTime = new TimeSpan(0, 0, 0, 0, 16);
-        this.mockBehavior = new Mock<IBehavior>();
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
-    }
+    public ParticleTests() => this.frameTime = new TimeSpan(0, 0, 0, 0, 16);
 
     #region Prop Tests
     [Fact]
@@ -112,9 +106,10 @@ public class ParticleTests
     public void Update_WithFailedParse_ThrowsException()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("12z3");
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Value.Returns("12z3");
+        mockBehavior.Enabled.Returns(true);
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         var act = () => sut.Update(this.frameTime);
@@ -144,11 +139,12 @@ public class ParticleTests
     public void Update_WhenUsingWrongRandomColorValue_ThrowsException(ParticleAttribute attribute, string value, string expectedMessage)
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns(value);
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(attribute);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Value.Returns(value);
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.ApplyToAttribute.Returns(attribute);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         var act = () => sut.Update(this.frameTime);
@@ -164,11 +160,12 @@ public class ParticleTests
         // Arrange
         var expected = Color.FromArgb(255, 0, 0, 255);
 
-        this.mockBehavior.SetupGet(p => p.Value).Returns("clr:255,0,0,255");
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(true);
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Color);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Value.Returns("clr:255,0,0,255");
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Color);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -181,40 +178,45 @@ public class ParticleTests
     public void Update_WithDisabledBehavior_BehaviorShouldNotUpdate()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(false);
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Value.Returns("123");
+        mockBehavior.Enabled.Returns(false);
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
 
         // Assert
-        this.mockBehavior.Verify(m => m.Update(It.IsAny<TimeSpan>()), Times.Never);
+        mockBehavior.DidNotReceive().Update(Arg.Any<TimeSpan>());
     }
 
     [Fact]
     public void Update_WithEnabledBehavior_BehaviorShouldUpdate()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
 
         // Assert
-        this.mockBehavior.Verify(m => m.Update(It.IsAny<TimeSpan>()), Times.Once());
+        mockBehavior.Received(1).Update(Arg.Any<TimeSpan>());
     }
 
     [Fact]
     public void Update_WhenApplyingToXAttribute_UpdatesPositionX()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.X);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.X);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -227,10 +229,12 @@ public class ParticleTests
     public void Update_WhenApplyingToYAttribute_UpdatesPositionY()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Y);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Y);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -243,10 +247,12 @@ public class ParticleTests
     public void Update_WhenApplyingToAngleAttribute_UpdatesAngle()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Angle);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Angle);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -259,10 +265,12 @@ public class ParticleTests
     public void Update_WhenApplyingToSizeAttribute_UpdatesSize()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Size);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Size);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -275,10 +283,12 @@ public class ParticleTests
     public void Update_WhenApplyingToRedColorComponentAttribute_UpdatesRedColorComponent()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.RedColorComponent);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.RedColorComponent);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -291,10 +301,12 @@ public class ParticleTests
     public void Update_WhenApplyingToGreenColorComponentAttribute_UpdatesGreenColorComponent()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.GreenColorComponent);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.GreenColorComponent);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -307,10 +319,12 @@ public class ParticleTests
     public void Update_WhenApplyingToBlueColorComponentAttribute_UpdatesBlueColorComponent()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.BlueColorComponent);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.BlueColorComponent);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -323,10 +337,12 @@ public class ParticleTests
     public void Update_WhenApplyingToAlphaColorComponentAttribute_UpdatesAlphaColorComponent()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.AlphaColorComponent);
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.AlphaColorComponent);
 
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -339,22 +355,24 @@ public class ParticleTests
     public void Reset_WhenInvoked_ResetsAllBehaviors()
     {
         // Arrange
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var mockBehavior = Substitute.For<IBehavior>();
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Reset();
 
         // Assert
-        this.mockBehavior.Verify(m => m.Reset(), Times.Once());
+        mockBehavior.Received(1).Reset();
     }
 
     [Fact]
     public void Reset_WhenInvoked_ResetsAngle()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.Angle);
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Angle);
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -368,9 +386,10 @@ public class ParticleTests
     public void Reset_WhenInvoked_ResetsTintColor()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Value).Returns("123");
-        this.mockBehavior.SetupGet(p => p.ApplyToAttribute).Returns(ParticleAttribute.RedColorComponent);
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Value.Returns("123");
+        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.RedColorComponent);
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(this.frameTime);
@@ -384,8 +403,9 @@ public class ParticleTests
     public void Reset_WhenInvoked_ResetsIsAlive()
     {
         // Arrange
-        this.mockBehavior.SetupGet(p => p.Enabled).Returns(false);
-        var sut = new Particle(new[] { this.mockBehavior.Object });
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.Enabled.Returns(false);
+        var sut = new Particle(new[] { mockBehavior });
 
         // Act
         sut.Update(new TimeSpan(0, 0, 0, 10, 0));
@@ -399,7 +419,7 @@ public class ParticleTests
     public void Equals_WithDifferentObjects_ReturnsFalse()
     {
         // Arrange
-        var sut = new Particle(It.IsAny<IBehavior[]>());
+        var sut = new Particle(null);
         var obj = new object();
 
         // Act
@@ -413,11 +433,11 @@ public class ParticleTests
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
-        var sutA = new Particle(It.IsAny<IBehavior[]>())
+        var sutA = new Particle(null)
         {
             Size = 123f,
         };
-        var sutB = new Particle(It.IsAny<IBehavior[]>());
+        var sutB = new Particle(null);
 
         // Act
         var actual = sutA.Equals(sutB);

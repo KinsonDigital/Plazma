@@ -106,7 +106,7 @@ public sealed class ParticlePool<TTexture> : IDisposable
     /// <summary>
     /// Gets the list of particle in the pool.
     /// </summary>
-    public ReadOnlyCollection<Particle> Particles => new ReadOnlyCollection<Particle>(this.particles.ToArray());
+    public ReadOnlyCollection<Particle> Particles => new (this.particles.ToArray());
 
     /// <summary>
     /// Gets the particle effect of the pool.

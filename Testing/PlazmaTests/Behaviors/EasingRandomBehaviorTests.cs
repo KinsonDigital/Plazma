@@ -7,10 +7,10 @@ namespace PlazmaTests.Behaviors;
 
 using System;
 using FluentAssertions;
+using NSubstitute;
 using Plazma;
 using Plazma.Behaviors;
 using Plazma.Services;
-using Moq;
 using Xunit;
 
 /// <summary>
@@ -18,12 +18,12 @@ using Xunit;
 /// </summary>
 public class EasingRandomBehaviorTests
 {
-    private readonly Mock<IRandomizerService> mockRandomizerService;
+    private readonly IRandomizerService mockRandomizerService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EasingRandomBehaviorTests"/> class.
     /// </summary>
-    public EasingRandomBehaviorTests() => this.mockRandomizerService = new Mock<IRandomizerService>();
+    public EasingRandomBehaviorTests() => this.mockRandomizerService = Substitute.For<IRandomizerService>();
 
     #region Constructor Tests
     [Fact]
@@ -34,7 +34,7 @@ public class EasingRandomBehaviorTests
         {
             ApplyToAttribute = ParticleAttribute.Angle,
         };
-        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act
         var actual = behavior.ApplyToAttribute;
@@ -50,7 +50,7 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         var settings = new EasingRandomBehaviorSettings();
-        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
         behavior.Start = 123;
@@ -65,7 +65,7 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         var settings = new EasingRandomBehaviorSettings();
-        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
         behavior.Change = 123;
@@ -84,9 +84,9 @@ public class EasingRandomBehaviorTests
     public void Update_WhenInvoked_CorrectlySetsBehaviorValue(EasingFunction easingFunction, int start, int change, int lifeTime, int elapsedTime, string expected)
     {
         // Arrange
-        this.mockRandomizerService.Setup(m => m.GetValue(11f, 11f)).Returns(start);
-        this.mockRandomizerService.Setup(m => m.GetValue(22f, 22f)).Returns(change);
-        this.mockRandomizerService.Setup(m => m.GetValue(33f, 33f)).Returns(lifeTime);
+        this.mockRandomizerService.GetValue(11f, 11f).Returns(start);
+        this.mockRandomizerService.GetValue(22f, 22f).Returns(change);
+        this.mockRandomizerService.GetValue(33f, 33f).Returns(lifeTime);
 
         var settings = new EasingRandomBehaviorSettings
         {
@@ -98,7 +98,7 @@ public class EasingRandomBehaviorTests
             TotalTimeMin = 33,
             TotalTimeMax = 33,
         };
-        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
         behavior.Update(new TimeSpan(0, 0, 0, 0, elapsedTime));
@@ -112,7 +112,7 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         var settings = new EasingRandomBehaviorSettings();
-        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
         behavior.Update(new TimeSpan(0, 0, 0, 0, 16));
@@ -127,9 +127,9 @@ public class EasingRandomBehaviorTests
     public void Update_WhenInvoked_ProperlySetsEnabledState(int timeElapsed, bool expected)
     {
         // Arrange
-        this.mockRandomizerService.Setup(m => m.GetValue(It.IsAny<float>(), It.IsAny<float>())).Returns(1000f);
+        this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(1000f);
         var settings = new EasingRandomBehaviorSettings();
-        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
         behavior.Update(new TimeSpan(0, 0, 0, 0, timeElapsed));
@@ -143,8 +143,8 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         var setting = new EasingRandomBehaviorSettings();
-        this.mockRandomizerService.Setup(m => m.GetValue(It.IsAny<float>(), It.IsAny<float>())).Returns(123);
-        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService.Object);
+        this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(123);
+        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act
         behavior.Reset();
@@ -158,8 +158,8 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         var setting = new EasingRandomBehaviorSettings();
-        this.mockRandomizerService.Setup(m => m.GetValue(It.IsAny<float>(), It.IsAny<float>())).Returns(123);
-        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService.Object);
+        this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(123);
+        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act
         behavior.Reset();
@@ -173,7 +173,7 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         var setting = new EasingRandomBehaviorSettings();
-        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act
         behavior.Update(new TimeSpan(0, 0, 0, 0, 16));
@@ -188,7 +188,7 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         var setting = new EasingRandomBehaviorSettings();
-        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService.Object);
+        var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act
         behavior.Update(new TimeSpan(0, 0, 0, 0, 45));

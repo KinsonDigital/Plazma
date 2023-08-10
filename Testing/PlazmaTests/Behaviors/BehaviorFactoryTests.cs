@@ -9,7 +9,7 @@ using Fakes;
 using FluentAssertions;
 using Plazma.Behaviors;
 using Plazma.Services;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -37,7 +37,7 @@ public class BehaviorFactoryTests
     public void CreateBehaviors_WhenUsingEasingRandomBehaviorSettings_CreatesCorrectBehavior()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
         var settings = new BehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
@@ -45,7 +45,7 @@ public class BehaviorFactoryTests
         var sut = new BehaviorFactory();
 
         // Act
-        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService);
 
         // Assert
         actual.Should().ContainSingle();
@@ -56,7 +56,7 @@ public class BehaviorFactoryTests
     public void CreateBehaviors_WhenUsingColorTransitionBehaviorSettings_CreatesCorrectBehavior()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
         var settings = new BehaviorSettings[]
         {
             new ColorTransitionBehaviorSettings(),
@@ -64,7 +64,7 @@ public class BehaviorFactoryTests
         var sut = new BehaviorFactory();
 
         // Act
-        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService);
 
         // Assert
         actual.Should().ContainSingle();
@@ -75,7 +75,7 @@ public class BehaviorFactoryTests
     public void CreateBehaviors_WhenUsingRandomBehaviorSettings_CreatesCorrectBehavior()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
         var settings = new BehaviorSettings[]
         {
             new RandomChoiceBehaviorSettings(),
@@ -83,7 +83,7 @@ public class BehaviorFactoryTests
         var sut = new BehaviorFactory();
 
         // Act
-        var actual = sut.CreateBehaviors(settings, mockRandomizerService.Object);
+        var actual = sut.CreateBehaviors(settings, mockRandomizerService);
 
         // Assert
         actual.Should().ContainSingle();
@@ -113,7 +113,7 @@ public class BehaviorFactoryTests
     public void CreateBehaviors_WhenUsingUnknownBehaviorSettingsType_ThrowsException()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
         var unknownSettingsType = new BehaviorSettings[]
         {
             new FakeBehaviorSettings(),
@@ -121,7 +121,7 @@ public class BehaviorFactoryTests
         var sut = new BehaviorFactory();
 
         // Act
-        var act = () => sut.CreateBehaviors(unknownSettingsType, mockRandomizerService.Object);
+        var act = () => sut.CreateBehaviors(unknownSettingsType, mockRandomizerService);
 
         // Assert
         act.Should().Throw<Exception>()

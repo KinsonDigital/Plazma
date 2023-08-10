@@ -186,7 +186,7 @@ public class Particle
         HashCode.Combine(this.behaviors, Position, Angle, TintColor, Size, IsAlive, IsDead);
 
     /// <summary>
-    /// Parses the <paramref name="colorValue"/> string into a <see cref="ParticleColor"/> type.
+    /// Parses the <paramref name="colorValue"/> string into a <see cref="Color"/> type.
     /// </summary>
     /// <param name="colorValue">The color string to parse.</param>
     /// <param name="color">The parsed color.</param>
