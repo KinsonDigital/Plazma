@@ -20,7 +20,7 @@ using Services;
 public class ParticleEngine<TTexture> : IDisposable
     where TTexture : class, IDisposable
 {
-    private readonly List<ParticlePool<TTexture>> particlePools = new List<ParticlePool<TTexture>>();
+    private readonly List<ParticlePool<TTexture>> particlePools = new ();
     private readonly ITextureLoader<TTexture> textureLoader;
     private readonly IRandomizerService randomizer;
     private bool enabled = true;
@@ -41,7 +41,7 @@ public class ParticleEngine<TTexture> : IDisposable
     /// Gets all of the particle pools.
     /// </summary>
     public ReadOnlyCollection<ParticlePool<TTexture>> ParticlePools
-        => new ReadOnlyCollection<ParticlePool<TTexture>>(this.particlePools.ToArray());
+        => new (this.particlePools.ToArray());
 
     /// <summary>
     /// Gets or sets a value indicating whether the engine is enabled or disabled.

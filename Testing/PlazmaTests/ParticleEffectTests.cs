@@ -297,5 +297,5 @@ public class ParticleEffectTests
     /// Creates a <see cref="ParticleEffect"/> instance for the purpose of testing.
     /// </summary>
     /// <returns>The instance to return.</returns>
-    private static ParticleEffect CreateEffect() => new ParticleEffect(It.IsAny<string>(), Array.Empty<BehaviorSettings>());
+    private static ParticleEffect CreateEffect() => new (It.IsAny<string>(), Array.Empty<BehaviorSettings>());
 }

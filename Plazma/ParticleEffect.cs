@@ -115,7 +115,7 @@ public class ParticleEffect
     /// </summary>
     public ReadOnlyCollection<BehaviorSettings> BehaviorSettings
     {
-        get => new ReadOnlyCollection<BehaviorSettings>(this.behaviorSettings);
+        get => new (this.behaviorSettings);
         set => this.behaviorSettings = value.ToArray();
     }
 
