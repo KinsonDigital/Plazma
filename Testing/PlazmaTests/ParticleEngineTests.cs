@@ -123,8 +123,6 @@ public class ParticleEngineTests
         sut.ClearPools();
 
         // Assert
-        mockPool1Texture.Received(1).Dispose();
-        mockPool2Texture.Received(1).Dispose();
         sut.ParticlePools.Should().BeEmpty();
     }
 
@@ -199,50 +197,6 @@ public class ParticleEngineTests
 
         // Assert
         mockBehavior.Received(3).Update(Arg.Any<TimeSpan>());
-    }
-
-    [Fact]
-    [SuppressMessage("csharpsquid", "S3966", Justification = "Double invoke intended.")]
-    public void Dispose_WhenInvoked_DisposesOfManagedResources()
-    {
-        // Arrange
-        var mockPool1Texture = Substitute.For<IDisposable>();
-        var mockPool2Texture = Substitute.For<IDisposable>();
-        var textureALoaded = false;
-
-        this.mockTextureLoader.LoadTexture(null).Returns((_) =>
-            {
-                // Load the correct texture depending on the pool.
-                // All pools use the same instance of texture loader so we have
-                // to mock out the correct texture to go with the correct pool,
-                // so we can verify that each pool is disposing of there textures
-                if (textureALoaded)
-                {
-                    return mockPool2Texture;
-                }
-                else
-                {
-                    textureALoaded = true;
-                    return mockPool1Texture;
-                }
-            });
-
-        var effect = new ParticleEffect(null, Array.Empty<BehaviorSettings>());
-        var sut = new ParticleEngine<IDisposable>(this.mockTextureLoader, this.mockRandomizerService);
-
-        // Create 2 pools
-        sut.CreatePool(effect, this.mockBehaviorFactory);
-        sut.CreatePool(effect, this.mockBehaviorFactory);
-        sut.LoadTextures();
-
-        // Act
-        sut.Dispose();
-
-        sut.Dispose();
-
-        // Assert
-        mockPool1Texture.Received(1).Dispose();
-        mockPool2Texture.Received(1).Dispose();
     }
     #endregion
 }

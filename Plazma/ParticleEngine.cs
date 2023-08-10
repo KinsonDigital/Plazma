@@ -17,8 +17,8 @@ using Services;
 /// how all of the <see cref="Particle"/>s behave and look on the screen.
 /// </summary>
 /// <typeparam name="TTexture">The type of texture for the particles.</typeparam>
-public class ParticleEngine<TTexture> : IDisposable
-    where TTexture : class, IDisposable
+public sealed class ParticleEngine<TTexture> : IDisposable
+    where TTexture : class
 {
     private readonly List<ParticlePool<TTexture>> particlePools = new ();
     private readonly ITextureLoader<TTexture> textureLoader;
@@ -126,27 +126,25 @@ public class ParticleEngine<TTexture> : IDisposable
     }
 
     /// <inheritdoc/>
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
+    public void Dispose() => Dispose(true);
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
     /// <param name="disposing">True to dispose of managed resources.</param>
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
-        if (!this.isDisposed)
+        if (this.isDisposed)
         {
-            if (disposing)
-            {
-                foreach (var pool in ParticlePools)
-                {
-                    pool.Dispose();
-                }
-            }
-
-            this.isDisposed = true;
+            return;
         }
+
+        if (disposing)
+        {
+            foreach (var pool in ParticlePools)
+            {
+                pool.Dispose();
+            }
+        }
+
+        this.isDisposed = true;
     }
 }

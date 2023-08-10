@@ -344,33 +344,6 @@ public class ParticlePoolTests
         // Assert
         actual.Should().BeFalse();
     }
-
-    [Fact]
-    [SuppressMessage("csharpsquid", "S3966", Justification = "Double invoke intended.")]
-    public void Dispose_WhenInvoked_ProperlyFreesManagedResources()
-    {
-        // Arrange
-        var particleEffect = new ParticleEffect(null, Array.Empty<BehaviorSettings>());
-        var mockTexture = Substitute.For<IDisposable>();
-
-        this.mockTextureLoader.LoadTexture(Arg.Any<string>()).Returns((_) => mockTexture);
-
-        var pool = new ParticlePool<IDisposable>(this.mockBehaviorFactory,
-            this.mockTextureLoader,
-            particleEffect,
-            this.mockRandomizerService);
-
-        pool.LoadTexture();
-
-        // Call this twice to verify that the disposable pattern is implemented correctly.
-        // You should be able to call this method twice and not throw an exception
-        // Act
-        pool.Dispose();
-        pool.Dispose();
-
-        // Assert
-        mockTexture.Received().Dispose();
-    }
     #endregion
 
     /// <summary>
