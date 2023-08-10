@@ -6,6 +6,7 @@ namespace PlazmaTests;
 
 using System;
 using System.Drawing;
+using System.Numerics;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
@@ -62,11 +63,11 @@ public class ParticleEffectTests
         var effect = CreateEffect();
 
         // Act
-        effect.SpawnLocation = new PointF(11, 22);
+        effect.SpawnLocation = new Vector2(11, 22);
         var actual = effect.SpawnLocation;
 
         // Assert
-        actual.Should().Be(new PointF(11, 22));
+        actual.Should().Be(new Vector2(11, 22));
     }
 
     [Fact]
@@ -147,7 +148,7 @@ public class ParticleEffectTests
 
         var effect = new ParticleEffect("test-name", settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 11,
             SpawnRateMax = 22,
             TotalParticlesAliveAtOnce = 33,
@@ -182,7 +183,7 @@ public class ParticleEffectTests
 
         var effectA = new ParticleEffect("test-name", settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 11,
             SpawnRateMax = 22,
             TotalParticlesAliveAtOnce = 33,
@@ -191,7 +192,7 @@ public class ParticleEffectTests
 
         var effectB = new ParticleEffect("test-name", settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 11,
             SpawnRateMax = 22,
             TotalParticlesAliveAtOnce = 33,
@@ -225,7 +226,7 @@ public class ParticleEffectTests
 
         var effectA = new ParticleEffect("test-name", settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 11,
             SpawnRateMax = 22,
             TotalParticlesAliveAtOnce = 33,
@@ -234,7 +235,7 @@ public class ParticleEffectTests
 
         var effectB = new ParticleEffect("effect-bee", settings)
         {
-            SpawnLocation = new PointF(99, 88),
+            SpawnLocation = new Vector2(99, 88),
             SpawnRateMin = 77,
             SpawnRateMax = 66,
             TotalParticlesAliveAtOnce = 55,
@@ -268,7 +269,7 @@ public class ParticleEffectTests
 
         var effectA = new ParticleEffect("test-name", settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 11,
             SpawnRateMax = 22,
             TotalParticlesAliveAtOnce = 33,
@@ -277,7 +278,7 @@ public class ParticleEffectTests
 
         var effectB = new ParticleEffect("effect-name", settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 11,
             SpawnRateMax = 22,
             TotalParticlesAliveAtOnce = 33,

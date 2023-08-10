@@ -1,4 +1,4 @@
-﻿// <copyright file="ParticlePoolTests.cs" company="KinsonDigital">
+// <copyright file="ParticlePoolTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,7 @@ namespace PlazmaTests;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Numerics;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
@@ -297,7 +298,7 @@ public class ParticlePoolTests
     public void Equals_WithDifferentObjectTypes_ReturnsFalse()
     {
         // Arrange
-        this.effect.SpawnLocation = new PointF(11, 22);
+        this.effect.SpawnLocation = new Vector2(11, 22);
         this.effect.SpawnRateMin = 33;
         this.effect.SpawnRateMax = 44;
         this.effect.TotalParticlesAliveAtOnce = 99;
@@ -319,7 +320,7 @@ public class ParticlePoolTests
         // Arrange
         var effectA = new ParticleEffect("texture-name", this.settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 33,
             SpawnRateMax = 44,
             TotalParticlesAliveAtOnce = 99,
@@ -328,7 +329,7 @@ public class ParticlePoolTests
 
         var effectB = new ParticleEffect("texture-name", this.settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 33,
             SpawnRateMax = 44,
             TotalParticlesAliveAtOnce = 100,

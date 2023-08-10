@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using Behaviors;
 using Newtonsoft.Json;
 
@@ -46,7 +47,7 @@ public class ParticleEffect
     /// <summary>
     /// Gets or sets the location on the screen of where to spawn the <see cref="Particle"/>s.
     /// </summary>
-    public PointF SpawnLocation { get; set; }
+    public Vector2 SpawnLocation { get; set; }
 
     /// <summary>
     /// Gets or sets the total number of particles that can be alive at once.

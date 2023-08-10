@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
+using System.Numerics;
 using Behaviors;
 
 /// <summary>
@@ -28,7 +29,7 @@ public class Particle
     /// <summary>
     /// Gets or sets the position of the <see cref="Particle"/>.
     /// </summary>
-    public PointF Position { get; set; }
+    public Vector2 Position { get; set; }
 
     /// <summary>
     /// Gets or sets the angle of the <see cref="Particle"/>.
@@ -99,10 +100,10 @@ public class Particle
                 switch (behavior.ApplyToAttribute)
                 {
                     case ParticleAttribute.X:
-                        Position = new PointF(value, Position.Y);
+                        Position = new Vector2(value, Position.Y);
                         break;
                     case ParticleAttribute.Y:
-                        Position = new PointF(Position.X, value);
+                        Position = new Vector2(Position.X, value);
                         break;
                     case ParticleAttribute.Angle:
                         Angle = value;
