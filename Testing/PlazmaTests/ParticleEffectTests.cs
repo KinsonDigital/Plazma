@@ -5,7 +5,6 @@
 namespace PlazmaTests;
 
 using System;
-using System.Drawing;
 using System.Numerics;
 using FluentAssertions;
 using Plazma;

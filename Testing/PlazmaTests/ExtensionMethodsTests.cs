@@ -8,8 +8,6 @@ namespace PlazmaTests;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using System.Numerics;
 using Fakes;
 using FluentAssertions;
 using NSubstitute;
@@ -64,33 +62,6 @@ public class ExtensionMethodsTests
 
         // Assert
         actual.Should().Be(expected);
-    }
-
-    [Fact]
-    public void Add_WhenInvoking_ReturnsCorrectResult()
-    {
-        // Arrange
-        var pointA = new Vector2(10, 20);
-        var pointB = new Vector2(5, 3);
-
-        // Act
-        var result = pointA.Add(pointB);
-
-        // Assert
-        result.Should().Be(new Vector2(15f, 23f));
-    }
-
-    [Fact]
-    public void Mult_WhenInvoking_ReturnsCorrectResult()
-    {
-        // Arrange
-        var point = new Vector2(10, 20);
-
-        // Act
-        var result = point.Mult(2);
-
-        // Assert
-        result.Should().Be(new Vector2(20f, 40f));
     }
 
     [Fact]

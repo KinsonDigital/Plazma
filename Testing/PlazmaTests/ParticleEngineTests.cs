@@ -5,7 +5,6 @@
 namespace PlazmaTests;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;

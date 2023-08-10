@@ -4,8 +4,6 @@
 
 namespace Plazma;
 
-using System;
-
 /// <summary>
 /// Loads textures.
 /// </summary>
