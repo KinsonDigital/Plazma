@@ -18,7 +18,7 @@ using Services;
 /// </summary>
 /// <typeparam name="TTexture">The texture for the particles in the pool.</typeparam>
 public sealed class ParticlePool<TTexture> : IDisposable
-    where TTexture : class, IDisposable
+    where TTexture : class
 {
     private readonly IRandomizerService randomService;
     private readonly ITextureLoader<TTexture> textureLoader;
@@ -182,8 +182,6 @@ public sealed class ParticlePool<TTexture> : IDisposable
         // Dispose of managed resources
         if (disposing)
         {
-            PoolTexture?.Dispose();
-
             this.isDisposed = false;
             this.spawnRate = 0;
             this.spawnRateElapsed = 0;
