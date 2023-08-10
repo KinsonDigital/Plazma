@@ -9,7 +9,6 @@ using System.Drawing;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
-using Moq;
 using Xunit;
 
 /// <summary>
@@ -45,7 +44,7 @@ public class ParticleEffectTests
                 TotalTimeMax = 66,
             },
         };
-        var effect = new ParticleEffect(It.IsAny<string>(), settings);
+        var effect = new ParticleEffect(null, settings);
 
         // Act
         var actual = effect.BehaviorSettings;
@@ -297,5 +296,5 @@ public class ParticleEffectTests
     /// Creates a <see cref="ParticleEffect"/> instance for the purpose of testing.
     /// </summary>
     /// <returns>The instance to return.</returns>
-    private static ParticleEffect CreateEffect() => new (It.IsAny<string>(), Array.Empty<BehaviorSettings>());
+    private static ParticleEffect CreateEffect() => new ("test-texture", Array.Empty<BehaviorSettings>());
 }
