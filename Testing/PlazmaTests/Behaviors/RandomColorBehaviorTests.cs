@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using FluentAssertions;
 using Plazma.Behaviors;
 using Plazma.Services;
-using Moq;
+using NSubstitute;
 using Xunit;
 
 /// <summary>
@@ -22,28 +22,28 @@ public class RandomColorBehaviorTests
     public void Update_WhenInvokedAfterFirstInvoke_OnlyUpdatesValueOnFirstInvoke()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
         var settings = new RandomChoiceBehaviorSettings();
-        var behavior = new RandomColorBehavior(settings, mockRandomizerService.Object);
+        var behavior = new RandomColorBehavior(settings, mockRandomizerService);
 
         // Act
-        behavior.Update(It.IsAny<TimeSpan>());
-        behavior.Update(It.IsAny<TimeSpan>());
+        behavior.Update(TimeSpan.Zero);
+        behavior.Update(TimeSpan.Zero);
 
         // Assert
-        mockRandomizerService.Verify(m => m.GetValue(0, 0), Times.Once());
+        mockRandomizerService.Received(1).GetValue(0, 0);
     }
 
     [Fact]
     public void Update_WhenInvokedWithNullSettingsData_UsesDefaultWhiteColor()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
         var settings = new RandomChoiceBehaviorSettings();
-        var behavior = new RandomColorBehavior(settings, mockRandomizerService.Object);
+        var behavior = new RandomColorBehavior(settings, mockRandomizerService);
 
         // Act
-        behavior.Update(It.IsAny<TimeSpan>());
+        behavior.Update(TimeSpan.Zero);
 
         // Assert
         behavior.Value.Should().Be("clr:255,255,255,255");
@@ -53,18 +53,18 @@ public class RandomColorBehaviorTests
     public void Update_WhenInvokedWithSettingsData_RandomlyChoosesSecondColor()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
-        mockRandomizerService.Setup(m => m.GetValue(0, 1)).Returns(1);
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
+        mockRandomizerService.GetValue(0, 1).Returns(1);
 
         var settings = new RandomChoiceBehaviorSettings
         {
             Data = new ReadOnlyCollection<string>(new[] { "clr:255,255,0,0", "clr:255,0,255,0" }),
         };
 
-        var behavior = new RandomColorBehavior(settings, mockRandomizerService.Object);
+        var behavior = new RandomColorBehavior(settings, mockRandomizerService);
 
         // Act
-        behavior.Update(It.IsAny<TimeSpan>());
+        behavior.Update(TimeSpan.Zero);
 
         // Assert
         behavior.Value.Should().Be("clr:255,0,255,0");
@@ -74,17 +74,17 @@ public class RandomColorBehaviorTests
     public void Update_WhenResetAfterInvoked_ChoosesAnotherColor()
     {
         // Arrange
-        var mockRandomizerService = new Mock<IRandomizerService>();
+        var mockRandomizerService = Substitute.For<IRandomizerService>();
         var settings = new RandomChoiceBehaviorSettings();
-        var behavior = new RandomColorBehavior(settings, mockRandomizerService.Object);
+        var behavior = new RandomColorBehavior(settings, mockRandomizerService);
 
         // Act
-        behavior.Update(It.IsAny<TimeSpan>());
+        behavior.Update(TimeSpan.Zero);
         behavior.Reset();
-        behavior.Update(It.IsAny<TimeSpan>());
+        behavior.Update(TimeSpan.Zero);
 
         // Assert
-        mockRandomizerService.Verify(m => m.GetValue(0, 0), Times.Exactly(2));
+        mockRandomizerService.Received(2).GetValue(0, 0);
     }
     #endregion
 }
