@@ -1,3 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-Console.WriteLine("Hello, World!");
+using PlazmaTesting;
+
+var game = new MainWindow();
+game.Show();
