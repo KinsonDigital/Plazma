@@ -38,7 +38,7 @@ public class BehaviorFactoryTests
     {
         // Arrange
         var mockRandomizerService = Substitute.For<IRandomizerService>();
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -57,7 +57,7 @@ public class BehaviorFactoryTests
     {
         // Arrange
         var mockRandomizerService = Substitute.For<IRandomizerService>();
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new ColorTransitionBehaviorSettings(),
         };
@@ -76,7 +76,7 @@ public class BehaviorFactoryTests
     {
         // Arrange
         var mockRandomizerService = Substitute.For<IRandomizerService>();
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new RandomChoiceBehaviorSettings(),
         };
@@ -99,7 +99,7 @@ public class BehaviorFactoryTests
         // Act
         var act = () =>
         {
-            var settings = new BehaviorSettings[] { new ColorTransitionBehaviorSettings(), };
+            var settings = new IBehaviorSettings[] { new ColorTransitionBehaviorSettings(), };
             sut.CreateBehaviors(settings, null);
         };
 
@@ -114,7 +114,7 @@ public class BehaviorFactoryTests
     {
         // Arrange
         var mockRandomizerService = Substitute.For<IRandomizerService>();
-        var unknownSettingsType = new BehaviorSettings[]
+        var unknownSettingsType = new IBehaviorSettings[]
         {
             new FakeBehaviorSettings(),
         };

@@ -11,13 +11,13 @@ using System;
 /// </summary>
 public abstract class Behavior : IBehavior
 {
-    private readonly BehaviorSettings setting;
+    private readonly IBehaviorSettings setting;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Behavior"/> class.
     /// </summary>
     /// <param name="settings">The settings used to dictate how the behavior makes a particle behave.</param>
-    public Behavior(BehaviorSettings settings) => this.setting = settings;
+    public Behavior(IBehaviorSettings settings) => this.setting = settings;
 
     /// <summary>
     /// Gets or sets the current value of the behavior.

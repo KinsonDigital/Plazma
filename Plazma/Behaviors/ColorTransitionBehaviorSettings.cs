@@ -10,7 +10,7 @@ using System.Drawing;
 /// Transitions from one color to another over a specific amount of time
 /// using an easing function.
 /// </summary>
-public class ColorTransitionBehaviorSettings : BehaviorSettings, IEasingCapable
+public class ColorTransitionBehaviorSettings : IBehaviorSettings, IEasingCapable
 {
     /*NOTE:
      * The "change amount props" are build on the premise that if the start color component
@@ -18,6 +18,9 @@ public class ColorTransitionBehaviorSettings : BehaviorSettings, IEasingCapable
      * value will make sure that the change amount being fed into the ease in function
      * will increase the start value until it reaches the stop value.
      */
+
+    /// <inheritdoc/>
+    public ParticleAttribute ApplyToAttribute { get; set; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ColorTransitionBehaviorSettings"/> class.

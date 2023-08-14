@@ -9,8 +9,11 @@ using System;
 /// <summary>
 /// Stores settings for creating an <see cref="EasingRandomBehavior"/>.
 /// </summary>
-public class EasingRandomBehaviorSettings : BehaviorSettings, IEasingCapable
+public class EasingRandomBehaviorSettings : IBehaviorSettings, IEasingCapable
 {
+    /// <inheritdoc/>
+    public ParticleAttribute ApplyToAttribute { get; set; }
+
     /// <inheritdoc/>
     public EasingFunction EasingFunctionType { get; set; } = EasingFunction.EaseIn;
 

@@ -53,7 +53,7 @@ public class ParticleEngineTests
     public void ParticlePools_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new BehaviorSettings[] { new EasingRandomBehaviorSettings(), };
+        var settings = new IBehaviorSettings[] { new EasingRandomBehaviorSettings(), };
         var effect = new ParticleEffect(null, settings);
         this.engine.CreatePool(effect, this.mockBehaviorFactory);
         this.engine.LoadTextures();
@@ -71,7 +71,7 @@ public class ParticleEngineTests
     public void TexturesLoaded_WhenGettingValueAfterTexturesAreLoaded_ReturnsTrue()
     {
         // Arrange
-        var settings = new BehaviorSettings[] { new EasingRandomBehaviorSettings(), };
+        var settings = new IBehaviorSettings[] { new EasingRandomBehaviorSettings(), };
         var effect = new ParticleEffect(null, settings);
         this.engine.CreatePool(effect, this.mockBehaviorFactory);
         this.engine.LoadTextures();
@@ -110,7 +110,7 @@ public class ParticleEngineTests
                 }
             });
 
-        var effect = new ParticleEffect(null, Array.Empty<BehaviorSettings>());
+        var effect = new ParticleEffect(null, Array.Empty<IBehaviorSettings>());
         var sut = new ParticleEngine<IDisposable>(this.mockTextureLoader, this.mockRandomizerService);
 
         // Create 2 pools
@@ -129,7 +129,7 @@ public class ParticleEngineTests
     public void LoadTextures_WhenInvoked_LoadsParticlePoolTextures()
     {
         // Arrange
-        var settings = new BehaviorSettings[] { new EasingRandomBehaviorSettings(), };
+        var settings = new IBehaviorSettings[] { new EasingRandomBehaviorSettings(), };
         var effect = new ParticleEffect("texture-name", settings);
         this.engine.CreatePool(effect, this.mockBehaviorFactory);
         this.engine.LoadTextures();
@@ -161,7 +161,7 @@ public class ParticleEngineTests
     public void Update_WhenDisabled_DoesNotUpdateParticles()
     {
         // Arrange
-        var settings = new BehaviorSettings[] { new EasingRandomBehaviorSettings(), };
+        var settings = new IBehaviorSettings[] { new EasingRandomBehaviorSettings(), };
         var effect = new ParticleEffect(null, settings);
         var mockBehavior = Substitute.For<IBehavior>();
 
@@ -181,14 +181,14 @@ public class ParticleEngineTests
     public void Update_WhenEnabled_UpdatesAllParticles()
     {
         // Arrange
-        var settings = new BehaviorSettings[] { new EasingRandomBehaviorSettings(), };
+        var settings = new IBehaviorSettings[] { new EasingRandomBehaviorSettings(), };
         var effect = new ParticleEffect(null, settings) { TotalParticlesAliveAtOnce = 2, };
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns("0");
 
         this.mockRandomizerService.GetValue(Arg.Any<int>(), Arg.Any<int>()).Returns(16);
-        this.mockBehaviorFactory.CreateBehaviors(Arg.Any<BehaviorSettings[]>(), this.mockRandomizerService)
+        this.mockBehaviorFactory.CreateBehaviors(Arg.Any<IBehaviorSettings[]>(), this.mockRandomizerService)
             .Returns(new[] { mockBehavior });
 
         this.engine.CreatePool(effect, this.mockBehaviorFactory);

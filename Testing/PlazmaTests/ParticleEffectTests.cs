@@ -21,7 +21,7 @@ public class ParticleEffectTests
     public void Ctor_WhenInvoked_SetsParticleTextureName()
     {
         // Act
-        var effect = new ParticleEffect("effect-name", Array.Empty<BehaviorSettings>());
+        var effect = new ParticleEffect("effect-name", Array.Empty<IBehaviorSettings>());
 
         // Assert
         effect.ParticleTextureName.Should().Be("effect-name");
@@ -31,7 +31,7 @@ public class ParticleEffectTests
     public void Ctor_WhenInvoked_SetsBehaviorSettings()
     {
         // Arrange
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new EasingRandomBehaviorSettings
             {
@@ -131,7 +131,7 @@ public class ParticleEffectTests
     public void Equals_WithDifferentObjects_ReturnsFalse()
     {
         // Arrange
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new EasingRandomBehaviorSettings
             {
@@ -166,7 +166,7 @@ public class ParticleEffectTests
     public void Equals_WithEqualObjects_ReturnsTrue()
     {
         // Arrange
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new EasingRandomBehaviorSettings
             {
@@ -209,7 +209,7 @@ public class ParticleEffectTests
     public void Equals_WithNonEqualObjects_ReturnsFalse()
     {
         // Arrange
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new EasingRandomBehaviorSettings
             {
@@ -252,7 +252,7 @@ public class ParticleEffectTests
     public void Equals_WithDifferentTintColorTotals_ReturnsFalse()
     {
         // Arrange
-        var settings = new BehaviorSettings[]
+        var settings = new IBehaviorSettings[]
         {
             new EasingRandomBehaviorSettings
             {
@@ -296,5 +296,5 @@ public class ParticleEffectTests
     /// Creates a <see cref="ParticleEffect"/> instance for the purpose of testing.
     /// </summary>
     /// <returns>The instance to return.</returns>
-    private static ParticleEffect CreateEffect() => new ("test-texture", Array.Empty<BehaviorSettings>());
+    private static ParticleEffect CreateEffect() => new ("test-texture", Array.Empty<IBehaviorSettings>());
 }

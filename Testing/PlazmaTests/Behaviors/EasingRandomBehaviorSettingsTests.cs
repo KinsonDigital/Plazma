@@ -207,39 +207,5 @@ public class EasingRandomBehaviorSettingsTests
         // Assert
         actual.Should().BeFalse();
     }
-
-    [Fact]
-    public void GetHashCode_WhenInvoked_ReturnsCorrectResult()
-    {
-        // Arrange
-        var settingA = new EasingRandomBehaviorSettings
-        {
-            ApplyToAttribute = ParticleAttribute.Angle,
-            RandomChangeMin = 10,
-            RandomChangeMax = 20,
-            RandomStartMin = 30,
-            RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
-        };
-
-        var settingB = new EasingRandomBehaviorSettings
-        {
-            ApplyToAttribute = ParticleAttribute.Angle,
-            RandomChangeMin = 10,
-            RandomChangeMax = 20,
-            RandomStartMin = 30,
-            RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
-        };
-
-        // Act
-        var settingAHashCode = settingA.GetHashCode();
-        var settingBHashCode = settingB.GetHashCode();
-
-        // Assert
-        settingBHashCode.Should().Be(settingAHashCode);
-    }
     #endregion
 }

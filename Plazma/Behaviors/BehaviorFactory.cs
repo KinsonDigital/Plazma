@@ -21,7 +21,7 @@ public class BehaviorFactory : IBehaviorFactory
     /// <param name="randomService">The random used to randomly generate values.</param>
     /// <returns>A list of behaviors.</returns>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="settings"/> parameter is null.</exception>
-    public IBehavior[] CreateBehaviors(BehaviorSettings[] settings, IRandomizerService randomService)
+    public IBehavior[] CreateBehaviors(IBehaviorSettings[] settings, IRandomizerService randomService)
     {
         ArgumentNullException.ThrowIfNull(settings);
         ArgumentNullException.ThrowIfNull(randomService);

@@ -1,4 +1,4 @@
-﻿// <copyright file="ParticleEffect.cs" company="KinsonDigital">
+// <copyright file="ParticleEffect.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 /// </summary>
 public class ParticleEffect
 {
-    private BehaviorSettings[] behaviorSettings = Array.Empty<BehaviorSettings>();
+    private IBehaviorSettings[] behaviorSettings = Array.Empty<IBehaviorSettings>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
@@ -32,7 +32,7 @@ public class ParticleEffect
     /// </summary>
     /// <param name="particleTextureName">The name of the texture used in the particle effect.</param>
     /// <param name="settings">The settings used to setup the particle effect.</param>
-    public ParticleEffect(string particleTextureName, BehaviorSettings[] settings)
+    public ParticleEffect(string particleTextureName, IBehaviorSettings[] settings)
     {
         this.behaviorSettings = settings ?? throw new ArgumentNullException(nameof(settings), "Parameter must not be null.");
         ParticleTextureName = particleTextureName;
@@ -113,7 +113,7 @@ public class ParticleEffect
     /// <summary>
     /// Gets or sets the list of behavior settings that describe how the particle effect is setup.
     /// </summary>
-    public ReadOnlyCollection<BehaviorSettings> BehaviorSettings
+    public ReadOnlyCollection<IBehaviorSettings> BehaviorSettings
     {
         get => new (this.behaviorSettings);
         set => this.behaviorSettings = value.ToArray();

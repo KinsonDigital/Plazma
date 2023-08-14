@@ -22,7 +22,7 @@ public class ParticlePoolTests
     private readonly IRandomizerService mockRandomizerService;
     private readonly ITextureLoader<IDisposable> mockTextureLoader;
     private readonly IBehaviorFactory mockBehaviorFactory;
-    private readonly BehaviorSettings[] settings;
+    private readonly IBehaviorSettings[] settings;
     private readonly ParticleEffect effect;
 
     /// <summary>
@@ -30,7 +30,7 @@ public class ParticlePoolTests
     /// </summary>
     public ParticlePoolTests()
     {
-        this.settings = new BehaviorSettings[]
+        this.settings = new IBehaviorSettings[]
         {
             new EasingRandomBehaviorSettings(),
         };
@@ -45,7 +45,7 @@ public class ParticlePoolTests
 
         this.mockBehaviorFactory = Substitute.For<IBehaviorFactory>();
         this.mockBehaviorFactory
-            .CreateBehaviors(Arg.Any<BehaviorSettings[]>(), this.mockRandomizerService)
+            .CreateBehaviors(Arg.Any<IBehaviorSettings[]>(), this.mockRandomizerService)
             .Returns(new[] { mockBehavior });
     }
 

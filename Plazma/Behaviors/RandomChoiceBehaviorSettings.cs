@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 /// <summary>
 /// Various settings for behaviors that choose values randomly from a list of choices.
 /// </summary>
-public class RandomChoiceBehaviorSettings : BehaviorSettings
+public class RandomChoiceBehaviorSettings : IBehaviorSettings
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="RandomChoiceBehaviorSettings"/> class.
@@ -17,6 +17,9 @@ public class RandomChoiceBehaviorSettings : BehaviorSettings
     public RandomChoiceBehaviorSettings()
     {
     }
+
+    /// <inheritdoc/>
+    public ParticleAttribute ApplyToAttribute { get; set; }
 
     /// <summary>
     /// Gets or sets the data for the use by an <see cref="IBehavior"/> implementation.

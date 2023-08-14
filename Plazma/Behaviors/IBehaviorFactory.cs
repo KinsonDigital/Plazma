@@ -17,5 +17,5 @@ public interface IBehaviorFactory
     /// <param name="settings">The list of settings used to create each behavior.</param>
     /// <param name="randomService">Used to generate random values from the given <paramref name="settings"/> parameter.</param>
     /// <returns>A list of behaviors.</returns>
-    IBehavior[] CreateBehaviors(BehaviorSettings[] settings, IRandomizerService randomService);
+    IBehavior[] CreateBehaviors(IBehaviorSettings[] settings, IRandomizerService randomService);
 }

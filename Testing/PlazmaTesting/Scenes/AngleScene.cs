@@ -101,7 +101,7 @@ public class AngleScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private BehaviorSettings[] CreateSettings()
+    private IBehaviorSettings[] CreateSettings()
     {
         var windowCenter = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
 
@@ -141,7 +141,7 @@ public class AngleScene : SceneBase
             RandomStartMax = 0,
         };
 
-        return new BehaviorSettings[]
+        return new IBehaviorSettings[]
         {
             xPosSettings,
             yPosSettings,

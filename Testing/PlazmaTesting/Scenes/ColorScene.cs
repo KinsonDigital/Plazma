@@ -103,7 +103,7 @@ public class ColorScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private BehaviorSettings[] CreateSettings()
+    private IBehaviorSettings[] CreateSettings()
     {
         var windowCenter = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
 
@@ -141,7 +141,7 @@ public class ColorScene : SceneBase
             StopColor = Color.MediumPurple,
         };
 
-        return new BehaviorSettings[]
+        return new IBehaviorSettings[]
         {
             xPosSettings,
             yPosSettings,

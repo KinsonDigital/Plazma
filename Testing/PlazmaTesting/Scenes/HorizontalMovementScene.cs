@@ -117,7 +117,7 @@ public class HorizontalMovementScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private BehaviorSettings CreateSettings()
+    private IBehaviorSettings CreateSettings()
     {
         const int changeMin = 1000;
         const int changeMax = 2000;
