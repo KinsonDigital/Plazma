@@ -132,20 +132,49 @@ public class ColorScene : SceneBase
             RandomStartMax = windowCenter.Y,
         };
 
-        var clrSettings = new ColorTransitionBehaviorSettings
+        var white = Color.White;
+        var purple = Color.MediumPurple;
+
+        var redSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Color,
-            EasingFunctionType = EasingFunction.EaseIn,
-            LifeTime = 1500,
-            StartColor = Color.White,
-            StopColor = Color.MediumPurple,
+            ApplyToAttribute = ParticleAttribute.RedColorComponent,
+            LifeTimeMinMilliseconds = 1500,
+            LifeTimeMaxMilliseconds = 1500,
+            RandomChangeMin = purple.R - white.R,
+            RandomChangeMax = purple.R - white.R,
+            RandomStartMin = white.R,
+            RandomStartMax = white.R,
+        };
+
+        var greenSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = ParticleAttribute.GreenColorComponent,
+            LifeTimeMinMilliseconds = 1500,
+            LifeTimeMaxMilliseconds = 1500,
+            RandomChangeMin = purple.G - white.G,
+            RandomChangeMax = purple.G - white.G,
+            RandomStartMin = white.G,
+            RandomStartMax = white.G,
+        };
+
+        var blueSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = ParticleAttribute.BlueColorComponent,
+            LifeTimeMinMilliseconds = 1500,
+            LifeTimeMaxMilliseconds = 1500,
+            RandomChangeMin = purple.B - white.B,
+            RandomChangeMax = purple.B - white.B,
+            RandomStartMin = white.B,
+            RandomStartMax = white.B,
         };
 
         return new IBehaviorSettings[]
         {
             xPosSettings,
             yPosSettings,
-            clrSettings
+            redSettings,
+            greenSettings,
+            blueSettings,
         };
     }
 }
