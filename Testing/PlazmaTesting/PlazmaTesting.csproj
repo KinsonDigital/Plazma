@@ -12,4 +12,23 @@
       <PackageReference Include="KinsonDigital.Velaptor" Version="1.0.0-preview.23" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Plazma\Plazma.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Content\Graphics\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Content\Graphics\drop.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="stylecop.json" />
+      <AdditionalFiles Include="stylecop.json" />
+    </ItemGroup>
+
 </Project>
