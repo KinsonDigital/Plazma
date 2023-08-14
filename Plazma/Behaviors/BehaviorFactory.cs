@@ -15,16 +15,16 @@ using Services;
 public class BehaviorFactory : IBehaviorFactory
 {
     /// <summary>
-    /// Creates all of the behaviors using the given <paramref name="randomizerService"/>.
+    /// Creates all of the behaviors using the given <paramref name="randomService"/>.
     /// </summary>
     /// <param name="settings">The list of settings used to create each behavior.</param>
-    /// <param name="randomizerService">The random used to randomly generate values.</param>
+    /// <param name="randomService">The random used to randomly generate values.</param>
     /// <returns>A list of behaviors.</returns>
     /// <exception cref="ArgumentNullException">Thrown if the <paramref name="settings"/> parameter is null.</exception>
-    public IBehavior[] CreateBehaviors(BehaviorSettings[] settings, IRandomizerService randomizerService)
+    public IBehavior[] CreateBehaviors(BehaviorSettings[] settings, IRandomizerService randomService)
     {
         ArgumentNullException.ThrowIfNull(settings);
-        ArgumentNullException.ThrowIfNull(randomizerService);
+        ArgumentNullException.ThrowIfNull(randomService);
 
         var behaviors = new List<IBehavior>();
 
@@ -34,13 +34,13 @@ public class BehaviorFactory : IBehaviorFactory
             switch (setting)
             {
                 case EasingRandomBehaviorSettings easingRandomBehaviorSettings:
-                    behaviors.Add(new EasingRandomBehavior(easingRandomBehaviorSettings, randomizerService));
+                    behaviors.Add(new EasingRandomBehavior(easingRandomBehaviorSettings, randomService));
                     break;
                 case ColorTransitionBehaviorSettings clrTransitionBehaviorSettings:
                     behaviors.Add(new ColorTransitionBehavior(clrTransitionBehaviorSettings));
                     break;
                 case RandomChoiceBehaviorSettings randomChoiceBehaviorSettings:
-                    behaviors.Add(new RandomColorBehavior(randomChoiceBehaviorSettings, randomizerService));
+                    behaviors.Add(new RandomColorBehavior(randomChoiceBehaviorSettings, randomService));
                     break;
                 default:
                     throw new Exception($"Unknown behavior settings of type '{setting.GetType().Name}'.");

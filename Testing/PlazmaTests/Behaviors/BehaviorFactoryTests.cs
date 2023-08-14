@@ -106,7 +106,7 @@ public class BehaviorFactoryTests
         // Assert
         act.Should()
             .Throw<ArgumentNullException>()
-            .WithMessage("Value cannot be null. (Parameter 'RandomizerService')");
+            .WithMessage("Value cannot be null. (Parameter 'randomService')");
     }
 
     [Fact]

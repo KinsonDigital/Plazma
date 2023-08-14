@@ -8,7 +8,6 @@ namespace Plazma;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
 using System.Linq;
 
 /// <summary>
@@ -43,35 +42,6 @@ public static class ExtensionMethods
         var randomResult = random.Next(minValueAsInt, maxValueAsInt);
 
         return randomResult / 1000f;
-    }
-
-    /// <summary>
-    /// Adds the given <paramref name="pointB"/>'s X and Y components to this point and returns the result.
-    /// </summary>
-    /// <param name="pointA">The current point to add the given point to.</param>
-    /// <param name="pointB">The point to add to this point.</param>
-    /// <returns>The sum of 2 points.</returns>
-    public static PointF Add(this PointF pointA, PointF pointB)
-    {
-        pointA.X += pointB.X;
-        pointA.Y += pointB.Y;
-
-        return pointA;
-    }
-
-    /// <summary>
-    /// Multiplies the components of this <see cref="PointF"/>
-    /// by the given <paramref name="scalar"/>.
-    /// </summary>
-    /// <param name="point">The left operand of the multiplication operation.</param>
-    /// <param name="scalar">The right operand of the multiplication operation.</param>
-    /// <returns>The sum of 2 points.</returns>
-    public static PointF Mult(this PointF point, double scalar)
-    {
-        point.X *= (float)scalar;
-        point.Y *= (float)scalar;
-
-        return point;
     }
 
     /// <summary>

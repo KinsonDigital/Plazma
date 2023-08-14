@@ -37,8 +37,8 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings();
 
         // Act
-        setting.StartMin = 1234f;
-        var actual = setting.StartMin;
+        setting.RandomStartMin = 1234f;
+        var actual = setting.RandomStartMin;
 
         // Assert
         actual.Should().Be(1234f);
@@ -51,8 +51,8 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings();
 
         // Act
-        setting.StartMax = 1234f;
-        var actual = setting.StartMax;
+        setting.RandomStartMax = 1234f;
+        var actual = setting.RandomStartMax;
 
         // Assert
         actual.Should().Be(1234f);
@@ -65,8 +65,8 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings();
 
         // Act
-        setting.ChangeMin = 1234f;
-        var actual = setting.ChangeMin;
+        setting.RandomChangeMin = 1234f;
+        var actual = setting.RandomChangeMin;
 
         // Assert
         actual.Should().Be(1234f);
@@ -79,8 +79,8 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings();
 
         // Act
-        setting.ChangeMax = 1234f;
-        var actual = setting.ChangeMax;
+        setting.RandomChangeMax = 1234f;
+        var actual = setting.RandomChangeMax;
 
         // Assert
         actual.Should().Be(1234f);
@@ -93,8 +93,8 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings();
 
         // Act
-        setting.TotalTimeMin = 1234f;
-        var actual = setting.TotalTimeMin;
+        setting.LifeTimeMinMilliseconds = 1234f;
+        var actual = setting.LifeTimeMinMilliseconds;
 
         // Assert
         actual.Should().Be(1234f);
@@ -107,8 +107,8 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings();
 
         // Act
-        setting.TotalTimeMax = 1234f;
-        var actual = setting.TotalTimeMax;
+        setting.LifeTimeMaxMilliseconds = 1234f;
+        var actual = setting.LifeTimeMaxMilliseconds;
 
         // Assert
         actual.Should().Be(1234f);
@@ -123,12 +123,12 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
-            ChangeMin = 10,
-            ChangeMax = 20,
-            StartMin = 30,
-            StartMax = 40,
-            TotalTimeMin = 50,
-            TotalTimeMax = 60,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
+            RandomStartMin = 30,
+            RandomStartMax = 40,
+            LifeTimeMinMilliseconds = 50,
+            LifeTimeMaxMilliseconds = 60,
         };
         var otherObj = new object();
 
@@ -146,33 +146,33 @@ public class EasingRandomBehaviorSettingsTests
         var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
-            ChangeMin = 10,
-            ChangeMax = 20,
-            StartMin = 30,
-            StartMax = 40,
-            TotalTimeMin = 50,
-            TotalTimeMax = 60,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
+            RandomStartMin = 30,
+            RandomStartMax = 40,
+            LifeTimeMinMilliseconds = 50,
+            LifeTimeMaxMilliseconds = 60,
         };
 
         var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
-            ChangeMin = 10,
-            ChangeMax = 20,
-            StartMin = 30,
-            StartMax = 40,
-            TotalTimeMin = 50,
-            TotalTimeMax = 60,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
+            RandomStartMin = 30,
+            RandomStartMax = 40,
+            LifeTimeMinMilliseconds = 50,
+            LifeTimeMaxMilliseconds = 60,
         };
 
         // Act & Assert
         settingA.ApplyToAttribute.Should().Be(settingB.ApplyToAttribute);
-        settingA.ChangeMin.Should().Be(settingB.ChangeMin);
-        settingA.ChangeMax.Should().Be(settingB.ChangeMax);
-        settingA.StartMin.Should().Be(settingB.StartMin);
-        settingA.StartMax.Should().Be(settingB.StartMax);
-        settingA.TotalTimeMin.Should().Be(settingB.TotalTimeMin);
-        settingA.TotalTimeMax.Should().Be(settingB.TotalTimeMax);
+        settingA.RandomChangeMin.Should().Be(settingB.RandomChangeMin);
+        settingA.RandomChangeMax.Should().Be(settingB.RandomChangeMax);
+        settingA.RandomStartMin.Should().Be(settingB.RandomStartMin);
+        settingA.RandomStartMax.Should().Be(settingB.RandomStartMax);
+        settingA.LifeTimeMinMilliseconds.Should().Be(settingB.LifeTimeMinMilliseconds);
+        settingA.LifeTimeMaxMilliseconds.Should().Be(settingB.LifeTimeMaxMilliseconds);
     }
 
     [Fact]
@@ -182,23 +182,23 @@ public class EasingRandomBehaviorSettingsTests
         var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.BlueColorComponent,
-            ChangeMin = 100,
-            ChangeMax = 200,
-            StartMin = 300,
-            StartMax = 400,
-            TotalTimeMin = 500,
-            TotalTimeMax = 600,
+            RandomChangeMin = 100,
+            RandomChangeMax = 200,
+            RandomStartMin = 300,
+            RandomStartMax = 400,
+            LifeTimeMinMilliseconds = 500,
+            LifeTimeMaxMilliseconds = 600,
         };
 
         var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
-            ChangeMin = 10,
-            ChangeMax = 20,
-            StartMin = 30,
-            StartMax = 40,
-            TotalTimeMin = 50,
-            TotalTimeMax = 60,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
+            RandomStartMin = 30,
+            RandomStartMax = 40,
+            LifeTimeMinMilliseconds = 50,
+            LifeTimeMaxMilliseconds = 60,
         };
 
         // Act
@@ -215,23 +215,23 @@ public class EasingRandomBehaviorSettingsTests
         var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
-            ChangeMin = 10,
-            ChangeMax = 20,
-            StartMin = 30,
-            StartMax = 40,
-            TotalTimeMin = 50,
-            TotalTimeMax = 60,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
+            RandomStartMin = 30,
+            RandomStartMax = 40,
+            LifeTimeMinMilliseconds = 50,
+            LifeTimeMaxMilliseconds = 60,
         };
 
         var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Angle,
-            ChangeMin = 10,
-            ChangeMax = 20,
-            StartMin = 30,
-            StartMax = 40,
-            TotalTimeMin = 50,
-            TotalTimeMax = 60,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
+            RandomStartMin = 30,
+            RandomStartMax = 40,
+            LifeTimeMinMilliseconds = 50,
+            LifeTimeMaxMilliseconds = 60,
         };
 
         // Act

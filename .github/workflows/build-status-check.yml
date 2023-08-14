@@ -2,16 +2,39 @@ name: ✅Build Status Check
 run-name: ✅Build Status Check (${{ github.base_ref }} branch)
 
 
+defaults:
+  run:
+    shell: pwsh
+
+
 on:
   pull_request:
     branches: [main, preview]
 
 
 jobs:
-  build_status_check:
+  build_main_project:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v11.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v12.0.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+
+
+  build_testing_app:
+    name: ${{ vars.PROJECT_NAME }} Build Status Check
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v12.0.0
+    with:
+      project-name: "${{ vars.PROJECT_NAME }}Testing"
+      build-config: Debug
+      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+
+
+  build_status_check:
+    name: ${{ vars.PROJECT_NAME }} Build Status Check
+    needs: [build_main_project, build_testing_app]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Success Message
+        run: Write-Host "Build Status Check Passed!"

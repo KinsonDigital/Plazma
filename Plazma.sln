@@ -34,6 +34,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlazmaTests", "Testing\PlazmaTests\PlazmaTests.csproj", "{AF6A9738-F676-408A-B1B9-E7F43631BC08}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlazmaTesting", "Testing\PlazmaTesting\PlazmaTesting.csproj", "{D2B0088E-5452-48FE-B804-FA985A114635}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +50,10 @@ Global
 		{AF6A9738-F676-408A-B1B9-E7F43631BC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF6A9738-F676-408A-B1B9-E7F43631BC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF6A9738-F676-408A-B1B9-E7F43631BC08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2B0088E-5452-48FE-B804-FA985A114635}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2B0088E-5452-48FE-B804-FA985A114635}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2B0088E-5452-48FE-B804-FA985A114635}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2B0088E-5452-48FE-B804-FA985A114635}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +61,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{8518113E-D0C3-4E63-8F2E-542EB6D1CCE9} = {67F82AED-1502-4803-855A-CDB26DC685B4}
 		{AF6A9738-F676-408A-B1B9-E7F43631BC08} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
+		{D2B0088E-5452-48FE-B804-FA985A114635} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E6732B6-A610-43DA-A1D7-1EC8EE1E6273}

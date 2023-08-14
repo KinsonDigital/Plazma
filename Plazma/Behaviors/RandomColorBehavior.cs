@@ -1,4 +1,4 @@
-﻿// <copyright file="RandomColorBehavior.cs" company="KinsonDigital">
+// <copyright file="RandomColorBehavior.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 

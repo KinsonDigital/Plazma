@@ -7,6 +7,7 @@ namespace PlazmaTests;
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Numerics;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
@@ -32,14 +33,14 @@ public class ParticleTests
         // Arrange
         var sut = new Particle(Array.Empty<IBehavior>())
         {
-            Position = new PointF(11, 22),
+            Position = new Vector2(11, 22),
         };
 
         // Act
         var actual = sut.Position;
 
         // Assert
-        actual.Should().Be(new PointF(11, 22));
+        actual.Should().Be(new Vector2(11, 22));
     }
 
     [Fact]

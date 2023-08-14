@@ -1,12 +1,11 @@
-﻿// <copyright file="ParticlePoolTests.cs" company="KinsonDigital">
+// <copyright file="ParticlePoolTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace PlazmaTests;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
+using System.Numerics;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
@@ -297,7 +296,7 @@ public class ParticlePoolTests
     public void Equals_WithDifferentObjectTypes_ReturnsFalse()
     {
         // Arrange
-        this.effect.SpawnLocation = new PointF(11, 22);
+        this.effect.SpawnLocation = new Vector2(11, 22);
         this.effect.SpawnRateMin = 33;
         this.effect.SpawnRateMax = 44;
         this.effect.TotalParticlesAliveAtOnce = 99;
@@ -319,7 +318,7 @@ public class ParticlePoolTests
         // Arrange
         var effectA = new ParticleEffect("texture-name", this.settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 33,
             SpawnRateMax = 44,
             TotalParticlesAliveAtOnce = 99,
@@ -328,7 +327,7 @@ public class ParticlePoolTests
 
         var effectB = new ParticleEffect("texture-name", this.settings)
         {
-            SpawnLocation = new PointF(11, 22),
+            SpawnLocation = new Vector2(11, 22),
             SpawnRateMin = 33,
             SpawnRateMax = 44,
             TotalParticlesAliveAtOnce = 100,
@@ -343,33 +342,6 @@ public class ParticlePoolTests
 
         // Assert
         actual.Should().BeFalse();
-    }
-
-    [Fact]
-    [SuppressMessage("csharpsquid", "S3966", Justification = "Double invoke intended.")]
-    public void Dispose_WhenInvoked_ProperlyFreesManagedResources()
-    {
-        // Arrange
-        var particleEffect = new ParticleEffect(null, Array.Empty<BehaviorSettings>());
-        var mockTexture = Substitute.For<IDisposable>();
-
-        this.mockTextureLoader.LoadTexture(Arg.Any<string>()).Returns((_) => mockTexture);
-
-        var pool = new ParticlePool<IDisposable>(this.mockBehaviorFactory,
-            this.mockTextureLoader,
-            particleEffect,
-            this.mockRandomizerService);
-
-        pool.LoadTexture();
-
-        // Call this twice to verify that the disposable pattern is implemented correctly.
-        // You should be able to call this method twice and not throw an exception
-        // Act
-        pool.Dispose();
-        pool.Dispose();
-
-        // Assert
-        mockTexture.Received().Dispose();
     }
     #endregion
 

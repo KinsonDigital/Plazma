@@ -4,14 +4,12 @@
 
 namespace Plazma;
 
-using System;
-
 /// <summary>
 /// Loads textures.
 /// </summary>
 /// <typeparam name="TTexture">The type of texture to load.</typeparam>
-public interface ITextureLoader<TTexture>
-    where TTexture : class, IDisposable
+public interface ITextureLoader<out TTexture>
+    where TTexture : class
 {
     /// <summary>
     /// Loads and returns a texture with the given <paramref name="assetName"/>.

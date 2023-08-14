@@ -46,34 +46,33 @@ public class EasingRandomBehavior : Behavior
     /// <param name="timeElapsed">The amount of time that has elapsed for this update of the behavior.</param>
     public override void Update(TimeSpan timeElapsed)
     {
-        switch (this.settings.EasingFunctionType)
+        // TODO: Using 'ToString()' for the value provides tons of allocations and is not ideal.  Need to change how this works.
+        Value = this.settings.EasingFunctionType switch
         {
-            case EasingFunction.EaseOutBounce:
-                Value = EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture);
-                break;
-            case EasingFunction.EaseIn:
-                Value = EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture);
-                break;
+            EasingFunction.EaseOutBounce => EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime)
+                .ToString(CultureInfo.InvariantCulture),
+            EasingFunction.EaseIn => EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture),
+            _ => Value
+        };
+
+        if (this.settings.UpdateRandomStartMin is not null)
+        {
+            this.settings.RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke() ?? 0f;
         }
 
-        if (!(this.settings.UpdateStartMin is null))
+        if (this.settings.UpdateRandomStartMax is not null)
         {
-            this.settings.StartMin = this.settings.UpdateStartMin.Invoke();
+            this.settings.RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke() ?? 0f;
         }
 
-        if (!(this.settings.UpdateStartMax is null))
+        if (this.settings.UpdateRandomChangeMin is not null)
         {
-            this.settings.StartMax = this.settings.UpdateStartMax.Invoke();
+            this.settings.RandomChangeMin = this.settings.UpdateRandomChangeMin?.Invoke() ?? 0f;
         }
 
-        if (!(this.settings.UpdateChangeMin is null))
+        if (this.settings.UpdateRandomChangeMax is not null)
         {
-            this.settings.ChangeMin = this.settings.UpdateChangeMin.Invoke();
-        }
-
-        if (!(this.settings.UpdateChangeMax is null))
-        {
-            this.settings.ChangeMax = this.settings.UpdateChangeMax.Invoke();
+            this.settings.RandomChangeMax = this.settings.UpdateRandomChangeMax?.Invoke() ?? 0f;
         }
 
         base.Update(timeElapsed);
@@ -94,8 +93,8 @@ public class EasingRandomBehavior : Behavior
     /// </summary>
     private void ApplyRandomization()
     {
-        Start = this.randomizer.GetValue(this.settings.StartMin, this.settings.StartMax);
-        Change = this.randomizer.GetValue(this.settings.ChangeMin, this.settings.ChangeMax);
-        LifeTime = this.randomizer.GetValue(this.settings.TotalTimeMin, this.settings.TotalTimeMax);
+        Start = this.randomizer.GetValue(this.settings.RandomStartMin, this.settings.RandomStartMax);
+        Change = this.randomizer.GetValue(this.settings.RandomChangeMin, this.settings.RandomChangeMax);
+        LifeTime = this.randomizer.GetValue(this.settings.LifeTimeMinMilliseconds, this.settings.LifeTimeMaxMilliseconds);
     }
 }
