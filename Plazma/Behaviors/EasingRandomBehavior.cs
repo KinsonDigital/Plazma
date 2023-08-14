@@ -1,4 +1,4 @@
-// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
+﻿// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -74,10 +74,6 @@ public class EasingRandomBehavior : Behavior
         {
             this.settings.RandomChangeMax = this.settings.UpdateRandomChangeMax?.Invoke() ?? 0f;
         }
-
-
-
-
 
         base.Update(timeElapsed);
     }

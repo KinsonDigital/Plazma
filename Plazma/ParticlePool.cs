@@ -226,7 +226,7 @@ public sealed class ParticlePool<TTexture> : IDisposable
     {
         foreach (var t in this.particles)
         {
-            if (!t.IsDead)
+            if (t.IsAlive)
             {
                 continue;
             }
