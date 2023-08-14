@@ -92,7 +92,8 @@ public class ColorScene : SceneBase
                 var srcRect = new Rectangle(0, 0, (int)pool.PoolTexture.Width, (int)pool.PoolTexture.Height);
                 var destRect = new Rectangle((int)renderPosX, (int)renderPosY, (int)pool.PoolTexture.Width, (int)pool.PoolTexture.Height);
 
-                this.textureRenderer.Render(pool.PoolTexture, srcRect, destRect, 1f, 0, particle.TintColor, RenderEffects.None);
+                var tintClr = particle.TintColor;
+                this.textureRenderer.Render(pool.PoolTexture, srcRect, destRect, 1f, 0, tintClr, RenderEffects.None);
             }
         }
 
@@ -135,15 +136,26 @@ public class ColorScene : SceneBase
         var white = Color.White;
         var purple = Color.MediumPurple;
 
+        var alphaSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = ParticleAttribute.AlphaColorComponent,
+            LifeTimeMinMilliseconds = 2000,
+            LifeTimeMaxMilliseconds = 2000,
+            RandomStartMin = 255,
+            RandomStartMax = 255,
+            RandomChangeMin = -255f,
+            RandomChangeMax = -255f,
+        };
+
         var redSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.RedColorComponent,
             LifeTimeMinMilliseconds = 1500,
             LifeTimeMaxMilliseconds = 1500,
-            RandomChangeMin = purple.R - white.R,
-            RandomChangeMax = purple.R - white.R,
             RandomStartMin = white.R,
             RandomStartMax = white.R,
+            RandomChangeMin = purple.R - white.R,
+            RandomChangeMax = purple.R - white.R,
         };
 
         var greenSettings = new EasingRandomBehaviorSettings
@@ -151,10 +163,10 @@ public class ColorScene : SceneBase
             ApplyToAttribute = ParticleAttribute.GreenColorComponent,
             LifeTimeMinMilliseconds = 1500,
             LifeTimeMaxMilliseconds = 1500,
-            RandomChangeMin = purple.G - white.G,
-            RandomChangeMax = purple.G - white.G,
             RandomStartMin = white.G,
             RandomStartMax = white.G,
+            RandomChangeMin = purple.G - white.G,
+            RandomChangeMax = purple.G - white.G,
         };
 
         var blueSettings = new EasingRandomBehaviorSettings
@@ -162,16 +174,17 @@ public class ColorScene : SceneBase
             ApplyToAttribute = ParticleAttribute.BlueColorComponent,
             LifeTimeMinMilliseconds = 1500,
             LifeTimeMaxMilliseconds = 1500,
-            RandomChangeMin = purple.B - white.B,
-            RandomChangeMax = purple.B - white.B,
             RandomStartMin = white.B,
             RandomStartMax = white.B,
+            RandomChangeMin = purple.B - white.B,
+            RandomChangeMax = purple.B - white.B,
         };
 
         return new IBehaviorSettings[]
         {
             xPosSettings,
             yPosSettings,
+            alphaSettings,
             redSettings,
             greenSettings,
             blueSettings,
