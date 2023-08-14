@@ -53,25 +53,6 @@ public class BehaviorFactoryTests
     }
 
     [Fact]
-    public void CreateBehaviors_WhenUsingColorTransitionBehaviorSettings_CreatesCorrectBehavior()
-    {
-        // Arrange
-        var mockRandomizerService = Substitute.For<IRandomizerService>();
-        var settings = new IBehaviorSettings[]
-        {
-            new ColorTransitionBehaviorSettings(),
-        };
-        var sut = new BehaviorFactory();
-
-        // Act
-        var actual = sut.CreateBehaviors(settings, mockRandomizerService);
-
-        // Assert
-        actual.Should().ContainSingle();
-        actual[0].Should().BeOfType<ColorTransitionBehavior>();
-    }
-
-    [Fact]
     public void CreateBehaviors_WhenUsingRandomBehaviorSettings_CreatesCorrectBehavior()
     {
         // Arrange
@@ -99,7 +80,7 @@ public class BehaviorFactoryTests
         // Act
         var act = () =>
         {
-            var settings = new IBehaviorSettings[] { new ColorTransitionBehaviorSettings(), };
+            var settings = new IBehaviorSettings[] { new FakeBehaviorSettings(), };
             sut.CreateBehaviors(settings, null);
         };
 

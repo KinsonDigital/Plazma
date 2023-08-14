@@ -36,9 +36,6 @@ public class BehaviorFactory : IBehaviorFactory
                 case EasingRandomBehaviorSettings easingRandomBehaviorSettings:
                     behaviors.Add(new EasingRandomBehavior(easingRandomBehaviorSettings, randomService));
                     break;
-                case ColorTransitionBehaviorSettings clrTransitionBehaviorSettings:
-                    behaviors.Add(new ColorTransitionBehavior(clrTransitionBehaviorSettings));
-                    break;
                 case RandomChoiceBehaviorSettings randomChoiceBehaviorSettings:
                     behaviors.Add(new RandomColorBehavior(randomChoiceBehaviorSettings, randomService));
                     break;
