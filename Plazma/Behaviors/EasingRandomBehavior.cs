@@ -1,4 +1,4 @@
-﻿// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
+// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -55,10 +55,29 @@ public class EasingRandomBehavior : Behavior
             _ => Value
         };
 
-        this.settings.StartMin = this.settings.UpdateStartMin?.Invoke() ?? 0f;
-        this.settings.StartMax = this.settings.UpdateStartMax?.Invoke() ?? 0f;
-        this.settings.ChangeMin = this.settings.UpdateChangeMin?.Invoke() ?? 0f;
-        this.settings.ChangeMax = this.settings.UpdateChangeMax?.Invoke() ?? 0f;
+        if (this.settings.UpdateRandomStartMin is not null)
+        {
+            this.settings.RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke() ?? 0f;
+        }
+
+        if (this.settings.UpdateRandomStartMax is not null)
+        {
+            this.settings.RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke() ?? 0f;
+        }
+
+        if (this.settings.UpdateRandomChangeMin is not null)
+        {
+            this.settings.RandomChangeMin = this.settings.UpdateRandomChangeMin?.Invoke() ?? 0f;
+        }
+
+        if (this.settings.UpdateRandomChangeMax is not null)
+        {
+            this.settings.RandomChangeMax = this.settings.UpdateRandomChangeMax?.Invoke() ?? 0f;
+        }
+
+
+
+
 
         base.Update(timeElapsed);
     }
@@ -78,8 +97,8 @@ public class EasingRandomBehavior : Behavior
     /// </summary>
     private void ApplyRandomization()
     {
-        Start = this.randomizer.GetValue(this.settings.StartMin, this.settings.StartMax);
-        Change = this.randomizer.GetValue(this.settings.ChangeMin, this.settings.ChangeMax);
-        LifeTime = this.randomizer.GetValue(this.settings.TotalTimeMin, this.settings.TotalTimeMax);
+        Start = this.randomizer.GetValue(this.settings.RandomStartMin, this.settings.RandomStartMax);
+        Change = this.randomizer.GetValue(this.settings.RandomChangeMin, this.settings.RandomChangeMax);
+        LifeTime = this.randomizer.GetValue(this.settings.LifeTimeMinMilliseconds, this.settings.LifeTimeMaxMilliseconds);
     }
 }

@@ -36,12 +36,12 @@ public class ParticleEffectTests
             new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
-                ChangeMin = 11,
-                ChangeMax = 22,
-                StartMin = 33,
-                StartMax = 44,
-                TotalTimeMin = 55,
-                TotalTimeMax = 66,
+                RandomChangeMin = 11,
+                RandomChangeMax = 22,
+                RandomStartMin = 33,
+                RandomStartMax = 44,
+                LifeTimeMinMilliseconds = 55,
+                LifeTimeMaxMilliseconds = 66,
             },
         };
         var effect = new ParticleEffect(null, settings);
@@ -136,12 +136,12 @@ public class ParticleEffectTests
             new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
-                ChangeMin = 11,
-                ChangeMax = 22,
-                StartMin = 33,
-                StartMax = 44,
-                TotalTimeMin = 55,
-                TotalTimeMax = 66,
+                RandomChangeMin = 11,
+                RandomChangeMax = 22,
+                RandomStartMin = 33,
+                RandomStartMax = 44,
+                LifeTimeMinMilliseconds = 55,
+                LifeTimeMaxMilliseconds = 66,
             },
         };
 
@@ -171,12 +171,12 @@ public class ParticleEffectTests
             new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
-                ChangeMin = 11,
-                ChangeMax = 22,
-                StartMin = 33,
-                StartMax = 44,
-                TotalTimeMin = 55,
-                TotalTimeMax = 66,
+                RandomChangeMin = 11,
+                RandomChangeMax = 22,
+                RandomStartMin = 33,
+                RandomStartMax = 44,
+                LifeTimeMinMilliseconds = 55,
+                LifeTimeMaxMilliseconds = 66,
             },
         };
 
@@ -214,12 +214,12 @@ public class ParticleEffectTests
             new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
-                ChangeMin = 11,
-                ChangeMax = 22,
-                StartMin = 33,
-                StartMax = 44,
-                TotalTimeMin = 55,
-                TotalTimeMax = 66,
+                RandomChangeMin = 11,
+                RandomChangeMax = 22,
+                RandomStartMin = 33,
+                RandomStartMax = 44,
+                LifeTimeMinMilliseconds = 55,
+                LifeTimeMaxMilliseconds = 66,
             },
         };
 
@@ -257,12 +257,12 @@ public class ParticleEffectTests
             new EasingRandomBehaviorSettings
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
-                ChangeMin = 11,
-                ChangeMax = 22,
-                StartMin = 33,
-                StartMax = 44,
-                TotalTimeMin = 55,
-                TotalTimeMax = 66,
+                RandomChangeMin = 11,
+                RandomChangeMax = 22,
+                RandomStartMin = 33,
+                RandomStartMax = 44,
+                LifeTimeMinMilliseconds = 55,
+                LifeTimeMaxMilliseconds = 66,
             },
         };
 
