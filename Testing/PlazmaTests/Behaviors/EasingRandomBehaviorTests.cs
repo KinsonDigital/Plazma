@@ -93,10 +93,10 @@ public class EasingRandomBehaviorTests
             EasingFunctionType = easingFunction,
             RandomStartMin = 11,
             RandomStartMax = 11,
-            RandomChangeMin = 22,
-            RandomChangeMax = 22,
-            LifeTimeMinMilliseconds = 33,
-            LifeTimeMaxMilliseconds = 33,
+            RandomStopMin = 22,
+            RandomStopMax = 22,
+            LifeTimeMillisecondsMin = 33,
+            LifeTimeMillisecondsMax = 33,
         };
         var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 

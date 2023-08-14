@@ -114,10 +114,10 @@ public class ColorScene : SceneBase
         var xPosSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.X,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
-            RandomChangeMin = -winHalfWidth - TextureHalfWidth,
-            RandomChangeMax = winHalfWidth + TextureHalfWidth,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
+            RandomStopMin = -winHalfWidth - TextureHalfWidth,
+            RandomStopMax = winHalfWidth + TextureHalfWidth,
             RandomStartMin = windowCenter.X,
             RandomStartMax = windowCenter.X,
         };
@@ -125,10 +125,10 @@ public class ColorScene : SceneBase
         var yPosSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Y,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
-            RandomChangeMin = -winHalfHeight - TextureHalfHeight,
-            RandomChangeMax = winHalfHeight + TextureHalfHeight,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
+            RandomStopMin = -winHalfHeight - TextureHalfHeight,
+            RandomStopMax = winHalfHeight + TextureHalfHeight,
             RandomStartMin = windowCenter.Y,
             RandomStartMax = windowCenter.Y,
         };
@@ -139,45 +139,45 @@ public class ColorScene : SceneBase
         var alphaSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.AlphaColorComponent,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
             RandomStartMin = 255,
             RandomStartMax = 255,
-            RandomChangeMin = -255f,
-            RandomChangeMax = -255f,
+            RandomStopMin = -255f,
+            RandomStopMax = -255f,
         };
 
         var redSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.RedColorComponent,
-            LifeTimeMinMilliseconds = 1500,
-            LifeTimeMaxMilliseconds = 1500,
+            LifeTimeMillisecondsMin = 1500,
+            LifeTimeMillisecondsMax = 1500,
             RandomStartMin = white.R,
             RandomStartMax = white.R,
-            RandomChangeMin = purple.R - white.R,
-            RandomChangeMax = purple.R - white.R,
+            RandomStopMin = purple.R - white.R,
+            RandomStopMax = purple.R - white.R,
         };
 
         var greenSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.GreenColorComponent,
-            LifeTimeMinMilliseconds = 1500,
-            LifeTimeMaxMilliseconds = 1500,
+            LifeTimeMillisecondsMin = 1500,
+            LifeTimeMillisecondsMax = 1500,
             RandomStartMin = white.G,
             RandomStartMax = white.G,
-            RandomChangeMin = purple.G - white.G,
-            RandomChangeMax = purple.G - white.G,
+            RandomStopMin = purple.G - white.G,
+            RandomStopMax = purple.G - white.G,
         };
 
         var blueSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.BlueColorComponent,
-            LifeTimeMinMilliseconds = 1500,
-            LifeTimeMaxMilliseconds = 1500,
+            LifeTimeMillisecondsMin = 1500,
+            LifeTimeMillisecondsMax = 1500,
             RandomStartMin = white.B,
             RandomStartMax = white.B,
-            RandomChangeMin = purple.B - white.B,
-            RandomChangeMax = purple.B - white.B,
+            RandomStopMin = purple.B - white.B,
+            RandomStopMax = purple.B - white.B,
         };
 
         return new IBehaviorSettings[]

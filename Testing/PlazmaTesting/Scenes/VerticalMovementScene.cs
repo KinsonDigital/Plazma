@@ -128,10 +128,10 @@ public class VerticalMovementScene : SceneBase
         return new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.Y,
-            LifeTimeMinMilliseconds = 2500,
-            LifeTimeMaxMilliseconds = 5000,
-            RandomChangeMin = changeMin,
-            RandomChangeMax = changeMax,
+            LifeTimeMillisecondsMin = 2500,
+            LifeTimeMillisecondsMax = 5000,
+            RandomStopMin = changeMin,
+            RandomStopMax = changeMax,
             RandomStartMin = startMin,
             RandomStartMax = startMax,
             UpdateRandomStartMin = () => this.mousePos.Y,

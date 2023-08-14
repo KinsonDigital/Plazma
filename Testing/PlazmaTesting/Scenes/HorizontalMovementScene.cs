@@ -127,10 +127,10 @@ public class HorizontalMovementScene : SceneBase
         return new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = ParticleAttribute.X,
-            LifeTimeMinMilliseconds = 3500,
-            LifeTimeMaxMilliseconds = 7000,
-            RandomChangeMin = changeMin,
-            RandomChangeMax = changeMax,
+            LifeTimeMillisecondsMin = 3500,
+            LifeTimeMillisecondsMax = 7000,
+            RandomStopMin = changeMin,
+            RandomStopMax = changeMax,
             RandomStartMin = startMin,
             RandomStartMax = startMax,
             UpdateRandomStartMin = () => this.mousePos.X,
