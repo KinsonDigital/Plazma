@@ -29,7 +29,6 @@ public class VerticalMovementScene : SceneBase
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
     private Point mousePos;
-    private MouseState previousMouseState;
 
     /// <summary>
     /// Creates a new instance of <see cref="VerticalMovementScene"/>.
@@ -43,7 +42,7 @@ public class VerticalMovementScene : SceneBase
 
         this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
 
-        var allSettings = new BehaviorSettings[]
+        var allSettings = new []
         {
             CreateSettings(),
         };
@@ -84,7 +83,6 @@ public class VerticalMovementScene : SceneBase
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(this.mousePos.X, this.mousePos.Y);
 
-        this.previousMouseState = mouseState;
         base.Update(frameTime);
     }
 

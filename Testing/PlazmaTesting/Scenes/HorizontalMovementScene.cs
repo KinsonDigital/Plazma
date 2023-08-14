@@ -28,7 +28,6 @@ public class HorizontalMovementScene : SceneBase
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
     private Point mousePos;
-    private MouseState previousMouseState;
 
     /// <summary>
     /// Creates a new instance of <see cref="HorizontalMovementScene"/>.
@@ -42,7 +41,7 @@ public class HorizontalMovementScene : SceneBase
 
         this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
 
-        var allSettings = new BehaviorSettings[]
+        var allSettings = new []
         {
             CreateSettings(),
         };
@@ -83,7 +82,6 @@ public class HorizontalMovementScene : SceneBase
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(this.mousePos.X, this.mousePos.Y);
 
-        this.previousMouseState = mouseState;
         base.Update(frameTime);
     }
 
