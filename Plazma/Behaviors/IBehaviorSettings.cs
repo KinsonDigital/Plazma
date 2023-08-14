@@ -4,10 +4,18 @@
 
 namespace Plazma.Behaviors;
 
+/// <summary>
+/// The settings for a particle behavior.
+/// </summary>
 public interface IBehaviorSettings
 {
     /// <summary>
-    /// Gets or sets the particle attribute to set the behavior value to.
+    /// Gets the particle attribute to set the behavior value to.
     /// </summary>
-    ParticleAttribute ApplyToAttribute { get; set; }
+    ParticleAttribute ApplyToAttribute { get; }
+
+    /// <summary>
+    /// Gets the amount of time the behavior will run.
+    /// </summary>
+    public double LifeTime { get; }
 }

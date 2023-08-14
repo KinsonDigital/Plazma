@@ -16,4 +16,9 @@ public class FakeBehaviorSettings : IBehaviorSettings
     /// Gets or sets a value used for testing.
     /// </summary>
     public ParticleAttribute ApplyToAttribute { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value used for testing.
+    /// </summary>
+    public double LifeTime { get; }
 }

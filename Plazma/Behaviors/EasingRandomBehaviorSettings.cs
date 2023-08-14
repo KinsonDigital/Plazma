@@ -15,6 +15,9 @@ public class EasingRandomBehaviorSettings : IBehaviorSettings, IEasingCapable
     public ParticleAttribute ApplyToAttribute { get; set; }
 
     /// <inheritdoc/>
+    public double LifeTime { get; }
+
+    /// <inheritdoc/>
     public EasingFunction EasingFunctionType { get; set; } = EasingFunction.EaseIn;
 
     /// <summary>
