@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Numerics;
 using Plazma;
 using Plazma.Behaviors;
-using Plazma.Services;
+using Plazma.Factories;
 using Velaptor;
 using Velaptor.Content;
 using Velaptor.Factories;
@@ -17,10 +17,9 @@ using Velaptor.Scene;
 /// </summary>
 public class AngleScene : SceneBase
 {
-     private const float TextureHalfWidth = 22.5f;
+    private const float TextureHalfWidth = 22.5f;
     private const float TextureHalfHeight = 31.5f;
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly TrueRandomizerService randomService = new ();
     private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
 
@@ -31,7 +30,7 @@ public class AngleScene : SceneBase
     {
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
+        this.engine = new ParticleEngine<ITexture>();
     }
 
     /// <summary>
@@ -45,10 +44,11 @@ public class AngleScene : SceneBase
         {
             SpawnRateMin = 125,
             SpawnRateMax = 125,
-            TotalParticlesAliveAtOnce = 10,
+            TotalParticles = 50,
         };
 
-        this.engine.CreatePool(effect);
+        var poolFactory = new ParticlePoolFactory();
+        this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
@@ -73,11 +73,11 @@ public class AngleScene : SceneBase
     {
         var clr = Color.LightGreen.DecreaseBrightness(0.2f);
 
-        foreach (ParticlePool<ITexture> pool in this.engine.ParticlePools)
+        foreach (var pool in this.engine.ParticlePools)
         {
-            foreach (Particle particle in pool.Particles)
+            foreach (var particle in pool.Particles)
             {
-                if (particle.IsDead)
+                if (particle.IsAlive is false)
                 {
                     continue;
                 }

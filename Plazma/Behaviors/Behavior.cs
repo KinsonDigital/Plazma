@@ -22,6 +22,7 @@ public abstract class Behavior : IBehavior
     /// <summary>
     /// Gets or sets the current value of the behavior.
     /// </summary>
+    // TODO: needs to be converted to a double
     public string Value { get; protected set; } = "0";
 
     /// <summary>

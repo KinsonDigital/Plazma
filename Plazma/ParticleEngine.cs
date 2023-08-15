@@ -9,8 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Behaviors;
-using Services;
 
 /// <summary>
 /// Manages multiple <see cref="Particle"/>s with various settings that dictate
@@ -20,27 +18,15 @@ using Services;
 public sealed class ParticleEngine<TTexture> : IDisposable
     where TTexture : class
 {
-    private readonly List<ParticlePool<TTexture>> particlePools = new ();
-    private readonly ITextureLoader<TTexture> textureLoader;
-    private readonly IRandomizerService randomizer;
+    // TODO: Convert to iterable and IEnumerable for particle pools
+    private readonly List<IParticlePool<TTexture>> particlePools = new ();
     private bool enabled = true;
     private bool isDisposed;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ParticleEngine{TTexture}"/> class.
-    /// </summary>
-    /// <param name="textureLoader">Loads particle textures.</param>
-    /// <param name="randomizer">Randomizes numbers.</param>
-    public ParticleEngine(ITextureLoader<TTexture> textureLoader, IRandomizerService randomizer)
-    {
-        this.textureLoader = textureLoader;
-        this.randomizer = randomizer;
-    }
-
-    /// <summary>
     /// Gets all of the particle pools.
     /// </summary>
-    public ReadOnlyCollection<ParticlePool<TTexture>> ParticlePools
+    public ReadOnlyCollection<IParticlePool<TTexture>> ParticlePools
         => new (this.particlePools.ToArray());
 
     /// <summary>
@@ -56,6 +42,7 @@ public sealed class ParticleEngine<TTexture> : IDisposable
             // If the engine is disabled, kill all the particles
             if (!this.enabled)
             {
+                // TODO: Do I need to kill particles here?
                 KillAllParticles();
             }
         }
@@ -68,11 +55,10 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     public bool TexturesLoaded => this.particlePools.Count > 0 && this.particlePools.All(p => p.TextureLoaded);
 
     /// <summary>
-    /// Creates a particle pool using the given particle <paramref name="effect"/>.
+    /// Adds the given particle <paramref name="pool"/> t o he engine.
     /// </summary>
-    /// <param name="effect">The particle effect for the pool to use.</param>
-    public void CreatePool(ParticleEffect effect) =>
-        this.particlePools.Add(new ParticlePool<TTexture>(this.textureLoader, effect, this.randomizer));
+    /// <param name="pool">The particle pool to add.</param>
+    public void AddPool(IParticlePool<TTexture> pool) => this.particlePools.Add(pool);
 
     /// <summary>
     /// Clears all of the current existing pools.
@@ -111,11 +97,6 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     /// <param name="timeElapsed">The amount of time that has passed since the last frame.</param>
     public void Update(TimeSpan timeElapsed)
     {
-        if (this.particlePools.Count <= 0)
-        {
-            return;
-        }
-
         if (!TexturesLoaded)
         {
             throw new Exception("The textures must be loaded first.");

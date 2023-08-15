@@ -5,10 +5,10 @@
 namespace PlazmaTests;
 
 using System;
+using Fakes;
 using FluentAssertions;
 using Plazma;
 using Plazma.Behaviors;
-using Plazma.Services;
 using NSubstitute;
 using Xunit;
 
@@ -18,21 +18,15 @@ using Xunit;
 public class ParticleEngineTests
 {
     private readonly ITextureLoader<IDisposable> mockTextureLoader;
-    private readonly IRandomizerService mockRandomizerService;
-    private readonly ParticleEngine<IDisposable> engine;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEngineTests"/> class.
     /// </summary>
     public ParticleEngineTests()
     {
-        this.mockRandomizerService = Substitute.For<IRandomizerService>();
-
         var fakeTexture = Substitute.For<IDisposable>();
         this.mockTextureLoader = Substitute.For<ITextureLoader<IDisposable>>();
         this.mockTextureLoader.LoadTexture(Arg.Any<string>()).Returns(fakeTexture);
-
-        this.engine = new ParticleEngine<IDisposable>(this.mockTextureLoader, this.mockRandomizerService);
     }
 
     #region Prop Tests
@@ -40,41 +34,42 @@ public class ParticleEngineTests
     public void Enabled_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        this.engine.Enabled = false;
+        var sut = CreateSystemUnderTest();
+        sut.Enabled = false;
 
         // Assert
-        this.engine.Enabled.Should().BeFalse();
+        sut.Enabled.Should().BeFalse();
     }
 
     [Fact]
     public void ParticlePools_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new[] { default(EasingRandomBehaviorSettings), };
-        var effect = new ParticleEffect(null, settings);
-        this.engine.CreatePool(effect);
-        this.engine.LoadTextures();
-        this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
+        var mockPool = Substitute.For<IParticlePool<FakeTexture>>();
+
+        var sut = CreateSystemUnderTest();
+        sut.AddPool(mockPool);
 
         // Act
-        var actual = this.engine.ParticlePools;
+        var actual = sut.ParticlePools;
 
         // Assert
         actual.Should().ContainSingle();
-        this.engine.ParticlePools[0].Effect.Should().Be(effect);
     }
 
     [Fact]
     public void TexturesLoaded_WhenGettingValueAfterTexturesAreLoaded_ReturnsTrue()
     {
         // Arrange
-        var settings = new[] { default(EasingRandomBehaviorSettings), };
-        var effect = new ParticleEffect(null, settings);
-        this.engine.CreatePool(effect);
-        this.engine.LoadTextures();
+        var mockPool = Substitute.For<IParticlePool<FakeTexture>>();
+        mockPool.TextureLoaded.Returns(true);
+
+        var sut = CreateSystemUnderTest();
+        sut.AddPool(mockPool);
+        sut.LoadTextures();
 
         // Act
-        var actual = this.engine.TexturesLoaded;
+        var actual = sut.TexturesLoaded;
 
         // Assert
         actual.Should().BeTrue();
@@ -100,19 +95,19 @@ public class ParticleEngineTests
                 {
                     return mockPool2Texture;
                 }
-                else
-                {
-                    textureALoaded = true;
-                    return mockPool1Texture;
-                }
+
+                textureALoaded = true;
+                return mockPool1Texture;
             });
 
-        var effect = new ParticleEffect(null, Array.Empty<EasingRandomBehaviorSettings>());
-        var sut = new ParticleEngine<IDisposable>(this.mockTextureLoader, this.mockRandomizerService);
+        var sut = new ParticleEngine<IDisposable>();
+
+        var mockPoolA = Substitute.For<IParticlePool<FakeTexture>>();
+        var mockPoolB = Substitute.For<IParticlePool<FakeTexture>>();
 
         // Create 2 pools
-        sut.CreatePool(effect);
-        sut.CreatePool(effect);
+        sut.AddPool(mockPoolA);
+        sut.AddPool(mockPoolB);
         sut.LoadTextures();
 
         // Act
@@ -126,28 +121,30 @@ public class ParticleEngineTests
     public void LoadTextures_WhenInvoked_LoadsParticlePoolTextures()
     {
         // Arrange
-        var settings = new[] { default(EasingRandomBehaviorSettings), };
-        var effect = new ParticleEffect("texture-name", settings);
-        this.engine.CreatePool(effect);
-        this.engine.LoadTextures();
-        this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
+        var mockPool = Substitute.For<IParticlePool<FakeTexture>>();
+        mockPool.TextureLoaded.Returns(true);
+
+        var sut = CreateSystemUnderTest();
+        sut.AddPool(mockPool);
 
         // Act
-        var unused = this.engine.ParticlePools;
+        sut.LoadTextures();
 
         // Assert
-        this.mockTextureLoader.Received(1).LoadTexture("texture-name");
+        mockPool.Received(1).LoadTexture();
     }
 
     [Fact]
     public void Update_WithTexturesNotLoaded_ThrowsException()
     {
         // Arrange
-        var effect = new ParticleEffect();
-        this.engine.CreatePool(effect);
+        var mockPool = Substitute.For<IParticlePool<FakeTexture>>();
+
+        var sut = CreateSystemUnderTest();
+        sut.AddPool(mockPool);
 
         // Act
-        var act = () => this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
+        var act = () => sut.Update(new TimeSpan(0, 0, 0, 0, 16));
 
         // Assert
         act.Should().Throw<Exception>()
@@ -158,45 +155,48 @@ public class ParticleEngineTests
     public void Update_WhenDisabled_DoesNotUpdateParticles()
     {
         // Arrange
-        var settings = new[] { default(EasingRandomBehaviorSettings), };
-        var effect = new ParticleEffect(null, settings);
         var mockBehavior = Substitute.For<IBehavior>();
 
-        this.engine.Enabled = false;
-        this.engine.CreatePool(effect);
-        this.engine.LoadTextures();
+        var mockPool = Substitute.For<IParticlePool<FakeTexture>>();
+        mockPool.TextureLoaded.Returns(true);
+
+        var timeElapsed = 16.ToMillisecondsTimeSpan();
+
+        var sut = CreateSystemUnderTest();
+        sut.Enabled = false;
+        sut.AddPool(mockPool);
+        sut.LoadTextures();
 
         // Act
-        this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
+        sut.Update(timeElapsed);
 
         // Assert
         mockBehavior.DidNotReceive().Update(Arg.Any<TimeSpan>());
     }
 
     [Fact]
-    public void Update_WhenEnabled_UpdatesAllParticles()
+    public void Update_WhenEnabled_UpdatesPools()
     {
-        // Arrange
-        var settings = new[] { default(EasingRandomBehaviorSettings), };
-        var effect = new ParticleEffect(null, settings)
-        {
-            TotalParticlesAliveAtOnce = 2,
-        };
-        var mockBehavior = Substitute.For<IBehavior>();
-        mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("0");
+        var mockPool = Substitute.For<IParticlePool<FakeTexture>>();
+        mockPool.TextureLoaded.Returns(true);
 
-        this.mockRandomizerService.GetValue(Arg.Any<int>(), Arg.Any<int>()).Returns(16);
+        var sut = CreateSystemUnderTest();
+        sut.Enabled = true;
+        sut.AddPool(mockPool);
 
-        this.engine.CreatePool(effect);
-        this.engine.LoadTextures();
+        var timeElapsed = 16.ToMillisecondsTimeSpan();
 
         // Act
-        this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
-        this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
+        sut.Update(timeElapsed);
 
         // Assert
-        mockBehavior.Received(3).Update(Arg.Any<TimeSpan>());
+        mockPool.Received(1).Update(timeElapsed);
     }
     #endregion
+
+    /// <summary>
+    /// Creates a new instance of <see cref="ParticleEngine{FakeTexture}"/> for the purpose of testing.
+    /// </summary>
+    /// <returns>The instance to test.</returns>
+    private ParticleEngine<FakeTexture> CreateSystemUnderTest() => new ();
 }

@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Numerics;
 using Plazma;
 using Plazma.Behaviors;
-using Plazma.Services;
+using Plazma.Factories;
 using Velaptor;
 using Velaptor.Content;
 using Velaptor.Factories;
@@ -23,7 +23,6 @@ using Velaptor.Scene;
 public class HorizontalMovementScene : SceneBase
 {
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly TrueRandomizerService randomService = new ();
     private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
@@ -39,7 +38,7 @@ public class HorizontalMovementScene : SceneBase
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
 
-        this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
+        this.engine = new ParticleEngine<ITexture>();
 
         var allSettings = new []
         {
@@ -51,10 +50,11 @@ public class HorizontalMovementScene : SceneBase
             SpawnLocation = new Vector2(400, 400),
             SpawnRateMin = 62,
             SpawnRateMax = 250,
-            TotalParticlesAliveAtOnce = 100,
+            TotalParticles = 100,
         };
 
-        this.engine.CreatePool(effect);
+        var poolFactory = new ParticlePoolFactory();
+        this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
     }
 
     /// <summary>
@@ -88,11 +88,11 @@ public class HorizontalMovementScene : SceneBase
     /// </summary>
     public override void Render()
     {
-        foreach (ParticlePool<ITexture> pool in this.engine.ParticlePools)
+        foreach (var pool in this.engine.ParticlePools)
         {
-            foreach (Particle particle in pool.Particles)
+            foreach (var particle in pool.Particles)
             {
-                if (particle.IsDead)
+                if (particle.IsAlive is false)
                 {
                     continue;
                 }

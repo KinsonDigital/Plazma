@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Numerics;
 using Plazma;
 using Plazma.Behaviors;
-using Plazma.Services;
+using Plazma.Factories;
 using Velaptor;
 using Velaptor.Content;
 using Velaptor.Factories;
@@ -24,7 +24,6 @@ public class ColorScene : SceneBase
     private const float TextureHalfWidth = 22.5f;
     private const float TextureHalfHeight = 31.5f;
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly TrueRandomizerService randomService = new ();
     private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
 
@@ -35,7 +34,7 @@ public class ColorScene : SceneBase
     {
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
+        this.engine = new ParticleEngine<ITexture>();
     }
 
     /// <summary>
@@ -49,10 +48,11 @@ public class ColorScene : SceneBase
         {
             SpawnRateMin = 62,
             SpawnRateMax = 62,
-            TotalParticlesAliveAtOnce = 100,
+            TotalParticles = 100,
         };
 
-        this.engine.CreatePool(effect);
+        var poolFactory = new ParticlePoolFactory();
+        this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
@@ -75,11 +75,11 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void Render()
     {
-        foreach (ParticlePool<ITexture> pool in this.engine.ParticlePools)
+        foreach (var pool in this.engine.ParticlePools)
         {
-            foreach (Particle particle in pool.Particles)
+            foreach (var particle in pool.Particles)
             {
-                if (particle.IsDead)
+                if (particle.IsAlive is false)
                 {
                     continue;
                 }

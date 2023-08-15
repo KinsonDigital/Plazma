@@ -70,14 +70,14 @@ public class ParticleEffectTests
     }
 
     [Fact]
-    public void TotalParticlesAliveAtOnce_WhenSettingValue_ReturnsCorrectResult()
+    public void TotalParticles_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
         var effect = CreateEffect();
 
         // Act
-        effect.TotalParticlesAliveAtOnce = 1234;
-        var actual = effect.TotalParticlesAliveAtOnce;
+        effect.TotalParticles = 1234;
+        var actual = effect.TotalParticles;
 
         // Assert
         actual.Should().Be(1234);

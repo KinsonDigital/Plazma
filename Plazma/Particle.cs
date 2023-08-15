@@ -13,10 +13,9 @@ using System.Numerics;
 using Behaviors;
 
 /// <summary>
-/// Represents a single particle with various properties that dictate how the <see cref="Particle"/>
-/// behaves and looks on the screen.
+/// <inheritdoc/>
 /// </summary>
-public class Particle
+public class Particle : IParticle
 {
     private readonly IBehavior[] behaviors;
 
@@ -52,21 +51,12 @@ public class Particle
     public bool IsAlive { get; set; }
 
     /// <summary>
-    /// Gets or sets a value indicating whether the <see cref="Particle"/> is dead or alive.
-    /// </summary>
-    public bool IsDead
-    {
-        get => !IsAlive;
-        set => IsAlive = !value;
-    }
-
-    /// <summary>
     /// Updates the particle.
     /// </summary>
     /// <param name="timeElapsed">The amount of time that has elapsed since the last frame.</param>
     public void Update(TimeSpan timeElapsed)
     {
-        IsDead = true;
+        IsAlive = false;
 
         static byte ClampClrValue(float value)
         {
@@ -78,8 +68,6 @@ public class Particle
         {
             if (behavior.Enabled)
             {
-                var value = 0f;
-
                 behavior.Update(timeElapsed);
                 IsAlive = true;
 
@@ -88,8 +76,8 @@ public class Particle
                  * point number OR if it is the special color syntax value.  This is because the color value syntax is
                  * not an actual number and cannot be parsed into a float and requires special parsing.
                  */
-                var parseSuccess = behavior.ApplyToAttribute == ParticleAttribute.Color
-                                   || float.TryParse(string.IsNullOrEmpty(behavior.Value) ? "0" : behavior.Value, out value);
+                // TODO: Parsing needs to be removed once the behavior value is of type double
+                var parseSuccess = float.TryParse(string.IsNullOrEmpty(behavior.Value) ? "0" : behavior.Value, out var value);
 
                 if (!parseSuccess)
                 {
@@ -111,18 +99,6 @@ public class Particle
                     case ParticleAttribute.Size:
                         Size = value;
                         break;
-                    case ParticleAttribute.Color:
-                        // Create the color
-                        var (clrParseSuccess, _, parseFailReason) = TryParse(behavior.Value, out var result);
-
-                        if (!clrParseSuccess)
-                        {
-                            // TODO: Create custom exception
-                            throw new Exception($"Particle.Update Exception: {parseFailReason}");
-                        }
-
-                        TintColor = result;
-                        break;
                     case ParticleAttribute.AlphaColorComponent:
                         TintColor = Color.FromArgb(ClampClrValue(value), TintColor.R, TintColor.G, TintColor.B);
                         break;
@@ -136,8 +112,7 @@ public class Particle
                         TintColor = Color.FromArgb(TintColor.A, TintColor.R, TintColor.G, ClampClrValue(value));
                         break;
                     default:
-                        const string exceptionMsg = $"The '{nameof(ParticleAttribute)}' enum value is invalid.";
-                        throw new InvalidEnumArgumentException(exceptionMsg, (int)behavior.ApplyToAttribute, typeof(ParticleAttribute));
+                        throw new InvalidEnumArgumentException(nameof(ParticleAttribute), (int)behavior.ApplyToAttribute, typeof(ParticleAttribute));
                 }
             }
         }
@@ -158,33 +133,6 @@ public class Particle
         TintColor = Color.White;
         IsAlive = true;
     }
-
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
-    public override bool Equals(object? obj)
-    {
-        if (obj is not Particle particle)
-        {
-            return false;
-        }
-
-        return Position == particle.Position &&
-               Math.Abs(Angle - particle.Angle) <= 0.0000f &&
-               TintColor == particle.TintColor &&
-               Math.Abs(Size - particle.Size) <= 0.0000f &&
-               IsAlive == particle.IsAlive &&
-               IsDead == particle.IsDead;
-    }
-
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    public override int GetHashCode() =>
-        HashCode.Combine(this.behaviors, Position, Angle, TintColor, Size, IsAlive, IsDead);
 
     /// <summary>
     /// Parses the <paramref name="colorValue"/> string into a <see cref="Color"/> type.

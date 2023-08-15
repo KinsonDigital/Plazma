@@ -7,9 +7,11 @@ using Velaptor.Factories;
 /// <summary>
 /// Loads particle textures.
 /// </summary>
-public class ParticleTextureLoader : ITextureLoader<ITexture>
+public sealed class ParticleTextureLoader : ITextureLoader<ITexture>
 {
     private readonly ILoader<ITexture> loader = ContentLoaderFactory.CreateTextureLoader();
+    private bool isDisposed;
+    private string contentPathOrName = string.Empty;
 
     /// <summary>
     /// Loads a single particle texture with the given <paramref name="assetName"/>.
@@ -18,6 +20,26 @@ public class ParticleTextureLoader : ITextureLoader<ITexture>
     /// <returns></returns>
     public ITexture LoadTexture(string assetName)
     {
+        ArgumentException.ThrowIfNullOrEmpty(assetName);
+
+        this.contentPathOrName = assetName;
         return this.loader.Load(assetName);
+    }
+
+    public void Dispose() => Dispose(true);
+
+    private void Dispose(bool disposing)
+    {
+        if (this.isDisposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            this.loader.Unload(this.contentPathOrName);
+        }
+
+        this.isDisposed = true;
     }
 }

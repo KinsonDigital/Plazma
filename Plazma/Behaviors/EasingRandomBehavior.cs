@@ -14,8 +14,8 @@ using Services;
 /// </summary>
 public class EasingRandomBehavior : Behavior
 {
-    private EasingRandomBehaviorSettings settings;
     private readonly IRandomizerService randomizer;
+    private EasingRandomBehaviorSettings settings;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EasingRandomBehavior"/> class.
@@ -55,6 +55,7 @@ public class EasingRandomBehavior : Behavior
             _ => Value
         };
 
+        // TODO: These func props might go away after the swap setting feature has been added
         if (this.settings.UpdateRandomStartMin is not null)
         {
             this.settings = this.settings with { RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke() ?? 0f };

@@ -9,38 +9,73 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Behaviors;
+using Factories;
 using Services;
 
-/// <summary>
-/// Contains a number of reusable particles with a given particle effect applied to them.
-/// </summary>
-/// <typeparam name="TTexture">The texture for the particles in the pool.</typeparam>
-public sealed class ParticlePool<TTexture> : IDisposable
+/// <inheritdoc/>
+public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     where TTexture : class
 {
+    // TODO: Make this IEnumerable with iterator for ParticleEffects
     private readonly IRandomizerService randomService;
     private readonly ITextureLoader<TTexture> textureLoader;
-    private List<Particle> particles = new ();
-    private bool isDisposed;
+    private readonly IBehaviorFactory behaviorFactory;
+    private readonly IParticleFactory particleFactory;
+    private readonly List<IParticle> particles = new ();
     private int spawnRate;
     private double spawnRateElapsed;
     private int burstOnTimeElapsed;
     private int burstOffTimeElapsed;
+    private bool isDisposed;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParticlePool{TTexture}"/> class.
+    /// </summary>
+    /// <param name="effect">The particle effect for all particles in the pool.</param>
+    /// <param name="textureLoader">Loads the textures for the particle pool.</param>
+    [ExcludeFromCodeCoverage(Justification = "Uses non-testable IoC container.")]
+    public ParticlePool(ParticleEffect effect, ITextureLoader<TTexture> textureLoader)
+    {
+        ArgumentNullException.ThrowIfNull(effect);
+        ArgumentNullException.ThrowIfNull(textureLoader);
+
+        Effect = effect;
+        this.textureLoader = textureLoader;
+        this.randomService = IoC.Container.GetInstance<IRandomizerService>();
+        this.behaviorFactory = IoC.Container.GetInstance<IBehaviorFactory>();
+        this.particleFactory = IoC.Container.GetInstance<IParticleFactory>();
+
+        CreateAllParticles();
+        this.spawnRate = GetRandomSpawnRate();
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticlePool{Texture}"/> class.
     /// </summary>
     /// <param name="textureLoader">Loads the textures for the <see cref="ParticlePool{Texture}"/>.</param>
-    /// <param name="effect">The particle effect to be applied to all of the particles in the pool.</param>
     /// <param name="randomizer">Used for generating random values when a particle is spawned.</param>
-    public ParticlePool(ITextureLoader<TTexture> textureLoader, ParticleEffect effect, IRandomizerService randomizer)
+    /// <param name="behaviorFactory">Creates behaviors.</param>
+    /// <param name="particleFactory">Creates particles.</param>
+    /// <param name="effect">The particle effect to be applied to all of the particles in the pool.</param>
+    internal ParticlePool(
+        ITextureLoader<TTexture> textureLoader,
+        IRandomizerService randomizer,
+        IBehaviorFactory behaviorFactory,
+        IParticleFactory particleFactory,
+        ParticleEffect effect)
     {
-        Effect = effect ?? throw new ArgumentNullException(nameof(effect), "The parameter must not be null.");
+        ArgumentNullException.ThrowIfNull(textureLoader);
+        ArgumentNullException.ThrowIfNull(randomizer);
+        ArgumentNullException.ThrowIfNull(behaviorFactory);
+        ArgumentNullException.ThrowIfNull(particleFactory);
+        ArgumentNullException.ThrowIfNull(effect);
 
         this.textureLoader = textureLoader;
         this.randomService = randomizer;
+        this.behaviorFactory = behaviorFactory;
+        this.particleFactory = particleFactory;
+        Effect = effect;
 
         CreateAllParticles();
         this.spawnRate = GetRandomSpawnRate();
@@ -60,7 +95,7 @@ public sealed class ParticlePool<TTexture> : IDisposable
     /// <summary>
     /// Gets the current total number of dead <see cref="Particle"/>s.
     /// </summary>
-    public int TotalDeadParticles => this.particles.Count(p => p.IsDead);
+    public int TotalDeadParticles => this.particles.Count(p => p.IsAlive is false);
 
     /// <summary>
     /// Gets or sets a value indicating whether particles will spawn at a limited rate.
@@ -89,18 +124,19 @@ public sealed class ParticlePool<TTexture> : IDisposable
     }
 
     /// <summary>
-    /// Gets a value indicating whether the bursting effect is currently bursting.
+    /// Gets or sets a value indicating whether the bursting effect is currently bursting.
     /// </summary>
     /// <remarks>
     ///     Indicates if the bursting effect is currently in its on in the on/off cycle.
     ///     True is bursting and false means it is not.
     /// </remarks>
-    public bool IsCurrentlyBursting { get; private set; }
+    public bool InBurstMode { get; set; }
 
     /// <summary>
     /// Gets the list of particle in the pool.
     /// </summary>
-    public ReadOnlyCollection<Particle> Particles => new (this.particles.ToArray());
+    // TODO: Look into truely readonly array.  Refer to nick chapsas videos
+    public ReadOnlyCollection<IParticle> Particles => new (this.particles.ToArray());
 
     /// <summary>
     /// Gets the particle effect of the pool.
@@ -140,50 +176,25 @@ public sealed class ParticlePool<TTexture> : IDisposable
 
         foreach (var t in this.particles)
         {
-            if (t.IsDead)
+            if (t.IsAlive)
             {
-                continue;
+                t.Update(timeElapsed);
             }
-
-            t.Update(timeElapsed);
         }
     }
 
     /// <summary>
     /// Kills all of the particles.
     /// </summary>
-    public void KillAllParticles() => this.particles.ForEach(p => p.IsDead = true);
+    public void KillAllParticles() => this.particles.ForEach(p => p.IsAlive = false);
 
     /// <summary>
     /// Loads the texture for the pool to use for rendering the particles.
     /// </summary>
     public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
 
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    public void Dispose() => Dispose(true);
-
     /// <inheritdoc cref="IDisposable.Dispose"/>
-    /// <param name="disposing">True to dispose of managed resources.</param>
-    private void Dispose(bool disposing)
-    {
-        if (this.isDisposed)
-        {
-            return;
-        }
-
-        // Dispose of managed resources
-        if (disposing)
-        {
-            this.isDisposed = false;
-            this.spawnRate = 0;
-            this.spawnRateElapsed = 0;
-            this.particles = new List<Particle>();
-        }
-
-        this.isDisposed = true;
-    }
+    public void Dispose() => Dispose(true);
 
     /// <summary>
     /// Manages the timings for the burst effect on and off cycle.
@@ -202,11 +213,11 @@ public sealed class ParticlePool<TTexture> : IDisposable
         {
             this.burstOnTimeElapsed += (int)timeElapsed.TotalMilliseconds;
 
-            IsCurrentlyBursting = false;
+            InBurstMode = false;
 
             if (this.burstOnTimeElapsed >= Effect.BurstOnMilliseconds)
             {
-                IsCurrentlyBursting = true;
+                InBurstMode = true;
                 this.burstOffTimeElapsed = 0;
                 this.burstOnTimeElapsed = 0;
             }
@@ -240,8 +251,8 @@ public sealed class ParticlePool<TTexture> : IDisposable
     /// <returns>A randomized spawn rate.</returns>
     private int GetRandomSpawnRate()
     {
-        var minRate = BurstEnabled && IsCurrentlyBursting ? Effect.BurstSpawnRateMin : Effect.SpawnRateMin;
-        var maxRate = BurstEnabled && IsCurrentlyBursting ? Effect.BurstSpawnRateMax : Effect.SpawnRateMax;
+        var minRate = BurstEnabled && InBurstMode ? Effect.BurstSpawnRateMin : Effect.SpawnRateMin;
+        var maxRate = BurstEnabled && InBurstMode ? Effect.BurstSpawnRateMax : Effect.SpawnRateMax;
 
         return Effect.SpawnRateMin <= Effect.SpawnRateMax
             ? this.randomService.GetValue(minRate, maxRate)
@@ -255,17 +266,37 @@ public sealed class ParticlePool<TTexture> : IDisposable
     {
         this.particles.Clear();
 
-        for (var i = 0; i < Effect.TotalParticlesAliveAtOnce; i++)
+        for (var i = 0; i < Effect.TotalParticles; i++)
         {
             var behaviors = new List<IBehavior>();
 
             foreach (EasingRandomBehaviorSettings settings in Effect.BehaviorSettings)
             {
-                var newBehavior = new EasingRandomBehavior(settings, this.randomService);
+                var newBehavior = this.behaviorFactory.CreateEasingRandomBehavior(settings);
                 behaviors.Add(newBehavior);
             }
 
-            this.particles.Add(new Particle(behaviors.ToArray()));
+            this.particles.Add(this.particleFactory.Create(behaviors.ToArray()));
         }
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="IDisposable.Dispose"/>
+    /// </summary>
+    /// <param name="disposing">True to dispose of managed resources.</param>
+    private void Dispose(bool disposing)
+    {
+        if (this.isDisposed)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            this.randomService.Dispose();
+            this.textureLoader.Dispose();
+        }
+
+        this.isDisposed = true;
     }
 }

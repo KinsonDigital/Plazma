@@ -1,11 +1,10 @@
-// <copyright file="ParticleEffect.cs" company="KinsonDigital">
+﻿// <copyright file="ParticleEffect.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace Plazma;
 
 using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
@@ -15,9 +14,11 @@ using Newtonsoft.Json;
 /// <summary>
 /// Holds the particle setup settings data for the <see cref="ParticleEngine{TTexture}"/> to consume.
 /// </summary>
-public class ParticleEffect
+public class ParticleEffect // : IEnumerable<IBehaviorSettings>
 {
     private EasingRandomBehaviorSettings[] behaviorSettings = Array.Empty<EasingRandomBehaviorSettings>();
+
+    // TODO: Make this ienumerable with iterator
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
@@ -49,9 +50,10 @@ public class ParticleEffect
     public Vector2 SpawnLocation { get; set; }
 
     /// <summary>
-    /// Gets or sets the total number of particles that can be alive at once.
+    /// Gets or sets the total number of particles..
     /// </summary>
-    public int TotalParticlesAliveAtOnce { get; set; } = 1;
+    /// <remarks>This takes into account any particle regardless if it is alive or dead.</remarks>
+    public int TotalParticles { get; set; } = 1;
 
     /// <summary>
     /// Gets or sets the minimum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
