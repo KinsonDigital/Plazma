@@ -5,7 +5,7 @@
 namespace Plazma;
 
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
@@ -60,8 +60,7 @@ public interface IParticlePool<out TTexture> : IDisposable
     /// <summary>
     /// Gets the list of particle in the pool.
     /// </summary>
-    // TODO: Look into truely readonly array.  Refer to nick chapsas videos
-    public ReadOnlyCollection<IParticle> Particles { get; }
+    public ImmutableArray<IParticle> Particles { get; }
 
     /// <summary>
     /// Gets the particle effect of the pool.

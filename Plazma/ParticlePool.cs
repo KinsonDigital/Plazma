@@ -7,7 +7,7 @@ namespace Plazma;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Behaviors;
 using Factories;
@@ -135,8 +135,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// <summary>
     /// Gets the list of particle in the pool.
     /// </summary>
-    // TODO: Look into truely readonly array.  Refer to nick chapsas videos
-    public ReadOnlyCollection<IParticle> Particles => new (this.particles.ToArray());
+    public ImmutableArray<IParticle> Particles => this.particles.ToImmutableArray();
 
     /// <summary>
     /// Gets the particle effect of the pool.
