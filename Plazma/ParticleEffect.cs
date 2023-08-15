@@ -68,7 +68,7 @@ public class ParticleEffect
     /// <summary>
     /// Gets or sets a value indicating whether particles will spawn at a limited rate.
     /// </summary>
-    public bool SpawnRateEnabled { get; set; } = true;
+    public bool LimitSpawnRate { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether the bursting effect is enabled or disabled.

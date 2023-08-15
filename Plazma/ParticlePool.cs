@@ -1,4 +1,4 @@
-﻿// <copyright file="ParticlePool.cs" company="KinsonDigital">
+// <copyright file="ParticlePool.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -65,10 +65,10 @@ public sealed class ParticlePool<TTexture> : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether particles will spawn at a limited rate.
     /// </summary>
-    public bool SpawnRateEnabled
+    public bool LimitSpawnRate
     {
-        get => Effect.SpawnRateEnabled;
-        set => Effect.SpawnRateEnabled = value;
+        get => Effect.LimitSpawnRate;
+        set => Effect.LimitSpawnRate = value;
     }
 
     /// <summary>
@@ -129,7 +129,7 @@ public sealed class ParticlePool<TTexture> : IDisposable
         ManageBurstEffectTimings(timeElapsed);
 
         // If the amount of time to spawn a new particle has passed
-        if (!Effect.SpawnRateEnabled || this.spawnRateElapsed >= this.spawnRate)
+        if (Effect.LimitSpawnRate is false || this.spawnRateElapsed >= this.spawnRate)
         {
             this.spawnRate = GetRandomSpawnRate();
 
