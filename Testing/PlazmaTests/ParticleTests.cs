@@ -6,7 +6,6 @@ namespace PlazmaTests;
 
 using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Numerics;
 using FluentAssertions;
 using Plazma;
@@ -121,7 +120,7 @@ public class ParticleTests : Tests
     {
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.Enabled.Returns(false);
         var sut = new Particle(new[] { mockBehavior });
 
@@ -139,7 +138,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -157,7 +156,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.X);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -166,7 +165,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.Position.X.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.Position.X.Should().Be(123);
     }
 
     [Fact]
@@ -176,7 +175,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Y);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -185,7 +184,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.Position.Y.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.Position.Y.Should().Be(123);
     }
 
     [Fact]
@@ -195,7 +194,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Angle);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -204,7 +203,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.Angle.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.Angle.Should().Be(123);
     }
 
     [Fact]
@@ -214,7 +213,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Size);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -223,7 +222,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.Size.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.Size.Should().Be(123);
     }
 
     [Fact]
@@ -233,7 +232,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.RedColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -242,7 +241,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.TintColor.R.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.TintColor.R.Should().Be(123);
     }
 
     [Fact]
@@ -252,7 +251,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.GreenColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -261,7 +260,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.TintColor.G.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.TintColor.G.Should().Be(123);
     }
 
     [Fact]
@@ -271,7 +270,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.BlueColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -280,7 +279,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.TintColor.B.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.TintColor.B.Should().Be(123);
     }
 
     [Fact]
@@ -290,7 +289,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.AlphaColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -299,7 +298,7 @@ public class ParticleTests : Tests
         sut.Update(this.frameTime);
 
         // Assert
-        sut.TintColor.A.ToString(CultureInfo.InvariantCulture).Should().Be("123");
+        sut.TintColor.A.Should().Be(123);
     }
 
     [Fact]
@@ -323,7 +322,7 @@ public class ParticleTests : Tests
     {
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Angle);
         var sut = new Particle(new[] { mockBehavior });
 
@@ -341,7 +340,7 @@ public class ParticleTests : Tests
     {
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
-        mockBehavior.Value.Returns("123");
+        mockBehavior.Value.Returns(123);
         mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.RedColorComponent);
         var sut = new Particle(new[] { mockBehavior });
 

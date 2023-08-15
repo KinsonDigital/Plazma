@@ -14,7 +14,7 @@ public interface IBehavior
     /// <summary>
     /// Gets the current value of the behavior.
     /// </summary>
-    string Value { get; }
+    double Value { get; }
 
     /// <summary>
     /// Gets the current amount of time that has elapsed for the behavior.

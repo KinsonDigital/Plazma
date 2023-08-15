@@ -5,7 +5,6 @@
 namespace Plazma.Behaviors;
 
 using System;
-using System.Globalization;
 using Services;
 
 /// <summary>
@@ -46,12 +45,10 @@ public class EasingRandomBehavior : Behavior
     /// <param name="timeElapsed">The amount of time that has elapsed for this update of the behavior.</param>
     public override void Update(TimeSpan timeElapsed)
     {
-        // TODO: Using 'ToString()' for the value provides tons of allocations and is not ideal.  Need to change how this works.
         Value = this.settings.EasingFunctionType switch
         {
-            EasingFunction.EaseOutBounce => EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime)
-                .ToString(CultureInfo.InvariantCulture),
-            EasingFunction.EaseIn => EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture),
+            EasingFunction.EaseOutBounce => EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime),
+            EasingFunction.EaseIn => EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime),
             _ => Value
         };
 

@@ -22,8 +22,7 @@ public abstract class Behavior : IBehavior
     /// <summary>
     /// Gets or sets the current value of the behavior.
     /// </summary>
-    // TODO: needs to be converted to a double
-    public string Value { get; protected set; } = "0";
+    public double Value { get; protected set; }
 
     /// <summary>
     /// Gets or sets the current amount of time that has elapsed for the behavior in milliseconds.
@@ -58,7 +57,7 @@ public abstract class Behavior : IBehavior
     /// </summary>
     public virtual void Reset()
     {
-        Value = string.Empty;
+        Value = 0.0;
         ElapsedTime = 0;
         Enabled = true;
     }
