@@ -71,9 +71,8 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     /// Creates a particle pool using the given particle <paramref name="effect"/>.
     /// </summary>
     /// <param name="effect">The particle effect for the pool to use.</param>
-    /// <param name="behaviorFactory">The factory used for creating behaviors.</param>
-    public void CreatePool(ParticleEffect effect, IBehaviorFactory behaviorFactory) =>
-        this.particlePools.Add(new ParticlePool<TTexture>(behaviorFactory, this.textureLoader, effect, this.randomizer));
+    public void CreatePool(ParticleEffect effect) =>
+        this.particlePools.Add(new ParticlePool<TTexture>(this.textureLoader, effect, this.randomizer));
 
     /// <summary>
     /// Clears all of the current existing pools.

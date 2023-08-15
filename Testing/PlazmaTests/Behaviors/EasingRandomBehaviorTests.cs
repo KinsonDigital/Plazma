@@ -49,7 +49,7 @@ public class EasingRandomBehaviorTests
     public void Start_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings();
+        var settings = default(EasingRandomBehaviorSettings);
         var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
@@ -64,7 +64,7 @@ public class EasingRandomBehaviorTests
     public void Change_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings();
+        var settings = default(EasingRandomBehaviorSettings);
         var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
@@ -111,7 +111,7 @@ public class EasingRandomBehaviorTests
     public void Update_WhenInvoked_UpdatesElapsedTime()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings();
+        var settings = default(EasingRandomBehaviorSettings);
         var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
@@ -128,7 +128,7 @@ public class EasingRandomBehaviorTests
     {
         // Arrange
         this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(1000f);
-        var settings = new EasingRandomBehaviorSettings();
+        var settings = default(EasingRandomBehaviorSettings);
         var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
 
         // Act
@@ -142,7 +142,7 @@ public class EasingRandomBehaviorTests
     public void Reset_WhenInvoked_ResetsStartProp()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings();
+        var setting = default(EasingRandomBehaviorSettings);
         this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(123);
         var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
@@ -157,7 +157,7 @@ public class EasingRandomBehaviorTests
     public void Reset_WhenInvoked_ResetsChangeProp()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings();
+        var setting = default(EasingRandomBehaviorSettings);
         this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(123);
         var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
@@ -172,7 +172,7 @@ public class EasingRandomBehaviorTests
     public void Reset_WhenInvoked_ResetsElapsedTimeProp()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings();
+        var setting = default(EasingRandomBehaviorSettings);
         var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act
@@ -187,7 +187,7 @@ public class EasingRandomBehaviorTests
     public void Reset_WhenInvoked_ResetsEnabledProp()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings();
+        var setting = default(EasingRandomBehaviorSettings);
         var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act

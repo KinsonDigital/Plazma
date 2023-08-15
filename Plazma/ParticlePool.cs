@@ -32,23 +32,17 @@ public sealed class ParticlePool<TTexture> : IDisposable
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticlePool{Texture}"/> class.
     /// </summary>
-    /// <param name="behaviorFactory">The factory used for creating new behaviors for each particle.</param>
     /// <param name="textureLoader">Loads the textures for the <see cref="ParticlePool{Texture}"/>.</param>
     /// <param name="effect">The particle effect to be applied to all of the particles in the pool.</param>
     /// <param name="randomizer">Used for generating random values when a particle is spawned.</param>
-    public ParticlePool(IBehaviorFactory behaviorFactory, ITextureLoader<TTexture> textureLoader, ParticleEffect effect, IRandomizerService randomizer)
+    public ParticlePool(ITextureLoader<TTexture> textureLoader, ParticleEffect effect, IRandomizerService randomizer)
     {
-        if (behaviorFactory is null)
-        {
-            throw new ArgumentNullException(nameof(behaviorFactory), "The parameter must not be null.");
-        }
-
         Effect = effect ?? throw new ArgumentNullException(nameof(effect), "The parameter must not be null.");
 
         this.textureLoader = textureLoader;
         this.randomService = randomizer;
 
-        CreateAllParticles(behaviorFactory);
+        CreateAllParticles();
         this.spawnRate = GetRandomSpawnRate();
     }
 
@@ -135,7 +129,7 @@ public sealed class ParticlePool<TTexture> : IDisposable
         ManageBurstEffectTimings(timeElapsed);
 
         // If the amount of time to spawn a new particle has passed
-        if (this.spawnRateElapsed >= this.spawnRate || !Effect.SpawnRateEnabled)
+        if (!Effect.SpawnRateEnabled || this.spawnRateElapsed >= this.spawnRate)
         {
             this.spawnRate = GetRandomSpawnRate();
 
@@ -249,24 +243,29 @@ public sealed class ParticlePool<TTexture> : IDisposable
         var minRate = BurstEnabled && IsCurrentlyBursting ? Effect.BurstSpawnRateMin : Effect.SpawnRateMin;
         var maxRate = BurstEnabled && IsCurrentlyBursting ? Effect.BurstSpawnRateMax : Effect.SpawnRateMax;
 
-        if (Effect.SpawnRateMin <= Effect.SpawnRateMax)
-        {
-            return this.randomService.GetValue(minRate, maxRate);
-        }
-
-        return this.randomService.GetValue(maxRate, minRate);
+        return Effect.SpawnRateMin <= Effect.SpawnRateMax
+            ? this.randomService.GetValue(minRate, maxRate)
+            : this.randomService.GetValue(maxRate, minRate);
     }
 
     /// <summary>
     /// Generates all of the particles.
     /// </summary>
-    private void CreateAllParticles(IBehaviorFactory behaviorFactory)
+    private void CreateAllParticles()
     {
         this.particles.Clear();
 
         for (var i = 0; i < Effect.TotalParticlesAliveAtOnce; i++)
         {
-            this.particles.Add(new Particle(behaviorFactory.CreateBehaviors(Effect.BehaviorSettings.ToArray(), this.randomService)));
+            var behaviors = new List<IBehavior>();
+
+            foreach (EasingRandomBehaviorSettings settings in Effect.BehaviorSettings)
+            {
+                var newBehavior = new EasingRandomBehavior(settings, this.randomService);
+                behaviors.Add(newBehavior);
+            }
+
+            this.particles.Add(new Particle(behaviors.ToArray()));
         }
     }
 }

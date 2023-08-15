@@ -43,7 +43,6 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
-        var behaviorFactory = new BehaviorFactory();
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
@@ -53,7 +52,7 @@ public class ColorScene : SceneBase
             TotalParticlesAliveAtOnce = 100,
         };
 
-        this.engine.CreatePool(effect, behaviorFactory);
+        this.engine.CreatePool(effect);
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
@@ -104,7 +103,7 @@ public class ColorScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private IBehaviorSettings[] CreateSettings()
+    private EasingRandomBehaviorSettings[] CreateSettings()
     {
         var windowCenter = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
 
@@ -116,10 +115,10 @@ public class ColorScene : SceneBase
             ApplyToAttribute = ParticleAttribute.X,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
-            RandomStopMin = -winHalfWidth - TextureHalfWidth,
-            RandomStopMax = winHalfWidth + TextureHalfWidth,
             RandomStartMin = windowCenter.X,
             RandomStartMax = windowCenter.X,
+            RandomStopMin = -winHalfWidth - TextureHalfWidth,
+            RandomStopMax = winHalfWidth + TextureHalfWidth,
         };
 
         var yPosSettings = new EasingRandomBehaviorSettings
@@ -127,10 +126,10 @@ public class ColorScene : SceneBase
             ApplyToAttribute = ParticleAttribute.Y,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
-            RandomStopMin = -winHalfHeight - TextureHalfHeight,
-            RandomStopMax = winHalfHeight + TextureHalfHeight,
             RandomStartMin = windowCenter.Y,
             RandomStartMax = windowCenter.Y,
+            RandomStopMin = -winHalfHeight - TextureHalfHeight,
+            RandomStopMax = winHalfHeight + TextureHalfHeight,
         };
 
         var white = Color.White;
@@ -180,7 +179,7 @@ public class ColorScene : SceneBase
             RandomStopMax = purple.B - white.B,
         };
 
-        return new IBehaviorSettings[]
+        return new []
         {
             xPosSettings,
             yPosSettings,

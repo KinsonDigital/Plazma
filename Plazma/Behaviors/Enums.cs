@@ -10,12 +10,12 @@ namespace Plazma.Behaviors;
 public enum EasingFunction
 {
     /// <summary>
-    /// Ease out bounce easing function.
-    /// </summary>
-    EaseOutBounce,
-
-    /// <summary>
     /// Ease in easing function.
     /// </summary>
     EaseIn,
+
+    /// <summary>
+    /// Ease out bounce easing function.
+    /// </summary>
+    EaseOutBounce,
 }

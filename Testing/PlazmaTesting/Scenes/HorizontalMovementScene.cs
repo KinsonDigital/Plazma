@@ -46,8 +46,6 @@ public class HorizontalMovementScene : SceneBase
             CreateSettings(),
         };
 
-        var behaviorFactory = new BehaviorFactory();
-
         var effect = new ParticleEffect("drop", allSettings)
         {
             SpawnLocation = new Vector2(400, 400),
@@ -56,7 +54,7 @@ public class HorizontalMovementScene : SceneBase
             TotalParticlesAliveAtOnce = 100,
         };
 
-        this.engine.CreatePool(effect, behaviorFactory);
+        this.engine.CreatePool(effect);
     }
 
     /// <summary>
@@ -117,7 +115,7 @@ public class HorizontalMovementScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private IBehaviorSettings CreateSettings()
+    private EasingRandomBehaviorSettings CreateSettings()
     {
         const int changeMin = 1000;
         const int changeMax = 2000;
@@ -129,10 +127,10 @@ public class HorizontalMovementScene : SceneBase
             ApplyToAttribute = ParticleAttribute.X,
             LifeTimeMillisecondsMin = 3500,
             LifeTimeMillisecondsMax = 7000,
-            RandomStopMin = changeMin,
-            RandomStopMax = changeMax,
             RandomStartMin = startMin,
             RandomStartMax = startMax,
+            RandomStopMin = changeMin,
+            RandomStopMax = changeMax,
             UpdateRandomStartMin = () => this.mousePos.X,
             UpdateRandomStartMax = () => this.mousePos.X,
         };

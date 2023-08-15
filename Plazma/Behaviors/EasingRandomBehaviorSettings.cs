@@ -9,82 +9,83 @@ using System;
 /// <summary>
 /// Stores settings for creating an <see cref="EasingRandomBehavior"/>.
 /// </summary>
-public class EasingRandomBehaviorSettings : IBehaviorSettings, IEasingCapable
+public readonly record struct EasingRandomBehaviorSettings
 {
-    /// <inheritdoc/>
-    public ParticleAttribute ApplyToAttribute { get; set; }
-
-    /// <inheritdoc/>
-    public double LifeTime { get; } = 1000.0;
-
-    /// <inheritdoc/>
-    public EasingFunction EasingFunctionType { get; set; } = EasingFunction.EaseIn;
+    /// <summary>
+    /// Gets the attribute of the particle to apply the easing function to.
+    /// </summary>
+    public ParticleAttribute ApplyToAttribute { get; init; }
 
     /// <summary>
-    /// Gets or sets the minimum starting value used in randomization.
+    /// Gets the type of easing function to use.
+    /// </summary>
+    public EasingFunction EasingFunctionType { get; init; }
+
+    /// <summary>
+    /// Gets the minimum starting value used in randomization.
     /// </summary>
     /// <remarks>
     ///     Negative values can be used as a stopping point.
     /// </remarks>
-    public float RandomStartMin { get; set; }
+    public float RandomStartMin { get; init; }
 
     /// <summary>
-    /// Gets or sets the maximum starting value used in randomization.
+    /// Gets the maximum starting value used in randomization.
     /// </summary>
     /// <remarks>
     ///     Negative values can be used as a stopping point.
     /// </remarks>
-    public float RandomStartMax { get; set; }
+    public float RandomStartMax { get; init; }
 
     /// <summary>
-    /// Gets or sets a delegate that will set the <see cref="RandomStartMin"/> value.
+    /// Gets a delegate that will set the <see cref="RandomStartMin"/> value.
     /// </summary>
     /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomStartMin { get; set; }
+    public Func<float>? UpdateRandomStartMin { get; init; }
 
     /// <summary>
-    /// Gets or sets a delegate that will set the <see cref="RandomStartMax"/> value.
+    /// Gets a delegate that will set the <see cref="RandomStartMax"/> value.
     /// </summary>
     /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomStartMax { get; set; }
+    public Func<float>? UpdateRandomStartMax { get; init; }
 
     /// <summary>
-    /// Gets or sets a delegate that will set the <see cref="RandomStopMin"/> value.
+    /// Gets a delegate that will set the <see cref="RandomStopMin"/> value.
     /// </summary>
     /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomChangeMin { get; set; }
+    public Func<float>? UpdateRandomStopMin { get; init; }
 
     /// <summary>
-    /// Gets or sets a delegate that will set the <see cref="RandomStopMax"/> value.
+    /// Gets a delegate that will set the <see cref="RandomStopMax"/> value.
     /// </summary>
     /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomChangeMax { get; set; }
+    public Func<float>? UpdateRandomStopMax { get; init; }
 
     /// <summary>
-    /// Gets or sets the minimum amount of change used in randomization.
+    /// Gets the minimum amount of change used in randomization.
     /// </summary>
     /// <remarks>
     ///     Negative values can be used as a stopping point.
     /// </remarks>
-    public float RandomStopMin { get; set; }
+    public float RandomStopMin { get; init; }
 
     /// <summary>
-    /// Gets or sets the maximum stopping value used in randomization.
+    /// Gets the maximum stopping value used in randomization.
     /// </summary>
     /// <remarks>
     ///     Negative values can be used as a stopping point.
     /// </remarks>
-    public float RandomStopMax { get; set; }
+    public float RandomStopMax { get; init; }
 
     /// <summary>
-    /// Gets or sets the minimum total amount of time in milliseconds to complete the behavior.
+    /// Gets the minimum total amount of time in milliseconds to complete the behavior.
     /// </summary>
     /// <remarks>A value less then or equal to 0 will result in the behavior not working.</remarks>
-    public float LifeTimeMillisecondsMin { get; set; } // TODO: Needs to be required somehow
+    public float LifeTimeMillisecondsMin { get; init; }
 
     /// <summary>
-    /// Gets or sets the maximum total amount of time in milliseconds to complete the behavior.
+    /// Gets the maximum total amount of time in milliseconds to complete the behavior.
     /// </summary>
     /// <remarks>A value less then or equal to 0 will result in the behavior not working.</remarks>
-    public float LifeTimeMillisecondsMax { get; set; } // TODO: Needs to be required somehow
+    public float LifeTimeMillisecondsMax { get; init; }
 }

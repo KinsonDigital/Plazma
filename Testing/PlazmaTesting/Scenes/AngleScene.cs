@@ -39,7 +39,6 @@ public class AngleScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
-        var behaviorFactory = new BehaviorFactory();
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
@@ -49,7 +48,7 @@ public class AngleScene : SceneBase
             TotalParticlesAliveAtOnce = 10,
         };
 
-        this.engine.CreatePool(effect, behaviorFactory);
+        this.engine.CreatePool(effect);
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
@@ -101,7 +100,7 @@ public class AngleScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private IBehaviorSettings[] CreateSettings()
+    private EasingRandomBehaviorSettings[] CreateSettings()
     {
         var windowCenter = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
 
@@ -141,7 +140,7 @@ public class AngleScene : SceneBase
             RandomStartMax = 0,
         };
 
-        return new IBehaviorSettings[]
+        return new []
         {
             xPosSettings,
             yPosSettings,

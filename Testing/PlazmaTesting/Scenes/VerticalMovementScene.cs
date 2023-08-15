@@ -1,4 +1,4 @@
-﻿// <copyright file="VerticalMovementScene.cs" company="KinsonDigital">
+// <copyright file="VerticalMovementScene.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -47,8 +47,6 @@ public class VerticalMovementScene : SceneBase
             CreateSettings(),
         };
 
-        var behaviorFactory = new BehaviorFactory();
-
         var effect = new ParticleEffect("drop", allSettings)
         {
             SpawnLocation = new Vector2(400, 400),
@@ -57,7 +55,7 @@ public class VerticalMovementScene : SceneBase
             TotalParticlesAliveAtOnce = 100,
         };
 
-        this.engine.CreatePool(effect, behaviorFactory);
+        this.engine.CreatePool(effect);
     }
 
     /// <summary>
@@ -118,7 +116,7 @@ public class VerticalMovementScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private IBehaviorSettings CreateSettings()
+    private EasingRandomBehaviorSettings CreateSettings()
     {
         const int changeMin = 1000;
         const int changeMax = 2000;
@@ -130,10 +128,10 @@ public class VerticalMovementScene : SceneBase
             ApplyToAttribute = ParticleAttribute.Y,
             LifeTimeMillisecondsMin = 2500,
             LifeTimeMillisecondsMax = 5000,
-            RandomStopMin = changeMin,
-            RandomStopMax = changeMax,
             RandomStartMin = startMin,
             RandomStartMax = startMax,
+            RandomStopMin = changeMin,
+            RandomStopMax = changeMax,
             UpdateRandomStartMin = () => this.mousePos.Y,
             UpdateRandomStartMax = () => this.mousePos.Y,
         };

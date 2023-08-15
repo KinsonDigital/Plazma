@@ -14,7 +14,7 @@ using Services;
 /// </summary>
 public class EasingRandomBehavior : Behavior
 {
-    private readonly EasingRandomBehaviorSettings settings;
+    private EasingRandomBehaviorSettings settings;
     private readonly IRandomizerService randomizer;
 
     /// <summary>
@@ -57,22 +57,22 @@ public class EasingRandomBehavior : Behavior
 
         if (this.settings.UpdateRandomStartMin is not null)
         {
-            this.settings.RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke() ?? 0f;
+            this.settings = this.settings with { RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke() ?? 0f };
         }
 
         if (this.settings.UpdateRandomStartMax is not null)
         {
-            this.settings.RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke() ?? 0f;
+            this.settings = this.settings with { RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke() ?? 0f };
         }
 
-        if (this.settings.UpdateRandomChangeMin is not null)
+        if (this.settings.UpdateRandomStopMin is not null)
         {
-            this.settings.RandomStopMin = this.settings.UpdateRandomChangeMin?.Invoke() ?? 0f;
+            this.settings = this.settings with { RandomStopMin = this.settings.UpdateRandomStopMin?.Invoke() ?? 0f };
         }
 
-        if (this.settings.UpdateRandomChangeMax is not null)
+        if (this.settings.UpdateRandomStopMax is not null)
         {
-            this.settings.RandomStopMax = this.settings.UpdateRandomChangeMax?.Invoke() ?? 0f;
+            this.settings = this.settings with { RandomStopMax = this.settings.UpdateRandomStopMax?.Invoke() ?? 0f };
         }
 
         base.Update(timeElapsed);

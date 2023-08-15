@@ -21,7 +21,7 @@ public class ParticleEffectTests
     public void Ctor_WhenInvoked_SetsParticleTextureName()
     {
         // Act
-        var effect = new ParticleEffect("effect-name", Array.Empty<IBehaviorSettings>());
+        var effect = new ParticleEffect("effect-name", Array.Empty<EasingRandomBehaviorSettings>());
 
         // Assert
         effect.ParticleTextureName.Should().Be("effect-name");
@@ -31,9 +31,9 @@ public class ParticleEffectTests
     public void Ctor_WhenInvoked_SetsBehaviorSettings()
     {
         // Arrange
-        var settings = new IBehaviorSettings[]
+        var settings = new EasingRandomBehaviorSettings[]
         {
-            new EasingRandomBehaviorSettings
+            new ()
             {
                 ApplyToAttribute = ParticleAttribute.Angle,
                 RandomStopMin = 11,
@@ -126,175 +126,9 @@ public class ParticleEffectTests
     }
     #endregion
 
-    #region Method Tests
-    [Fact]
-    public void Equals_WithDifferentObjects_ReturnsFalse()
-    {
-        // Arrange
-        var settings = new IBehaviorSettings[]
-        {
-            new EasingRandomBehaviorSettings
-            {
-                ApplyToAttribute = ParticleAttribute.Angle,
-                RandomStopMin = 11,
-                RandomStopMax = 22,
-                RandomStartMin = 33,
-                RandomStartMax = 44,
-                LifeTimeMillisecondsMin = 55,
-                LifeTimeMillisecondsMax = 66,
-            },
-        };
-
-        var effect = new ParticleEffect("test-name", settings)
-        {
-            SpawnLocation = new Vector2(11, 22),
-            SpawnRateMin = 11,
-            SpawnRateMax = 22,
-            TotalParticlesAliveAtOnce = 33,
-            UseColorsFromList = true,
-        };
-        var otherObj = new object();
-
-        // Act
-        var actual = effect.Equals(otherObj);
-
-        // Assert
-        actual.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_WithEqualObjects_ReturnsTrue()
-    {
-        // Arrange
-        var settings = new IBehaviorSettings[]
-        {
-            new EasingRandomBehaviorSettings
-            {
-                ApplyToAttribute = ParticleAttribute.Angle,
-                RandomStopMin = 11,
-                RandomStopMax = 22,
-                RandomStartMin = 33,
-                RandomStartMax = 44,
-                LifeTimeMillisecondsMin = 55,
-                LifeTimeMillisecondsMax = 66,
-            },
-        };
-
-        var effectA = new ParticleEffect("test-name", settings)
-        {
-            SpawnLocation = new Vector2(11, 22),
-            SpawnRateMin = 11,
-            SpawnRateMax = 22,
-            TotalParticlesAliveAtOnce = 33,
-            UseColorsFromList = true,
-        };
-
-        var effectB = new ParticleEffect("test-name", settings)
-        {
-            SpawnLocation = new Vector2(11, 22),
-            SpawnRateMin = 11,
-            SpawnRateMax = 22,
-            TotalParticlesAliveAtOnce = 33,
-            UseColorsFromList = true,
-        };
-
-        // Act
-        var actual = effectA.Equals(effectB);
-
-        // Assert
-        actual.Should().BeTrue();
-    }
-
-    [Fact]
-    public void Equals_WithNonEqualObjects_ReturnsFalse()
-    {
-        // Arrange
-        var settings = new IBehaviorSettings[]
-        {
-            new EasingRandomBehaviorSettings
-            {
-                ApplyToAttribute = ParticleAttribute.Angle,
-                RandomStopMin = 11,
-                RandomStopMax = 22,
-                RandomStartMin = 33,
-                RandomStartMax = 44,
-                LifeTimeMillisecondsMin = 55,
-                LifeTimeMillisecondsMax = 66,
-            },
-        };
-
-        var effectA = new ParticleEffect("test-name", settings)
-        {
-            SpawnLocation = new Vector2(11, 22),
-            SpawnRateMin = 11,
-            SpawnRateMax = 22,
-            TotalParticlesAliveAtOnce = 33,
-            UseColorsFromList = true,
-        };
-
-        var effectB = new ParticleEffect("effect-bee", settings)
-        {
-            SpawnLocation = new Vector2(99, 88),
-            SpawnRateMin = 77,
-            SpawnRateMax = 66,
-            TotalParticlesAliveAtOnce = 55,
-            UseColorsFromList = false,
-        };
-
-        // Act
-        var actual = effectA.Equals(effectB);
-
-        // Assert
-        actual.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Equals_WithDifferentTintColorTotals_ReturnsFalse()
-    {
-        // Arrange
-        var settings = new IBehaviorSettings[]
-        {
-            new EasingRandomBehaviorSettings
-            {
-                ApplyToAttribute = ParticleAttribute.Angle,
-                RandomStopMin = 11,
-                RandomStopMax = 22,
-                RandomStartMin = 33,
-                RandomStartMax = 44,
-                LifeTimeMillisecondsMin = 55,
-                LifeTimeMillisecondsMax = 66,
-            },
-        };
-
-        var effectA = new ParticleEffect("test-name", settings)
-        {
-            SpawnLocation = new Vector2(11, 22),
-            SpawnRateMin = 11,
-            SpawnRateMax = 22,
-            TotalParticlesAliveAtOnce = 33,
-            UseColorsFromList = true,
-        };
-
-        var effectB = new ParticleEffect("effect-name", settings)
-        {
-            SpawnLocation = new Vector2(11, 22),
-            SpawnRateMin = 11,
-            SpawnRateMax = 22,
-            TotalParticlesAliveAtOnce = 33,
-            UseColorsFromList = true,
-        };
-
-        // Act
-        var actual = effectA.Equals(effectB);
-
-        // Assert
-        actual.Should().BeFalse();
-    }
-    #endregion
-
     /// <summary>
     /// Creates a <see cref="ParticleEffect"/> instance for the purpose of testing.
     /// </summary>
     /// <returns>The instance to return.</returns>
-    private static ParticleEffect CreateEffect() => new ("test-texture", Array.Empty<IBehaviorSettings>());
+    private static ParticleEffect CreateEffect() => new ("test-texture", Array.Empty<EasingRandomBehaviorSettings>());
 }

@@ -19,99 +19,133 @@ public class EasingRandomBehaviorSettingsTests
     [Fact]
     public void ApplyToAttribute_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.ApplyToAttribute = ParticleAttribute.Angle;
-        var actual = setting.ApplyToAttribute;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { ApplyToAttribute = ParticleAttribute.Angle };
 
         // Assert
-        actual.Should().Be(ParticleAttribute.Angle);
+        setting.ApplyToAttribute.Should().Be(ParticleAttribute.Angle);
     }
 
     [Fact]
-    public void StartMin_WhenSettingValue_ReturnsCorrectResult()
+    public void EasingFunctionType_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomStartMin = 1234f;
-        var actual = setting.RandomStartMin;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { EasingFunctionType = EasingFunction.EaseIn };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.EasingFunctionType.Should().Be(EasingFunction.EaseIn);
     }
 
     [Fact]
-    public void StartMax_WhenSettingValue_ReturnsCorrectResult()
+    public void RandomStartMin_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomStartMax = 1234f;
-        var actual = setting.RandomStartMax;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomStartMin = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.RandomStartMin.Should().Be(1234f);
+    }
+
+    [Fact]
+    public void RandomStartMax_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomStartMax = 1234f };
+
+        // Assert
+        setting.RandomStartMax.Should().Be(1234f);
     }
 
     [Fact]
     public void RandomStopMin_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomStopMin = 1234f;
-        var actual = setting.RandomStopMin;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomStopMin = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.RandomStopMin.Should().Be(1234f);
     }
 
     [Fact]
     public void RandomStopMax_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomStopMax = 1234f;
-        var actual = setting.RandomStopMax;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomStopMax = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.RandomStopMax.Should().Be(1234f);
+    }
+
+    [Fact]
+    public void UpdateRandomStartMin_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var func = () => 123f;
+
+        // Act
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMin = func };
+
+        // Assert
+        setting.UpdateRandomStartMin.Should().BeSameAs(func);
+    }
+
+    [Fact]
+    public void UpdateRandomStartMax_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var func = () => 123f;
+
+        // Act
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMax = func };
+
+        // Assert
+        setting.UpdateRandomStartMax.Should().BeSameAs(func);
+    }
+
+    [Fact]
+    public void UpdateRandomStopMin_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var func = () => 123f;
+
+        // Act
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomStopMin = func };
+
+        // Assert
+        setting.UpdateRandomStopMin.Should().BeSameAs(func);
+    }
+
+    [Fact]
+    public void UpdateRandomStopMax_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var func = () => 123f;
+
+        // Act
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomStopMax = func };
+
+        // Assert
+        setting.UpdateRandomStopMax.Should().BeSameAs(func);
     }
 
     [Fact]
     public void LifeTimeMillisecondsMin_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.LifeTimeMillisecondsMin = 1234f;
-        var actual = setting.LifeTimeMillisecondsMin;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { LifeTimeMillisecondsMin = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.LifeTimeMillisecondsMin.Should().Be(1234f);
     }
 
     [Fact]
     public void LifeTimeMillisecondsMax_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.LifeTimeMillisecondsMax = 1234f;
-        var actual = setting.LifeTimeMillisecondsMax;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { LifeTimeMillisecondsMax = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.LifeTimeMillisecondsMax.Should().Be(1234f);
     }
     #endregion
 
