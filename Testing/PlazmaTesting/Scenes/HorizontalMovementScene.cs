@@ -1,4 +1,4 @@
-﻿// <copyright file="HorizontalMovementScene.cs" company="KinsonDigital">
+// <copyright file="HorizontalMovementScene.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -29,7 +29,7 @@ public class HorizontalMovementScene : SceneBase
     private Point mousePos;
 
     /// <summary>
-    /// Creates a new instance of <see cref="HorizontalMovementScene"/>.
+    /// Initializes a new instance of the <see cref="HorizontalMovementScene"/> class.
     /// </summary>
     public HorizontalMovementScene()
     {
@@ -40,7 +40,7 @@ public class HorizontalMovementScene : SceneBase
 
         this.engine = new ParticleEngine<ITexture>();
 
-        var allSettings = new []
+        var allSettings = new[]
         {
             CreateSettings(),
         };
@@ -58,7 +58,7 @@ public class HorizontalMovementScene : SceneBase
     }
 
     /// <summary>
-    /// Loads the content.
+    /// Unloads the content.
     /// </summary>
     public override void LoadContent()
     {

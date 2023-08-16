@@ -1,4 +1,8 @@
-﻿namespace PlazmaTesting;
+﻿// <copyright file="MainWindow.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace PlazmaTesting;
 
 using System.Drawing;
 using System.Text;
@@ -7,6 +11,9 @@ using Velaptor;
 using Velaptor.Graphics.Renderers;
 using Velaptor.UI;
 
+/// <summary>
+/// The main window of the application.
+/// </summary>
 public class MainWindow : Window
 {
     private static readonly char[] UpperCaseChars =
@@ -18,6 +25,9 @@ public class MainWindow : Window
     private readonly Button nextButton;
     private readonly Button previousButton;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainWindow"/> class.
+    /// </summary>
     public MainWindow()
     {
         TypeOfBorder = WindowBorder.Fixed;
@@ -27,22 +37,22 @@ public class MainWindow : Window
 
         var horizontalMovementScene = new HorizontalMovementScene
         {
-            Name = SplitByUpperCase(nameof(HorizontalMovementScene))
+            Name = SplitByUpperCase(nameof(HorizontalMovementScene)),
         };
 
         var verticalMovementScene = new VerticalMovementScene
         {
-            Name = SplitByUpperCase(nameof(VerticalMovementScene))
+            Name = SplitByUpperCase(nameof(VerticalMovementScene)),
         };
 
         var colorScene = new ColorScene
         {
-            Name = SplitByUpperCase(nameof(ColorScene))
+            Name = SplitByUpperCase(nameof(ColorScene)),
         };
 
         var angleScene = new AngleScene
         {
-            Name = SplitByUpperCase(nameof(AngleScene))
+            Name = SplitByUpperCase(nameof(AngleScene)),
         };
 
         SceneManager.AddScene(verticalMovementScene, true);
@@ -51,6 +61,9 @@ public class MainWindow : Window
         SceneManager.AddScene(angleScene);
     }
 
+    /// <summary>
+    /// Loads the applications content.
+    /// </summary>
     protected override void OnLoad()
     {
         const int buttonSpacing = 15;
@@ -73,6 +86,10 @@ public class MainWindow : Window
         base.OnLoad();
     }
 
+    /// <summary>
+    /// Updates the application.
+    /// </summary>
+    /// <param name="frameTime">The time passed for the current frame.</param>
     protected override void OnUpdate(FrameTime frameTime)
     {
         Title = $"Scene: {SceneManager.CurrentScene?.Name ?? "No Scene Loaded"}";
@@ -84,6 +101,10 @@ public class MainWindow : Window
         base.OnUpdate(frameTime);
     }
 
+    /// <summary>
+    /// Renders the application.
+    /// </summary>
+    /// <param name="frameTime">The time passed for the current frame.</param>
     protected override void OnDraw(FrameTime frameTime)
     {
         IRenderer.Begin();

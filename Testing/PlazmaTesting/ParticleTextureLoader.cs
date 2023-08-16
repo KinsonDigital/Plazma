@@ -1,3 +1,7 @@
+// <copyright file="ParticleTextureLoader.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
 namespace PlazmaTesting;
 
 using Plazma;
@@ -17,7 +21,7 @@ public sealed class ParticleTextureLoader : ITextureLoader<ITexture>
     /// Loads a single particle texture with the given <paramref name="assetName"/>.
     /// </summary>
     /// <param name="assetName">The name of the asset to load.</param>
-    /// <returns></returns>
+    /// <returns>The loaded texture.</returns>
     public ITexture LoadTexture(string assetName)
     {
         ArgumentException.ThrowIfNullOrEmpty(assetName);

@@ -28,7 +28,7 @@ public class ColorScene : SceneBase
     private readonly ITextureRenderer textureRenderer;
 
     /// <summary>
-    /// Creates a new instance of <see cref="ColorScene"/>.
+    /// Initializes a new instance of the <see cref="ColorScene"/> class.
     /// </summary>
     public ColorScene()
     {
@@ -179,7 +179,7 @@ public class ColorScene : SceneBase
             RandomStopMax = purple.B - white.B,
         };
 
-        return new []
+        return new[]
         {
             xPosSettings,
             yPosSettings,

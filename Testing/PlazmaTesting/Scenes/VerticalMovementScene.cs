@@ -30,7 +30,7 @@ public class VerticalMovementScene : SceneBase
     private Point mousePos;
 
     /// <summary>
-    /// Creates a new instance of <see cref="VerticalMovementScene"/>.
+    /// Initializes a new instance of the <see cref="VerticalMovementScene"/> class.
     /// </summary>
     public VerticalMovementScene()
     {
@@ -41,7 +41,7 @@ public class VerticalMovementScene : SceneBase
 
         this.engine = new ParticleEngine<ITexture>();
 
-        var allSettings = new []
+        var allSettings = new[]
         {
             CreateSettings(),
         };
@@ -59,7 +59,7 @@ public class VerticalMovementScene : SceneBase
     }
 
     /// <summary>
-    /// Loads the content.
+    /// Unloads the content.
     /// </summary>
     public override void LoadContent()
     {

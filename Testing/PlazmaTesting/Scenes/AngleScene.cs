@@ -1,4 +1,8 @@
-﻿namespace PlazmaTesting.Scenes;
+// <copyright file="AngleScene.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace PlazmaTesting.Scenes;
 
 using System.Drawing;
 using System.Numerics;
@@ -27,7 +31,7 @@ public class AngleScene : SceneBase
     private MouseState prevMouseState;
 
     /// <summary>
-    /// Creates a new instance of <see cref="AngleScene"/>.
+    /// Initializes a new instance of the <see cref="AngleScene"/> class.
     /// </summary>
     public AngleScene()
     {
@@ -154,11 +158,11 @@ public class AngleScene : SceneBase
             RandomStopMax = 360,
         };
 
-        return new []
+        return new[]
         {
             xPosSettings,
             yPosSettings,
-            angleSettings
+            angleSettings,
         };
     }
 }
