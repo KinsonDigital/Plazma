@@ -112,7 +112,7 @@ public class ColorScene : SceneBase
 
         var xPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.X,
+            ApplyToAttribute = BehaviorAttribute.X,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = windowCenter.X,
@@ -123,7 +123,7 @@ public class ColorScene : SceneBase
 
         var yPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Y,
+            ApplyToAttribute = BehaviorAttribute.Y,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = windowCenter.Y,
@@ -137,7 +137,7 @@ public class ColorScene : SceneBase
 
         var alphaSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.AlphaColorComponent,
+            ApplyToAttribute = BehaviorAttribute.AlphaColorComponent,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = 255,
@@ -148,7 +148,7 @@ public class ColorScene : SceneBase
 
         var redSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.RedColorComponent,
+            ApplyToAttribute = BehaviorAttribute.RedColorComponent,
             LifeTimeMillisecondsMin = 1500,
             LifeTimeMillisecondsMax = 1500,
             RandomStartMin = white.R,
@@ -159,7 +159,7 @@ public class ColorScene : SceneBase
 
         var greenSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.GreenColorComponent,
+            ApplyToAttribute = BehaviorAttribute.GreenColorComponent,
             LifeTimeMillisecondsMin = 1500,
             LifeTimeMillisecondsMax = 1500,
             RandomStartMin = white.G,
@@ -170,7 +170,7 @@ public class ColorScene : SceneBase
 
         var blueSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.BlueColorComponent,
+            ApplyToAttribute = BehaviorAttribute.BlueColorComponent,
             LifeTimeMillisecondsMin = 1500,
             LifeTimeMillisecondsMax = 1500,
             RandomStartMin = white.B,

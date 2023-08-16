@@ -32,15 +32,15 @@ public class EasingRandomBehaviorTests
         // Arrange
         var setting = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
         };
         var behavior = new EasingRandomBehavior(setting, this.mockRandomizerService);
 
         // Act
-        var actual = behavior.ApplyToAttribute;
+        var actual = behavior.BehaviorType;
 
         // Assert
-        actual.Should().Be(ParticleAttribute.Angle);
+        actual.Should().Be(BehaviorAttribute.Angle);
     }
     #endregion
 

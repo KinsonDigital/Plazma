@@ -7,7 +7,7 @@ namespace Plazma;
 /// <summary>
 /// Represents the different types of particle attributes that a behavior can be applied to.
 /// </summary>
-public enum ParticleAttribute
+public enum BehaviorAttribute
 {
     /// <summary>
     /// The X position of a particle.

@@ -24,7 +24,7 @@ public interface IBehavior
     /// <summary>
     /// Gets the particle attribute to apply the behavior result to.
     /// </summary>
-    ParticleAttribute ApplyToAttribute { get; }
+    BehaviorAttribute BehaviorType { get; }
 
     /// <summary>
     /// Gets a value indicating whether the behavior is enabled.

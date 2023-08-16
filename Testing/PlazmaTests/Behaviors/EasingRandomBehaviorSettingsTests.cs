@@ -20,10 +20,10 @@ public class EasingRandomBehaviorSettingsTests
     public void ApplyToAttribute_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange & Act
-        var setting = new EasingRandomBehaviorSettings { ApplyToAttribute = ParticleAttribute.Angle };
+        var setting = new EasingRandomBehaviorSettings { ApplyToAttribute = BehaviorAttribute.Angle };
 
         // Assert
-        setting.ApplyToAttribute.Should().Be(ParticleAttribute.Angle);
+        setting.ApplyToAttribute.Should().Be(BehaviorAttribute.Angle);
     }
 
     [Fact]
@@ -156,7 +156,7 @@ public class EasingRandomBehaviorSettingsTests
         // Arrange
         var setting = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomStopMin = 10,
             RandomStopMax = 20,
             RandomStartMin = 30,
@@ -179,7 +179,7 @@ public class EasingRandomBehaviorSettingsTests
         // Arrange
         var settingA = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomStopMin = 10,
             RandomStopMax = 20,
             RandomStartMin = 30,
@@ -190,7 +190,7 @@ public class EasingRandomBehaviorSettingsTests
 
         var settingB = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomStopMin = 10,
             RandomStopMax = 20,
             RandomStartMin = 30,
@@ -215,7 +215,7 @@ public class EasingRandomBehaviorSettingsTests
         // Arrange
         var settingA = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.BlueColorComponent,
+            ApplyToAttribute = BehaviorAttribute.BlueColorComponent,
             RandomStopMin = 100,
             RandomStopMax = 200,
             RandomStartMin = 300,
@@ -226,7 +226,7 @@ public class EasingRandomBehaviorSettingsTests
 
         var settingB = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomStopMin = 10,
             RandomStopMax = 20,
             RandomStartMin = 30,

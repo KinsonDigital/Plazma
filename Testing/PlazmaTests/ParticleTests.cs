@@ -99,7 +99,7 @@ public class ParticleTests : Tests
     {
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
-        mockBehavior.ApplyToAttribute.Returns((ParticleAttribute)999);
+        mockBehavior.BehaviorType.Returns((BehaviorAttribute)999);
         mockBehavior.Enabled.Returns(true);
 
         var sut = new Particle(new[] { mockBehavior });
@@ -108,7 +108,7 @@ public class ParticleTests : Tests
         var act = () => sut.Update(16.ToMillisecondsTimeSpan());
 
         // Assert
-        var expected = $"The value of argument '{nameof(ParticleAttribute)}' (999) is invalid for Enum type '{nameof(ParticleAttribute)}'.";
+        var expected = $"The value of argument '{nameof(BehaviorAttribute)}' (999) is invalid for Enum type '{nameof(BehaviorAttribute)}'.";
         expected += " (Parameter 'ParticleAttribute')";
         act.Should().Throw<InvalidEnumArgumentException>()
             .WithMessage(expected);
@@ -157,7 +157,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.X);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.X);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -176,7 +176,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Y);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.Y);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -195,7 +195,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Angle);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.Angle);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -214,7 +214,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Size);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.Size);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -233,7 +233,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.RedColorComponent);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.RedColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -252,7 +252,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.GreenColorComponent);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.GreenColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -271,7 +271,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.BlueColorComponent);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.BlueColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -290,7 +290,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Enabled.Returns(true);
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.AlphaColorComponent);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.AlphaColorComponent);
 
         var sut = new Particle(new[] { mockBehavior });
 
@@ -323,7 +323,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.Angle);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.Angle);
         var sut = new Particle(new[] { mockBehavior });
 
         // Act
@@ -341,7 +341,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.Value.Returns(123);
-        mockBehavior.ApplyToAttribute.Returns(ParticleAttribute.RedColorComponent);
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.RedColorComponent);
         var sut = new Particle(new[] { mockBehavior });
 
         // Act

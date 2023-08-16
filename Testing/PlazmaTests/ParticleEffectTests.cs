@@ -35,7 +35,7 @@ public class ParticleEffectTests
         {
             new ()
             {
-                ApplyToAttribute = ParticleAttribute.Angle,
+                ApplyToAttribute = BehaviorAttribute.Angle,
                 RandomStopMin = 11,
                 RandomStopMax = 22,
                 RandomStartMin = 33,

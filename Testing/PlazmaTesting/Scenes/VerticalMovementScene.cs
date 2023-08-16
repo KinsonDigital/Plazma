@@ -125,7 +125,7 @@ public class VerticalMovementScene : SceneBase
 
         return new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Y,
+            ApplyToAttribute = BehaviorAttribute.Y,
             LifeTimeMillisecondsMin = 2500,
             LifeTimeMillisecondsMax = 5000,
             RandomStartMin = startMin,

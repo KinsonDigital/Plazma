@@ -32,12 +32,12 @@ public abstract class Behavior : IBehavior
     /// <summary>
     /// Gets the particle attribute to apply the behavior value to.
     /// </summary>
-    public ParticleAttribute ApplyToAttribute => this.setting.ApplyToAttribute;
+    public BehaviorAttribute BehaviorType => this.setting.ApplyToAttribute;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the behavior is enabled.
+    /// Gets a value indicating whether the behavior is enabled.
     /// </summary>
-    public bool Enabled { get; protected set; } = true;
+    public bool Enabled { get; private set; } = true;
 
     /// <inheritdoc/>
     public double LifeTime { get; set; }

@@ -123,35 +123,35 @@ public class AngleScene : SceneBase
 
         var xPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.X,
+            ApplyToAttribute = BehaviorAttribute.X,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
-            RandomStopMin = -winHalfWidth - TextureHalfWidth,
-            RandomStopMax = winHalfWidth + TextureHalfWidth,
             RandomStartMin = windowCenter.X,
             RandomStartMax = windowCenter.X,
+            RandomStopMin = -winHalfWidth - TextureHalfWidth,
+            RandomStopMax = winHalfWidth + TextureHalfWidth,
         };
 
         var yPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Y,
+            ApplyToAttribute = BehaviorAttribute.Y,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
-            RandomStopMin = -winHalfHeight - TextureHalfHeight,
-            RandomStopMax = winHalfHeight + TextureHalfHeight,
             RandomStartMin = windowCenter.Y,
             RandomStartMax = windowCenter.Y,
+            RandomStopMin = -winHalfHeight - TextureHalfHeight,
+            RandomStopMax = winHalfHeight + TextureHalfHeight,
         };
 
         var angleSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
-            RandomStopMin = 360,
-            RandomStopMax = 360,
             RandomStartMin = 0,
             RandomStartMax = 0,
+            RandomStopMin = 360,
+            RandomStopMax = 360,
         };
 
         return new []

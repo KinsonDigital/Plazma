@@ -14,7 +14,7 @@ public readonly record struct EasingRandomBehaviorSettings
     /// <summary>
     /// Gets the attribute of the particle to apply the easing function to.
     /// </summary>
-    public ParticleAttribute ApplyToAttribute { get; init; }
+    public BehaviorAttribute ApplyToAttribute { get; init; }
 
     /// <summary>
     /// Gets the type of easing function to use.

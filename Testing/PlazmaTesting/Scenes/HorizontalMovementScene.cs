@@ -124,7 +124,7 @@ public class HorizontalMovementScene : SceneBase
 
         return new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.X,
+            ApplyToAttribute = BehaviorAttribute.X,
             LifeTimeMillisecondsMin = 3500,
             LifeTimeMillisecondsMax = 7000,
             RandomStartMin = startMin,

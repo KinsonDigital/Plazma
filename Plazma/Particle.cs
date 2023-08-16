@@ -69,34 +69,34 @@ public class Particle : IParticle
 
                 var value = (float)behavior.Value;
 
-                switch (behavior.ApplyToAttribute)
+                switch (behavior.BehaviorType)
                 {
-                    case ParticleAttribute.X:
+                    case BehaviorAttribute.X:
                         Position = new Vector2(value, Position.Y);
                         break;
-                    case ParticleAttribute.Y:
+                    case BehaviorAttribute.Y:
                         Position = new Vector2(Position.X, value);
                         break;
-                    case ParticleAttribute.Angle:
+                    case BehaviorAttribute.Angle:
                         Angle = value;
                         break;
-                    case ParticleAttribute.Size:
+                    case BehaviorAttribute.Size:
                         Size = value;
                         break;
-                    case ParticleAttribute.AlphaColorComponent:
+                    case BehaviorAttribute.AlphaColorComponent:
                         TintColor = Color.FromArgb(ClampClrValue(value), TintColor.R, TintColor.G, TintColor.B);
                         break;
-                    case ParticleAttribute.RedColorComponent:
+                    case BehaviorAttribute.RedColorComponent:
                         TintColor = Color.FromArgb(TintColor.A, ClampClrValue(value), TintColor.G, TintColor.B);
                         break;
-                    case ParticleAttribute.GreenColorComponent:
+                    case BehaviorAttribute.GreenColorComponent:
                         TintColor = Color.FromArgb(TintColor.A, TintColor.R, ClampClrValue(value), TintColor.B);
                         break;
-                    case ParticleAttribute.BlueColorComponent:
+                    case BehaviorAttribute.BlueColorComponent:
                         TintColor = Color.FromArgb(TintColor.A, TintColor.R, TintColor.G, ClampClrValue(value));
                         break;
                     default:
-                        throw new InvalidEnumArgumentException(nameof(ParticleAttribute), (int)behavior.ApplyToAttribute, typeof(ParticleAttribute));
+                        throw new InvalidEnumArgumentException(nameof(BehaviorAttribute), (int)behavior.BehaviorType, typeof(BehaviorAttribute));
                 }
             }
         }
