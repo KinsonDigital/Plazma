@@ -8,7 +8,6 @@ namespace Plazma;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 /// <summary>
 /// Manages multiple <see cref="Particle"/>s with various settings that dictate
@@ -20,7 +19,6 @@ public sealed class ParticleEngine<TTexture> : IDisposable
 {
     // TODO: Convert to iterable and IEnumerable for particle pools
     private readonly List<IParticlePool<TTexture>> particlePools = new ();
-    private bool enabled = true;
     private bool isDisposed;
 
     /// <summary>
@@ -32,27 +30,13 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     /// <summary>
     /// Gets or sets a value indicating whether the engine is enabled or disabled.
     /// </summary>
-    public bool Enabled
-    {
-        get => this.enabled;
-        set
-        {
-            this.enabled = value;
-
-            // If the engine is disabled, kill all the particles
-            if (!this.enabled)
-            {
-                // TODO: Do I need to kill particles here?
-                KillAllParticles();
-            }
-        }
-    }
+    public bool Enabled { get; set; } = true;
 
     /// <summary>
     /// Gets a value indicating whether the textures for the <see cref="ParticlePools"/>
     /// have been loaded.
     /// </summary>
-    public bool TexturesLoaded => this.particlePools.Count > 0 && this.particlePools.All(p => p.TextureLoaded);
+    public bool TexturesLoaded => this.particlePools.Count > 0 && this.particlePools.TrueForAll(p => p.TextureLoaded);
 
     /// <summary>
     /// Adds the given particle <paramref name="pool"/> t o he engine.
