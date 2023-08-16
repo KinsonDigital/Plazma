@@ -17,7 +17,6 @@ using Services;
 public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     where TTexture : class
 {
-    // TODO: Make this IEnumerable with iterator for ParticleEffects
     private readonly IRandomizerService randomService;
     private readonly ITextureLoader<TTexture> textureLoader;
     private readonly IBehaviorFactory behaviorFactory;
@@ -81,82 +80,47 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         this.spawnRate = GetRandomSpawnRate();
     }
 
-    /// <summary>
-    /// Occurs every time the total amount of living particles has changed.
-    /// </summary>
+    /// <inheritdoc/>
     [SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = "Part of the public API.")]
     public event EventHandler<EventArgs>? LivingParticlesCountChanged;
 
-    /// <summary>
-    /// Gets current total number of living <see cref="Particle"/>s.
-    /// </summary>
+    /// <inheritdoc/>
     public int TotalLivingParticles => this.particles.Count(p => p.IsAlive);
 
-    /// <summary>
-    /// Gets the current total number of dead <see cref="Particle"/>s.
-    /// </summary>
+    /// <inheritdoc/>
     public int TotalDeadParticles => this.particles.Count(p => p.IsAlive is false);
 
-    /// <summary>
-    /// Gets or sets a value indicating whether particles will spawn at a limited rate.
-    /// </summary>
+    /// <inheritdoc/>
     public bool LimitSpawnRate
     {
         get => Effect.LimitSpawnRate;
         set => Effect.LimitSpawnRate = value;
     }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether the bursting effect is enabled or disabled.
-    /// </summary>
-    /// <remarks>
-    ///     If enabled, the engine will spawn particles in a bursting fashion at intervals based on the timings between
-    ///     the <see cref="ParticleEffect.BurstOnMilliseconds"/> and <see cref="ParticleEffect.BurstOffMilliseconds"/> timing values.
-    ///     If the bursting effect is in its on cycle, the particles will use the
-    ///     <see cref="ParticleEffect.BurstSpawnRateMin"/> and <see cref="ParticleEffect.BurstSpawnRateMax"/>
-    ///     values and if the spawn effect is in its off cycle, it will use the <see cref="ParticleEffect.SpawnRateMin"/>
-    ///     <see cref="ParticleEffect.SpawnRateMax"/> values.
-    /// </remarks>
+    /// <inheritdoc/>
     public bool BurstEnabled
     {
         get => Effect.BurstEnabled;
         set => Effect.BurstEnabled = value;
     }
 
-    /// <summary>
-    /// Gets or sets a value indicating whether the bursting effect is currently bursting.
-    /// </summary>
-    /// <remarks>
-    ///     Indicates if the bursting effect is currently in its on in the on/off cycle.
-    ///     True is bursting and false means it is not.
-    /// </remarks>
+    /// <inheritdoc/>
     public bool InBurstMode { get; set; }
 
-    /// <summary>
-    /// Gets the list of particle in the pool.
-    /// </summary>
+    /// <inheritdoc/>
     public ImmutableArray<IParticle> Particles => this.particles.ToImmutableArray();
 
-    /// <summary>
-    /// Gets the particle effect of the pool.
-    /// </summary>
+    /// <inheritdoc/>
     public ParticleEffect Effect { get; private set; }
 
-    /// <summary>
-    /// Gets the texture of the particles in the pool.
-    /// </summary>
+    /// <inheritdoc/>
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Part of the public API.")]
     public TTexture? PoolTexture { get; private set; }
 
-    /// <summary>
-    /// Gets a value indicating whether the pool texture has been loaded.
-    /// </summary>
+    /// <inheritdoc/>
     public bool TextureLoaded => PoolTexture != null;
 
-    /// <summary>
-    /// Updates the particle pool.
-    /// </summary>
-    /// <param name="timeElapsed">The amount of time that has passed since the last frame.</param>
+    /// <inheritdoc/>
     public void Update(TimeSpan timeElapsed)
     {
         this.spawnRateElapsed += timeElapsed.TotalMilliseconds;
@@ -182,14 +146,10 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         }
     }
 
-    /// <summary>
-    /// Kills all of the particles.
-    /// </summary>
+    /// <inheritdoc/>
     public void KillAllParticles() => this.particles.ForEach(p => p.IsAlive = false);
 
-    /// <summary>
-    /// Loads the texture for the pool to use for rendering the particles.
-    /// </summary>
+    /// <inheritdoc/>
     public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
 
     /// <inheritdoc/>
@@ -287,13 +247,15 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         {
             var behaviors = new List<IBehavior>();
 
-            foreach (EasingRandomBehaviorSettings settings in Effect.BehaviorSettings)
+            for (var s = 0; s < Effect.BehaviorSettings.Count; s++)
             {
+                var settings = Effect.BehaviorSettings[s];
                 var newBehavior = this.behaviorFactory.CreateEasingRandomBehavior(settings);
                 behaviors.Add(newBehavior);
             }
 
-            this.particles.Add(this.particleFactory.Create(behaviors.ToArray()));
+            var newParticle = this.particleFactory.Create(behaviors.ToArray());
+            this.particles.Add(newParticle);
         }
     }
 

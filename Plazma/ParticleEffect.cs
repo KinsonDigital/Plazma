@@ -18,8 +18,6 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
 {
     private EasingRandomBehaviorSettings[] behaviorSettings = Array.Empty<EasingRandomBehaviorSettings>();
 
-    // TODO: Make this ienumerable with iterator
-
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
     /// </summary>
