@@ -10,6 +10,7 @@ using Velaptor.Content;
 using Velaptor.Factories;
 using Velaptor.Graphics;
 using Velaptor.Graphics.Renderers;
+using Velaptor.Input;
 using Velaptor.Scene;
 
 /// <summary>
@@ -22,12 +23,15 @@ public class AngleScene : SceneBase
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
     private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
+    private readonly IAppInput<MouseState> mouse;
+    private MouseState prevMouseState;
 
     /// <summary>
     /// Creates a new instance of <see cref="AngleScene"/>.
     /// </summary>
     public AngleScene()
     {
+        this.mouse = InputFactory.CreateMouse();
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
         this.engine = new ParticleEngine<ITexture>();
@@ -62,7 +66,17 @@ public class AngleScene : SceneBase
     /// <param name="frameTime">The time passed for the current frame.</param>
     public override void Update(FrameTime frameTime)
     {
+        var mouseState = this.mouse.GetState();
+
+        if (this.prevMouseState.IsLeftButtonDown() && mouseState.IsLeftButtonUp())
+        {
+            this.engine.Enabled = !this.engine.Enabled;
+        }
+
         this.engine.Update(frameTime.ElapsedTime);
+
+        this.prevMouseState = mouseState;
+
         base.Update(frameTime);
     }
 

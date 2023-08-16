@@ -1,4 +1,4 @@
-﻿// <copyright file="Particle.cs" company="KinsonDigital">
+// <copyright file="Particle.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,9 +10,7 @@ using System.Drawing;
 using System.Numerics;
 using Behaviors;
 
-/// <summary>
-/// <inheritdoc/>
-/// </summary>
+/// <inheritdoc cref="IParticle"/>
 public class Particle : IParticle
 {
     private readonly IBehavior[] behaviors;
