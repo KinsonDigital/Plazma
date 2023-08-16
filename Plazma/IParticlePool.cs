@@ -1,4 +1,4 @@
-﻿// <copyright file="IParticlePool.cs" company="KinsonDigital">
+// <copyright file="IParticlePool.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -7,6 +7,7 @@ namespace Plazma;
 using System;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using Behaviors;
 
 /// <summary>
 /// Contains a pool of reusable particles with each particle having various behaviors.
@@ -93,4 +94,16 @@ public interface IParticlePool<out TTexture> : IDisposable
     /// Loads the texture for the pool to use for rendering the particles.
     /// </summary>
     public void LoadTexture();
+
+    /// <summary>
+    /// Add a behavior to all of the particles using the given behavior settings.
+    /// </summary>
+    /// <param name="behaviorSettings">The behavior settings.</param>
+    void AddBehavior(EasingRandomBehaviorSettings behaviorSettings);
+
+    /// <summary>
+    /// Removes a behavior from all of the particles that matches the given <paramref name="behaviorType"/>.
+    /// </summary>
+    /// <param name="behaviorType">The type of behavior to remove.</param>
+    void RemoveBehavior(BehaviorAttribute behaviorType);
 }

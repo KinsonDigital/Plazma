@@ -556,6 +556,89 @@ public class ParticlePoolTests : Tests
     }
 
     [Fact]
+    public void AddBehavior_WhenInvoked_AddsNewBehavior()
+    {
+        // Arrange
+        var effect = new ParticleEffect { TotalParticles = 2 };
+
+        var settings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.Angle,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
+            RandomStartMin = 0,
+            RandomStartMax = 0,
+            RandomStopMin = 360,
+            RandomStopMax = 360,
+        };
+
+        var behavior = new EasingRandomBehavior(settings, Substitute.For<IRandomizerService>());
+
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>()).Returns(behavior);
+
+        var mockParticleA = Substitute.For<IParticle>();
+        var mockParticleB = Substitute.For<IParticle>();
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .ReturnsForAnyArgs(mockParticleA, mockParticleB);
+
+        var sut = CreateSystemUnderTest(effect);
+
+        // Act
+        sut.AddBehavior(settings);
+
+        // Assert
+        mockParticleA.Received(1).AddBehavior(Arg.Any<EasingRandomBehavior>());
+        mockParticleB.Received(1).AddBehavior(Arg.Any<EasingRandomBehavior>());
+        this.mockBehaviorFactory.Received(2).CreateEasingRandomBehavior(settings);
+    }
+
+    [Fact]
+    public void RemoveBehavior_WhenInvoked_AddsNewBehavior()
+    {
+        // Arrange
+        var mockParticleA = Substitute.For<IParticle>();
+        var mockParticleB = Substitute.For<IParticle>();
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(mockParticleA, mockParticleB);
+
+        var effect = new ParticleEffect { TotalParticles = 2 };
+        var angleSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.Angle,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
+            RandomStartMin = 0,
+            RandomStartMax = 0,
+            RandomStopMin = 360,
+            RandomStopMax = 360,
+        };
+
+        var blueSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.BlueColorComponent,
+            LifeTimeMillisecondsMin = 4000,
+            LifeTimeMillisecondsMax = 4000,
+            RandomStartMin = 0,
+            RandomStartMax = 0,
+            RandomStopMin = 255,
+            RandomStopMax = 255,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+        sut.AddBehavior(angleSettings);
+        sut.AddBehavior(blueSettings);
+
+        // Act
+        sut.RemoveBehavior(BehaviorAttribute.BlueColorComponent);
+
+        // Assert
+        mockParticleA.Received(1).RemoveBehavior(BehaviorAttribute.BlueColorComponent);
+        mockParticleB.Received(1).RemoveBehavior(BehaviorAttribute.BlueColorComponent);
+    }
+
+    [Fact]
     [SuppressMessage("csharpsquid", "S3966", Justification = "Redundant intentional for testing.")]
     public void Dispose_WhenInvoked2Times_DisposesOfPoolOneTime()
     {

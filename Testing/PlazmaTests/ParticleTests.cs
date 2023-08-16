@@ -25,6 +25,24 @@ public class ParticleTests : Tests
     /// </summary>
     public ParticleTests() => this.frameTime = 16.ToMillisecondsTimeSpan();
 
+    #region Ctor Tests
+    [Fact]
+    [Trait(Category, Constructors)]
+    public void Ctor_WithNullBehaviorsParam_ThrowsException()
+    {
+        // Arrange & Act
+        var act = () =>
+        {
+            _ = new Particle(null);
+        };
+
+        // Assert
+        act.Should()
+            .Throw<ArgumentNullException>()
+            .WithMessage("Value cannot be null. (Parameter 'behaviors')");
+    }
+    #endregion
+
     #region Prop Tests
     [Fact]
     [Trait(Category, Props)]
@@ -109,7 +127,7 @@ public class ParticleTests : Tests
 
         // Assert
         var expected = $"The value of argument '{nameof(BehaviorAttribute)}' (999) is invalid for Enum type '{nameof(BehaviorAttribute)}'.";
-        expected += " (Parameter 'ParticleAttribute')";
+        expected += $" (Parameter '{nameof(BehaviorAttribute)}')";
         act.Should().Throw<InvalidEnumArgumentException>()
             .WithMessage(expected);
     }
@@ -299,6 +317,71 @@ public class ParticleTests : Tests
 
         // Assert
         sut.TintColor.A.Should().Be(123);
+    }
+
+    [Fact]
+    public void AddBehavior_WhenBehaviorDoesNotAlreadyExist_AddsBehavior()
+    {
+        // Arrange
+        var mockBehavior = Substitute.For<IBehavior>();
+
+        var sut = new Particle();
+
+        // Act
+        sut.AddBehavior(mockBehavior);
+
+        // Assert
+        sut.Behaviors.Should().ContainSingle("no items existed when adding the new behavior.");
+    }
+
+    [Fact]
+    public void AddBehavior_WhenBehaviorAlreadyExists_DoesNotAddBehavior()
+    {
+        // Arrange
+        var mockBehavior = Substitute.For<IBehavior>();
+
+        var sut = new Particle(new[] { mockBehavior });
+
+        // Act
+        sut.AddBehavior(mockBehavior);
+
+        // Assert
+        sut.Behaviors.Should().ContainSingle("an item with the same behavior type already exists in the particle.");
+    }
+
+    [Fact]
+    public void RemoveBehavior_WhenBehaviorDoesNotAlreadyExist_DoesNotAttemptRemoval()
+    {
+        // Arrange
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.BehaviorType.Returns(BehaviorAttribute.Angle);
+
+        var sut = new Particle();
+
+        // Act
+        sut.RemoveBehavior(BehaviorAttribute.Angle);
+
+        // Assert
+        sut.Behaviors.Should().BeEmpty("the behavior did not exist in the particle.");
+    }
+
+    [Fact]
+    public void RemoveBehavior_WhenBehaviorDoesAlreadyExist_RemovesBehavior()
+    {
+        // Arrange
+        var mockBehaviorA = Substitute.For<IBehavior>();
+        mockBehaviorA.BehaviorType.Returns(BehaviorAttribute.Angle);
+
+        var mockBehaviorB = Substitute.For<IBehavior>();
+        mockBehaviorB.BehaviorType.Returns(BehaviorAttribute.BlueColorComponent);
+
+        var sut = new Particle(new[] { mockBehaviorA, mockBehaviorB });
+
+        // Act
+        sut.RemoveBehavior(BehaviorAttribute.Angle);
+
+        // Assert
+        sut.Behaviors.Should().ContainSingle("the behavior did not exist in the particle.");
     }
 
     [Fact]

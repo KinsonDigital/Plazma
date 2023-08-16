@@ -1,4 +1,4 @@
-﻿// <copyright file="IParticle.cs" company="KinsonDigital">
+// <copyright file="IParticle.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -40,10 +40,27 @@ public interface IParticle
     public bool IsAlive { get; set; }
 
     /// <summary>
+    /// Gets a list of the types of behaviors that the particle has.
+    /// </summary>
+    ImmutableArray<BehaviorAttribute> Behaviors { get; }
+
+    /// <summary>
     /// Updates the particle.
     /// </summary>
     /// <param name="timeElapsed">The amount of time that has elapsed since the last frame.</param>
     public void Update(TimeSpan timeElapsed);
+
+    /// <summary>
+    /// Adds the given behavior to the particle.
+    /// </summary>
+    /// <param name="behavior">The behavior to add.</param>
+    void AddBehavior(IBehavior behavior);
+
+    /// <summary>
+    /// Removes a behavior that matches the given <paramref name="behaviorType"/>.
+    /// </summary>
+    /// <param name="behaviorType">The type of behavior to remove.</param>
+    void RemoveBehavior(BehaviorAttribute behaviorType);
 
     /// <summary>
     /// Resets the particle.

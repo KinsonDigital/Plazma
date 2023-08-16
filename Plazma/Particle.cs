@@ -5,21 +5,36 @@
 namespace Plazma;
 
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Numerics;
 using Behaviors;
 
 /// <inheritdoc cref="IParticle"/>
 public class Particle : IParticle
 {
-    private readonly IBehavior[] behaviors;
+    private readonly List<IBehavior> behaviors = new ();
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Particle"/> class.
+    /// </summary>
+    public Particle()
+    {
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Particle"/> class.
     /// </summary>
     /// <param name="behaviors">The list of behaviors to add to the <see cref="Particle"/>.</param>
-    public Particle(IBehavior[] behaviors) => this.behaviors = behaviors;
+    public Particle(IBehavior[] behaviors)
+    {
+        ArgumentNullException.ThrowIfNull(behaviors);
+
+        this.behaviors = behaviors.ToList();
+    }
 
     /// <summary>
     /// Gets or sets the position of the <see cref="Particle"/>.
@@ -45,6 +60,9 @@ public class Particle : IParticle
     /// Gets or sets a value indicating whether the <see cref="Particle"/> is alive or dead.
     /// </summary>
     public bool IsAlive { get; set; }
+
+    /// <inheritdoc/>
+    public ImmutableArray<BehaviorAttribute> Behaviors => this.behaviors.Select(b => b.BehaviorType).ToImmutableArray();
 
     /// <summary>
     /// Updates the particle.
@@ -100,6 +118,30 @@ public class Particle : IParticle
                 }
             }
         }
+    }
+
+    /// <inheritdoc/>
+    public void AddBehavior(IBehavior behavior)
+    {
+        if (this.behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
+        {
+            return;
+        }
+
+        this.behaviors.Add(behavior);
+    }
+
+    /// <inheritdoc/>
+    public void RemoveBehavior(BehaviorAttribute behaviorType)
+    {
+        var behavior = this.behaviors.Find(b => b.BehaviorType == behaviorType);
+
+        if (behavior is null)
+        {
+            return;
+        }
+
+        this.behaviors.Remove(behavior);
     }
 
     /// <summary>

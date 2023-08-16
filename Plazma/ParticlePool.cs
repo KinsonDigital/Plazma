@@ -192,6 +192,24 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// </summary>
     public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
 
+    /// <inheritdoc/>
+    public void AddBehavior(EasingRandomBehaviorSettings behaviorSettings)
+    {
+        foreach (var particle in Particles)
+        {
+            particle.AddBehavior(this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings));
+        }
+    }
+
+    /// <inheritdoc/>
+    public void RemoveBehavior(BehaviorAttribute behaviorType)
+    {
+        foreach (var particle in Particles)
+        {
+            particle.RemoveBehavior(behaviorType);
+        }
+    }
+
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose() => Dispose(true);
 
