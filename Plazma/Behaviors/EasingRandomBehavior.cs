@@ -1,4 +1,4 @@
-﻿// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
+// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -52,25 +52,19 @@ public class EasingRandomBehavior : Behavior
             _ => Value
         };
 
-        // TODO: These func props might go away after the swap setting feature has been added
+        if (this.settings.UpdateValue is not null)
+        {
+            Value = this.settings.UpdateValue.Invoke(Value);
+        }
+
         if (this.settings.UpdateRandomStartMin is not null)
         {
-            this.settings = this.settings with { RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke() ?? 0f };
+            this.settings = this.settings with { RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke(Value) ?? 0f };
         }
 
         if (this.settings.UpdateRandomStartMax is not null)
         {
-            this.settings = this.settings with { RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke() ?? 0f };
-        }
-
-        if (this.settings.UpdateRandomChangeMin is not null)
-        {
-            this.settings = this.settings with { RandomChangeMin = this.settings.UpdateRandomChangeMin?.Invoke() ?? 0f };
-        }
-
-        if (this.settings.UpdateRandomChangeMax is not null)
-        {
-            this.settings = this.settings with { RandomChangeMax = this.settings.UpdateRandomChangeMax?.Invoke() ?? 0f };
+            this.settings = this.settings with { RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke(Value) ?? 0f };
         }
 
         base.Update(timeElapsed);

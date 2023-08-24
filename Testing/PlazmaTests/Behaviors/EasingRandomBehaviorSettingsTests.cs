@@ -1,4 +1,4 @@
-﻿// <copyright file="EasingRandomBehaviorSettingsTests.cs" company="KinsonDigital">
+// <copyright file="EasingRandomBehaviorSettingsTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -77,10 +77,23 @@ public class EasingRandomBehaviorSettingsTests
     }
 
     [Fact]
+    public void UpdateValue_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var func = (double value) => 123.0;
+
+        // Act
+        var setting = new EasingRandomBehaviorSettings { UpdateValue = func };
+
+        // Assert
+        setting.UpdateValue.Should().BeSameAs(func);
+    }
+
+    [Fact]
     public void UpdateRandomStartMin_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var func = () => 123f;
+        var func = (double value) => 123f;
 
         // Act
         var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMin = func };
@@ -93,39 +106,13 @@ public class EasingRandomBehaviorSettingsTests
     public void UpdateRandomStartMax_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var func = () => 123f;
+        var func = (double value) => 123f;
 
         // Act
         var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMax = func };
 
         // Assert
         setting.UpdateRandomStartMax.Should().BeSameAs(func);
-    }
-
-    [Fact]
-    public void UpdateRandomChangeMin_WhenSettingValue_ReturnsCorrectResult()
-    {
-        // Arrange
-        var func = () => 123f;
-
-        // Act
-        var setting = new EasingRandomBehaviorSettings { UpdateRandomChangeMin = func };
-
-        // Assert
-        setting.UpdateRandomChangeMin.Should().BeSameAs(func);
-    }
-
-    [Fact]
-    public void UpdateRandomChangeMax_WhenSettingValue_ReturnsCorrectResult()
-    {
-        // Arrange
-        var func = () => 123f;
-
-        // Act
-        var setting = new EasingRandomBehaviorSettings { UpdateRandomChangeMax = func };
-
-        // Assert
-        setting.UpdateRandomChangeMax.Should().BeSameAs(func);
     }
 
     [Fact]

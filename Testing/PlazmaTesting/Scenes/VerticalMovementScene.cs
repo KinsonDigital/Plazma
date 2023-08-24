@@ -24,9 +24,9 @@ using Velaptor.Scene;
 public class VerticalMovementScene : SceneBase
 {
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
+    private ParticleEngine<ITexture>? engine;
     private Point mousePos;
 
     /// <summary>
@@ -38,7 +38,13 @@ public class VerticalMovementScene : SceneBase
 
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
+    }
 
+    /// <summary>
+    /// Loads the content.
+    /// </summary>
+    public override void LoadContent()
+    {
         this.engine = new ParticleEngine<ITexture>();
 
         var allSettings = new[]
@@ -56,16 +62,20 @@ public class VerticalMovementScene : SceneBase
 
         var poolFactory = new ParticlePoolFactory();
         this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
+        this.engine.LoadTextures();
+
+        base.LoadContent();
     }
 
     /// <summary>
     /// Unloads the content.
     /// </summary>
-    public override void LoadContent()
+    public override void UnloadContent()
     {
-        this.engine.LoadTextures();
+        this.engine?.Dispose();
+        this.textureLoader.Dispose();
 
-        base.LoadContent();
+        base.UnloadContent();
     }
 
     /// <summary>
@@ -120,20 +130,18 @@ public class VerticalMovementScene : SceneBase
     {
         const int changeMin = 1000;
         const int changeMax = 2000;
-        const int startMin = 200;
-        const int startMax = 400;
 
         return new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.Y,
             LifeTimeMillisecondsMin = 2500,
             LifeTimeMillisecondsMax = 5000,
-            RandomStartMin = startMin,
-            RandomStartMax = startMax,
+            RandomStartMin = WindowCenter.Y,
+            RandomStartMax = WindowCenter.Y,
             RandomChangeMin = changeMin,
             RandomChangeMax = changeMax,
-            UpdateRandomStartMin = () => this.mousePos.Y,
-            UpdateRandomStartMax = () => this.mousePos.Y,
+            UpdateRandomStartMin = (_) => this.mousePos.Y,
+            UpdateRandomStartMax = (_) => this.mousePos.Y,
         };
     }
 }

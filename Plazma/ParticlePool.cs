@@ -213,8 +213,8 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
                 continue;
             }
 
-            t.Position = Effect.SpawnLocation;
             t.Reset();
+            t.Position = Effect.SpawnLocation;
 
             this.LivingParticlesCountChanged?.Invoke(this, EventArgs.Empty);
 
@@ -274,6 +274,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         {
             this.randomService.Dispose();
             this.textureLoader.Dispose();
+            this.particles.Clear();
         }
 
         this.isDisposed = true;

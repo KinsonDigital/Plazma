@@ -1,4 +1,4 @@
-// <copyright file="AngleScene.cs" company="KinsonDigital">
+﻿// <copyright file="AngleScene.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -25,9 +25,9 @@ public class AngleScene : SceneBase
     private const float TextureHalfWidth = 22.5f;
     private const float TextureHalfHeight = 31.5f;
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
+    private ParticleEngine<ITexture>? engine;
     private MouseState prevMouseState;
 
     /// <summary>
@@ -38,7 +38,6 @@ public class AngleScene : SceneBase
         this.mouse = InputFactory.CreateMouse();
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>();
     }
 
     /// <summary>
@@ -46,6 +45,8 @@ public class AngleScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
+        this.engine = new ParticleEngine<ITexture>();
+
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
@@ -65,21 +66,24 @@ public class AngleScene : SceneBase
     }
 
     /// <summary>
+    /// Unloads the content.
+    /// </summary>
+    public override void UnloadContent()
+    {
+        this.engine?.Dispose();
+        this.textureLoader.Dispose();
+
+        base.UnloadContent();
+    }
+
+    /// <summary>
     /// Updates the scene.
     /// </summary>
     /// <param name="frameTime">The time passed for the current frame.</param>
     public override void Update(FrameTime frameTime)
     {
-        var mouseState = this.mouse.GetState();
-
-        if (this.prevMouseState.IsLeftButtonDown() && mouseState.IsLeftButtonUp())
-        {
-            this.engine.Enabled = !this.engine.Enabled;
-        }
-
+        ProcessMouseInput();
         this.engine.Update(frameTime.ElapsedTime);
-
-        this.prevMouseState = mouseState;
 
         base.Update(frameTime);
     }
@@ -112,6 +116,23 @@ public class AngleScene : SceneBase
         }
 
         base.Render();
+    }
+
+    /// <summary>
+    /// Processes mouse input.
+    /// </summary>
+    private void ProcessMouseInput()
+    {
+        var mouseState = this.mouse.GetState();
+
+        var mouseNotOverButtons = !MainWindow.ButtonsArea.Contains(mouseState.GetPosition());
+
+        if (this.prevMouseState.IsLeftButtonDown() && mouseState.IsLeftButtonUp() && mouseNotOverButtons)
+        {
+            this.engine.Enabled = !this.engine.Enabled;
+        }
+
+        this.prevMouseState = mouseState;
     }
 
     /// <summary>

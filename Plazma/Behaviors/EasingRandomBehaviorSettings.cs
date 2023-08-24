@@ -1,4 +1,4 @@
-﻿// <copyright file="EasingRandomBehaviorSettings.cs" company="KinsonDigital">
+// <copyright file="EasingRandomBehaviorSettings.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -38,28 +38,45 @@ public readonly record struct EasingRandomBehaviorSettings
     public float RandomStartMax { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will set the <see cref="RandomStartMin"/> value.
+    /// Gets a delegate that will give the current value and return a value.
     /// </summary>
-    /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomStartMin { get; init; }
+    /// <remarks>
+    /// <para>
+    ///     This is invoked during the behavior update process.
+    /// </para>
+    /// <para>
+    ///     The value returned from the delegate will be used as the new value for the behavior.
+    /// </para>
+    /// </remarks>
+    public Func<double, double>? UpdateValue { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will set the <see cref="RandomStartMax"/> value.
+    /// Gets a delegate that will give the current value of the behavior and
+    /// returns a value that will be used as the new  <see cref="RandomStartMin"/>.
     /// </summary>
-    /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomStartMax { get; init; }
+    /// <remarks>
+    /// <para>
+    ///     This is invoked during the behavior update process.
+    /// </para>
+    /// <para>
+    ///     The value returned from the delegate will be used as the new value for the <see cref="RandomStartMin"/>.
+    /// </para>
+    /// </remarks>
+    public Func<double, float>? UpdateRandomStartMin { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will set the <see cref="RandomChangeMin"/> value.
+    /// Gets a delegate that will give the current value of the behavior and
+    /// returns a value that will be used as the new  <see cref="RandomStartMax"/>.
     /// </summary>
-    /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomChangeMin { get; init; }
-
-    /// <summary>
-    /// Gets a delegate that will set the <see cref="RandomChangeMax"/> value.
-    /// </summary>
-    /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomChangeMax { get; init; }
+    /// <remarks>
+    /// <para>
+    ///     This is invoked during the behavior update process.
+    /// </para>
+    /// <para>
+    ///     The value returned from the delegate will be used as the new value for the <see cref="RandomStartMax"/>.
+    /// </para>
+    /// </remarks>
+    public Func<double, float>? UpdateRandomStartMax { get; init; }
 
     /// <summary>
     /// Gets the minimum amount of change used in randomization.

@@ -568,8 +568,8 @@ public class ParticlePoolTests : Tests
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = 0,
             RandomStartMax = 0,
-            RandomStopMin = 360,
-            RandomStopMax = 360,
+            RandomChangeMin = 360,
+            RandomChangeMax = 360,
         };
 
         var behavior = new EasingRandomBehavior(settings, Substitute.For<IRandomizerService>());
@@ -611,8 +611,8 @@ public class ParticlePoolTests : Tests
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = 0,
             RandomStartMax = 0,
-            RandomStopMin = 360,
-            RandomStopMax = 360,
+            RandomChangeMin = 360,
+            RandomChangeMax = 360,
         };
 
         var blueSettings = new EasingRandomBehaviorSettings
@@ -622,8 +622,8 @@ public class ParticlePoolTests : Tests
             LifeTimeMillisecondsMax = 4000,
             RandomStartMin = 0,
             RandomStartMax = 0,
-            RandomStopMin = 255,
-            RandomStopMax = 255,
+            RandomChangeMin = 255,
+            RandomChangeMax = 255,
         };
 
         var sut = CreateSystemUnderTest(effect);

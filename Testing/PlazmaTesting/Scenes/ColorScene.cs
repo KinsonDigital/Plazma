@@ -5,6 +5,7 @@
 namespace PlazmaTesting.Scenes;
 
 using System.Drawing;
+using System.Globalization;
 using System.Numerics;
 using Plazma;
 using Plazma.Behaviors;
@@ -14,27 +15,31 @@ using Velaptor.Content;
 using Velaptor.Factories;
 using Velaptor.Graphics;
 using Velaptor.Graphics.Renderers;
+using Velaptor.Input;
 using Velaptor.Scene;
+using Velaptor.UI;
 
 /// <summary>
 /// Demonstrates the use of particle colors.
 /// </summary>
 public class ColorScene : SceneBase
 {
-    private const float TextureHalfWidth = 22.5f;
-    private const float TextureHalfHeight = 31.5f;
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
+    private readonly IAppInput<MouseState> mouse;
+    private ParticleEngine<ITexture>? engine;
+    private Label? lblInstructions;
+    private Label? lblSpread;
+    private float spread;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ColorScene"/> class.
     /// </summary>
     public ColorScene()
     {
+        this.mouse = InputFactory.CreateMouse();
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>();
     }
 
     /// <summary>
@@ -42,13 +47,15 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
+        this.spread = WindowSize.Height / 2f;
+        this.engine = new ParticleEngine<ITexture>();
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
         {
             SpawnRateMin = 62,
             SpawnRateMax = 62,
-            TotalParticles = 100,
+            TotalParticles = 300,
         };
 
         var poolFactory = new ParticlePoolFactory();
@@ -57,7 +64,34 @@ public class ColorScene : SceneBase
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
 
+        this.lblInstructions = new Label
+        {
+            Color = Color.White,
+            Text = "Scroll up to cluster and down to spread.",
+            Position = new Point(WindowCenter.X, 50),
+        };
+
+        this.lblSpread = new Label
+        {
+            Color = Color.White,
+            Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}",
+            Position = new Point(WindowCenter.X, 100),
+        };
+
+        AddControl(this.lblInstructions);
+        AddControl(this.lblSpread);
         base.LoadContent();
+    }
+
+    /// <summary>
+    /// Unloads the content.
+    /// </summary>
+    public override void UnloadContent()
+    {
+        this.engine?.Dispose();
+        this.textureLoader.Dispose();
+
+        base.UnloadContent();
     }
 
     /// <summary>
@@ -66,6 +100,17 @@ public class ColorScene : SceneBase
     /// <param name="frameTime">The time passed for the current frame.</param>
     public override void Update(FrameTime frameTime)
     {
+        var mouseState = this.mouse.GetState();
+
+        this.spread = mouseState.GetScrollDirection() switch
+        {
+            MouseScrollDirection.ScrollUp => this.spread - 50 <= 0 ? 0 : this.spread - 50,
+            MouseScrollDirection.ScrollDown => this.spread + 50 >= WindowSize.Height / 2f ? WindowSize.Height / 2f : this.spread + 50,
+            _ => this.spread,
+        };
+
+        this.lblSpread.Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}";
+
         this.engine.Update(frameTime.ElapsedTime);
         base.Update(frameTime);
     }
@@ -92,7 +137,7 @@ public class ColorScene : SceneBase
                 var destRect = new Rectangle((int)renderPosX, (int)renderPosY, (int)pool.PoolTexture.Width, (int)pool.PoolTexture.Height);
 
                 var tintClr = particle.TintColor;
-                this.textureRenderer.Render(pool.PoolTexture, srcRect, destRect, 1f, 0, tintClr, RenderEffects.None);
+                this.textureRenderer.Render(pool.PoolTexture, srcRect, destRect, particle.Size, 0, tintClr, RenderEffects.None);
             }
         }
 
@@ -107,18 +152,19 @@ public class ColorScene : SceneBase
     {
         var windowCenter = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
 
-        var winHalfWidth = windowCenter.X;
-        var winHalfHeight = windowCenter.Y;
+        const int change = 400;
 
         var xPosSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.X,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
-            RandomStartMin = windowCenter.X,
-            RandomStartMax = windowCenter.X,
-            RandomStopMin = -winHalfWidth - TextureHalfWidth,
-            RandomStopMax = winHalfWidth + TextureHalfWidth,
+            RandomStartMin = windowCenter.X - this.spread,
+            RandomStartMax = windowCenter.X + this.spread,
+            UpdateRandomStartMin = (_) => windowCenter.X - this.spread,
+            UpdateRandomStartMax = (_) => windowCenter.X + this.spread,
+            RandomChangeMin = -change,
+            RandomChangeMax = change,
         };
 
         var yPosSettings = new EasingRandomBehaviorSettings
@@ -126,10 +172,12 @@ public class ColorScene : SceneBase
             ApplyToAttribute = BehaviorAttribute.Y,
             LifeTimeMillisecondsMin = 2000,
             LifeTimeMillisecondsMax = 2000,
-            RandomStartMin = windowCenter.Y,
-            RandomStartMax = windowCenter.Y,
-            RandomStopMin = -winHalfHeight - TextureHalfHeight,
-            RandomStopMax = winHalfHeight + TextureHalfHeight,
+            RandomStartMin = windowCenter.Y - this.spread,
+            RandomStartMax = windowCenter.Y + this.spread,
+            UpdateRandomStartMin = (_) => windowCenter.Y - this.spread,
+            UpdateRandomStartMax = (_) => windowCenter.Y + this.spread,
+            RandomChangeMin = -change,
+            RandomChangeMax = change,
         };
 
         var white = Color.White;
@@ -142,41 +190,54 @@ public class ColorScene : SceneBase
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = 255,
             RandomStartMax = 255,
-            RandomStopMin = -255f,
-            RandomStopMax = -255f,
+            RandomChangeMin = -255f,
+            RandomChangeMax = -255f,
         };
 
+        const float clrChangeTime = 1000f;
         var redSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.RedColorComponent,
-            LifeTimeMillisecondsMin = 1500,
-            LifeTimeMillisecondsMax = 1500,
+            LifeTimeMillisecondsMin = clrChangeTime,
+            LifeTimeMillisecondsMax = clrChangeTime,
             RandomStartMin = white.R,
             RandomStartMax = white.R,
-            RandomStopMin = purple.R - white.R,
-            RandomStopMax = purple.R - white.R,
+            RandomChangeMin = purple.R - white.R,
+            RandomChangeMax = purple.R - white.R,
         };
 
         var greenSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.GreenColorComponent,
-            LifeTimeMillisecondsMin = 1500,
-            LifeTimeMillisecondsMax = 1500,
+            LifeTimeMillisecondsMin = clrChangeTime,
+            LifeTimeMillisecondsMax = clrChangeTime,
             RandomStartMin = white.G,
             RandomStartMax = white.G,
-            RandomStopMin = purple.G - white.G,
-            RandomStopMax = purple.G - white.G,
+            RandomChangeMin = purple.G - white.G,
+            RandomChangeMax = purple.G - white.G,
         };
 
         var blueSettings = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.BlueColorComponent,
-            LifeTimeMillisecondsMin = 1500,
-            LifeTimeMillisecondsMax = 1500,
+            LifeTimeMillisecondsMin = clrChangeTime,
+            LifeTimeMillisecondsMax = clrChangeTime,
             RandomStartMin = white.B,
             RandomStartMax = white.B,
-            RandomStopMin = purple.B - white.B,
-            RandomStopMax = purple.B - white.B,
+            RandomChangeMin = purple.B - white.B,
+            RandomChangeMax = purple.B - white.B,
+        };
+
+        var sizeSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.Size,
+            LifeTimeMillisecondsMin = 5000,
+            LifeTimeMillisecondsMax = 5000,
+            RandomStartMin = 0.3f,
+            RandomStartMax = 0.6f,
+            RandomChangeMin = -1f,
+            RandomChangeMax = -1f,
+            UpdateValue = (value) => value <= 0.0 ? 0.0 : value,
         };
 
         return new[]
@@ -187,6 +248,7 @@ public class ColorScene : SceneBase
             redSettings,
             greenSettings,
             blueSettings,
+            sizeSettings,
         };
     }
 }

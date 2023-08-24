@@ -61,6 +61,8 @@ public class MainWindow : Window
         SceneManager.AddScene(angleScene);
     }
 
+    public static Rectangle ButtonsArea { get; private set; }
+
     /// <summary>
     /// Loads the applications content.
     /// </summary>
@@ -82,6 +84,13 @@ public class MainWindow : Window
         this.nextButton.Position = new Point(this.previousButton.Position.X + (int)this.previousButton.Width + buttonSpacing, buttonTops);
 
         SceneManager.LoadContent();
+
+        var left = this.previousButton.Left;
+        var right = this.nextButton.Right;
+        var width = this.nextButton.Right - this.previousButton.Left;
+        var height = (int)Math.Max(this.previousButton.Height, this.nextButton.Height);
+
+        ButtonsArea = new Rectangle(left, right, width, height);
 
         base.OnLoad();
     }
