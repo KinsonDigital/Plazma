@@ -99,8 +99,8 @@ public class EasingRandomBehaviorTests
             EasingFunctionType = easingFunction,
             RandomStartMin = 11,
             RandomStartMax = 11,
-            RandomStopMin = 22,
-            RandomStopMax = 22,
+            RandomChangeMin = 22,
+            RandomChangeMax = 22,
             LifeTimeMillisecondsMin = 33,
             LifeTimeMillisecondsMax = 33,
         };

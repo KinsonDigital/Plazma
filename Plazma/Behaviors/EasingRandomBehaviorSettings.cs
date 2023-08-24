@@ -50,32 +50,32 @@ public readonly record struct EasingRandomBehaviorSettings
     public Func<float>? UpdateRandomStartMax { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will set the <see cref="RandomStopMin"/> value.
+    /// Gets a delegate that will set the <see cref="RandomChangeMin"/> value.
     /// </summary>
     /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomStopMin { get; init; }
+    public Func<float>? UpdateRandomChangeMin { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will set the <see cref="RandomStopMax"/> value.
+    /// Gets a delegate that will set the <see cref="RandomChangeMax"/> value.
     /// </summary>
     /// <remarks>This is invoked during the behavior update process.</remarks>
-    public Func<float>? UpdateRandomStopMax { get; init; }
+    public Func<float>? UpdateRandomChangeMax { get; init; }
 
     /// <summary>
     /// Gets the minimum amount of change used in randomization.
     /// </summary>
     /// <remarks>
-    ///     Negative values can be used as a stopping point.
+    ///     Negative values can be used.
     /// </remarks>
-    public float RandomStopMin { get; init; }
+    public float RandomChangeMin { get; init; }
 
     /// <summary>
-    /// Gets the maximum stopping value used in randomization.
+    /// Gets the maximum amount of change used in randomization.
     /// </summary>
     /// <remarks>
-    ///     Negative values can be used as a stopping point.
+    ///     Negative values can be used.
     /// </remarks>
-    public float RandomStopMax { get; init; }
+    public float RandomChangeMax { get; init; }
 
     /// <summary>
     /// Gets the minimum total amount of time in milliseconds to complete the behavior.

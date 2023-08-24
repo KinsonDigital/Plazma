@@ -132,8 +132,8 @@ public class AngleScene : SceneBase
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = windowCenter.X,
             RandomStartMax = windowCenter.X,
-            RandomStopMin = -winHalfWidth - TextureHalfWidth,
-            RandomStopMax = winHalfWidth + TextureHalfWidth,
+            RandomChangeMin = -winHalfWidth - TextureHalfWidth,
+            RandomChangeMax = winHalfWidth + TextureHalfWidth,
         };
 
         var yPosSettings = new EasingRandomBehaviorSettings
@@ -143,8 +143,8 @@ public class AngleScene : SceneBase
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = windowCenter.Y,
             RandomStartMax = windowCenter.Y,
-            RandomStopMin = -winHalfHeight - TextureHalfHeight,
-            RandomStopMax = winHalfHeight + TextureHalfHeight,
+            RandomChangeMin = -winHalfHeight - TextureHalfHeight,
+            RandomChangeMax = winHalfHeight + TextureHalfHeight,
         };
 
         var angleSettings = new EasingRandomBehaviorSettings
@@ -154,8 +154,8 @@ public class AngleScene : SceneBase
             LifeTimeMillisecondsMax = 2000,
             RandomStartMin = 0,
             RandomStartMax = 0,
-            RandomStopMin = 360,
-            RandomStopMax = 360,
+            RandomChangeMin = 360,
+            RandomChangeMax = 360,
         };
 
         return new[]

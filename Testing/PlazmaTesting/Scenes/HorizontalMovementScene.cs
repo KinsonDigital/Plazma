@@ -129,8 +129,8 @@ public class HorizontalMovementScene : SceneBase
             LifeTimeMillisecondsMax = 7000,
             RandomStartMin = startMin,
             RandomStartMax = startMax,
-            RandomStopMin = changeMin,
-            RandomStopMax = changeMax,
+            RandomChangeMin = changeMin,
+            RandomChangeMax = changeMax,
             UpdateRandomStartMin = () => this.mousePos.X,
             UpdateRandomStartMax = () => this.mousePos.X,
         };

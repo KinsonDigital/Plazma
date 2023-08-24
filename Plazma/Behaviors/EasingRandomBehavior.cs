@@ -63,14 +63,14 @@ public class EasingRandomBehavior : Behavior
             this.settings = this.settings with { RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke() ?? 0f };
         }
 
-        if (this.settings.UpdateRandomStopMin is not null)
+        if (this.settings.UpdateRandomChangeMin is not null)
         {
-            this.settings = this.settings with { RandomStopMin = this.settings.UpdateRandomStopMin?.Invoke() ?? 0f };
+            this.settings = this.settings with { RandomChangeMin = this.settings.UpdateRandomChangeMin?.Invoke() ?? 0f };
         }
 
-        if (this.settings.UpdateRandomStopMax is not null)
+        if (this.settings.UpdateRandomChangeMax is not null)
         {
-            this.settings = this.settings with { RandomStopMax = this.settings.UpdateRandomStopMax?.Invoke() ?? 0f };
+            this.settings = this.settings with { RandomChangeMax = this.settings.UpdateRandomChangeMax?.Invoke() ?? 0f };
         }
 
         base.Update(timeElapsed);
@@ -92,7 +92,7 @@ public class EasingRandomBehavior : Behavior
     private void ApplyRandomization()
     {
         Start = this.randomizer.GetValue(this.settings.RandomStartMin, this.settings.RandomStartMax);
-        Change = this.randomizer.GetValue(this.settings.RandomStopMin, this.settings.RandomStopMax);
+        Change = this.randomizer.GetValue(this.settings.RandomChangeMin, this.settings.RandomChangeMax);
         LifeTime = this.randomizer.GetValue(this.settings.LifeTimeMillisecondsMin, this.settings.LifeTimeMillisecondsMax);
     }
 }

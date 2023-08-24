@@ -130,8 +130,8 @@ public class VerticalMovementScene : SceneBase
             LifeTimeMillisecondsMax = 5000,
             RandomStartMin = startMin,
             RandomStartMax = startMax,
-            RandomStopMin = changeMin,
-            RandomStopMax = changeMax,
+            RandomChangeMin = changeMin,
+            RandomChangeMax = changeMax,
             UpdateRandomStartMin = () => this.mousePos.Y,
             UpdateRandomStartMax = () => this.mousePos.Y,
         };

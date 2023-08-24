@@ -60,20 +60,20 @@ public class EasingRandomBehaviorSettingsTests
     public void RandomStopMin_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange & Act
-        var setting = new EasingRandomBehaviorSettings { RandomStopMin = 1234f };
+        var setting = new EasingRandomBehaviorSettings { RandomChangeMin = 1234f };
 
         // Assert
-        setting.RandomStopMin.Should().Be(1234f);
+        setting.RandomChangeMin.Should().Be(1234f);
     }
 
     [Fact]
     public void RandomStopMax_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange & Act
-        var setting = new EasingRandomBehaviorSettings { RandomStopMax = 1234f };
+        var setting = new EasingRandomBehaviorSettings { RandomChangeMax = 1234f };
 
         // Assert
-        setting.RandomStopMax.Should().Be(1234f);
+        setting.RandomChangeMax.Should().Be(1234f);
     }
 
     [Fact]
@@ -103,29 +103,29 @@ public class EasingRandomBehaviorSettingsTests
     }
 
     [Fact]
-    public void UpdateRandomStopMin_WhenSettingValue_ReturnsCorrectResult()
+    public void UpdateRandomChangeMin_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
         var func = () => 123f;
 
         // Act
-        var setting = new EasingRandomBehaviorSettings { UpdateRandomStopMin = func };
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomChangeMin = func };
 
         // Assert
-        setting.UpdateRandomStopMin.Should().BeSameAs(func);
+        setting.UpdateRandomChangeMin.Should().BeSameAs(func);
     }
 
     [Fact]
-    public void UpdateRandomStopMax_WhenSettingValue_ReturnsCorrectResult()
+    public void UpdateRandomChangeMax_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
         var func = () => 123f;
 
         // Act
-        var setting = new EasingRandomBehaviorSettings { UpdateRandomStopMax = func };
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomChangeMax = func };
 
         // Assert
-        setting.UpdateRandomStopMax.Should().BeSameAs(func);
+        setting.UpdateRandomChangeMax.Should().BeSameAs(func);
     }
 
     [Fact]
@@ -157,8 +157,8 @@ public class EasingRandomBehaviorSettingsTests
         var setting = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.Angle,
-            RandomStopMin = 10,
-            RandomStopMax = 20,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
             LifeTimeMillisecondsMin = 50,
@@ -180,8 +180,8 @@ public class EasingRandomBehaviorSettingsTests
         var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.Angle,
-            RandomStopMin = 10,
-            RandomStopMax = 20,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
             LifeTimeMillisecondsMin = 50,
@@ -191,8 +191,8 @@ public class EasingRandomBehaviorSettingsTests
         var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.Angle,
-            RandomStopMin = 10,
-            RandomStopMax = 20,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
             LifeTimeMillisecondsMin = 50,
@@ -201,8 +201,8 @@ public class EasingRandomBehaviorSettingsTests
 
         // Act & Assert
         settingA.ApplyToAttribute.Should().Be(settingB.ApplyToAttribute);
-        settingA.RandomStopMin.Should().Be(settingB.RandomStopMin);
-        settingA.RandomStopMax.Should().Be(settingB.RandomStopMax);
+        settingA.RandomChangeMin.Should().Be(settingB.RandomChangeMin);
+        settingA.RandomChangeMax.Should().Be(settingB.RandomChangeMax);
         settingA.RandomStartMin.Should().Be(settingB.RandomStartMin);
         settingA.RandomStartMax.Should().Be(settingB.RandomStartMax);
         settingA.LifeTimeMillisecondsMin.Should().Be(settingB.LifeTimeMillisecondsMin);
@@ -216,8 +216,8 @@ public class EasingRandomBehaviorSettingsTests
         var settingA = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.BlueColorComponent,
-            RandomStopMin = 100,
-            RandomStopMax = 200,
+            RandomChangeMin = 100,
+            RandomChangeMax = 200,
             RandomStartMin = 300,
             RandomStartMax = 400,
             LifeTimeMillisecondsMin = 500,
@@ -227,8 +227,8 @@ public class EasingRandomBehaviorSettingsTests
         var settingB = new EasingRandomBehaviorSettings
         {
             ApplyToAttribute = BehaviorAttribute.Angle,
-            RandomStopMin = 10,
-            RandomStopMax = 20,
+            RandomChangeMin = 10,
+            RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
             LifeTimeMillisecondsMin = 50,
