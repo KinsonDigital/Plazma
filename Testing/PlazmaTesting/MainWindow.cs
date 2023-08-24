@@ -8,7 +8,8 @@ using System.Drawing;
 using System.Text;
 using Scenes;
 using Velaptor;
-using Velaptor.Graphics.Renderers;
+using Velaptor.Batching;
+using Velaptor.Factories;
 using Velaptor.UI;
 
 /// <summary>
@@ -24,6 +25,7 @@ public class MainWindow : Window
     };
     private readonly Button nextButton;
     private readonly Button previousButton;
+    private readonly IBatcher batcher;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -32,6 +34,9 @@ public class MainWindow : Window
     {
         TypeOfBorder = WindowBorder.Fixed;
 
+        var rendererFactory = new RendererFactory();
+
+        this.batcher = rendererFactory.CreateBatcher();
         this.nextButton = new Button { Text = "-->" };
         this.previousButton = new Button { Text = "<--" };
 
@@ -83,8 +88,6 @@ public class MainWindow : Window
         this.previousButton.Position = new Point(buttonGroupLeft, buttonTops);
         this.nextButton.Position = new Point(this.previousButton.Position.X + (int)this.previousButton.Width + buttonSpacing, buttonTops);
 
-        SceneManager.LoadContent();
-
         var left = this.previousButton.Left;
         var right = this.nextButton.Right;
         var width = this.nextButton.Right - this.previousButton.Left;
@@ -106,7 +109,6 @@ public class MainWindow : Window
         this.nextButton.Update(frameTime);
         this.previousButton.Update(frameTime);
 
-        SceneManager.Update(frameTime);
         base.OnUpdate(frameTime);
     }
 
@@ -116,16 +118,14 @@ public class MainWindow : Window
     /// <param name="frameTime">The time passed for the current frame.</param>
     protected override void OnDraw(FrameTime frameTime)
     {
-        IRenderer.Begin();
+        base.OnDraw(frameTime);
 
-        SceneManager.Render();
+        this.batcher.Begin();
 
         this.nextButton.Render();
         this.previousButton.Render();
 
-        IRenderer.End();
-
-        base.OnDraw(frameTime);
+        this.batcher.End();
     }
 
     /// <summary>
