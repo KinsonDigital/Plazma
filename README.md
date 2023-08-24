@@ -9,7 +9,7 @@
 <div align="center">
 
 [![Build PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Plazma/build-status-check.yml?label=%E2%9A%99%EF%B8%8FBuild)](https://github.com/KinsonDigital/Plazma/actions/workflows/build-status-check.yml)
-[![Test PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Plazma/test-status-check.yml?label=%F0%9F%A7%AATests)](https://github.com/KinsonDigital/Plazma/actions/workflows/test-status-check.yml)
+[![Test PR Status Check](https://img.shields.io/github/actions/workflow/status/KinsonDigital/Plazma/unit-test-status-check.yml?label=%F0%9F%A7%AATests)](https://github.com/KinsonDigital/Plazma/actions/workflows/unit-test-status-check.yml)
 
 [![Codecov](https://img.shields.io/codecov/c/github/KinsonDigital/Plazma?color=2F8840&label=Code%20Coverage&logo=codecov)](https://app.codecov.io/gh/KinsonDigital/Plazma/tree/release%2Fv1.0.0)
 
@@ -35,7 +35,7 @@ Plazma is a 2D, cross-platform particle engine that can be used for special effe
 
 <h2 style="font-weight:bold;" align="center">🙏🏼 Contributing 🙏🏼</h2>
 
-Interested in contributing? If so, click [here](https://github.com/KinsonDigital/.github/blob/master/docs/CONTRIBUTING.md) to learn how to contribute your time or [here](https://github.com/sponsors/KinsonDigital) if you are interested in contributing your funds via a one-time or recurring donation.
+Interested in contributing? If so, click [here](https://github.com/KinsonDigital/.github/blob/main/docs/CONTRIBUTING.md) to learn how to contribute your time or [here](https://github.com/sponsors/KinsonDigital) if you are interested in contributing your funds via a one-time or recurring donation.
 
 
 <h2 style="font-weight:bold;" align="center">🔧 Maintainers 🔧</h2>
@@ -52,7 +52,7 @@ Interested in contributing? If so, click [here](https://github.com/KinsonDigital
 
 <div align="center">
 
-[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/master/docs/code_of_conduct.md)
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=flat)](https://github.com/KinsonDigital/.github/blob/main/docs/code_of_conduct.md)
 [![GitHub](https://img.shields.io/github/license/kinsondigital/Plazma)](https://github.com/KinsonDigital/Plazma/blob/preview/LICENSE.md)
 </div>
 

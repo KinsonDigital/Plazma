@@ -9,7 +9,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Behaviors;
-using Newtonsoft.Json;
 
 /// <summary>
 /// Holds the particle setup settings data for the <see cref="ParticleEngine{TTexture}"/> to consume.
@@ -21,7 +20,6 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
     /// </summary>
-    [JsonConstructor]
     public ParticleEffect()
     {
     }
