@@ -7,7 +7,7 @@ namespace Plazma.Services;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 /// <summary>
 /// Serializes and deserializes and <see cref="ParticleEffect"/> objects.
@@ -15,15 +15,14 @@ using Newtonsoft.Json;
 [ExcludeFromCodeCoverage]
 public class ParticleEffectSerializerService : ISerializerService<ParticleEffect>
 {
-    private readonly JsonSerializerSettings jsonSettings;
+    private readonly JsonSerializerOptions jsonOptions;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffectSerializerService"/> class.
     /// </summary>
-    public ParticleEffectSerializerService() => this.jsonSettings = new JsonSerializerSettings
+    public ParticleEffectSerializerService() => this.jsonOptions = new JsonSerializerOptions
     {
-        Formatting = Formatting.Indented,
-        TypeNameHandling = TypeNameHandling.Objects,
+        WriteIndented = true,
     };
 
     /// <inheritdoc/>
@@ -34,7 +33,7 @@ public class ParticleEffectSerializerService : ISerializerService<ParticleEffect
             throw new ArgumentNullException(nameof(effect), "Parameter must not be null.");
         }
 
-        var jsonData = JsonConvert.SerializeObject(effect, this.jsonSettings);
+        var jsonData = JsonSerializer.Serialize(effect, this.jsonOptions);
 
         File.WriteAllText(filePath, jsonData);
     }
@@ -44,6 +43,6 @@ public class ParticleEffectSerializerService : ISerializerService<ParticleEffect
     {
         var jsonData = File.ReadAllText(filePath);
 
-        return JsonConvert.DeserializeObject<ParticleEffect>(jsonData, this.jsonSettings);
+        return JsonSerializer.Deserialize<ParticleEffect>(jsonData, this.jsonOptions);
     }
 }
