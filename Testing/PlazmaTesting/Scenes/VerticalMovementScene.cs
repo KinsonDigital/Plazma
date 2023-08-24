@@ -1,4 +1,4 @@
-﻿// <copyright file="VerticalMovementScene.cs" company="KinsonDigital">
+// <copyright file="VerticalMovementScene.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Numerics;
 using Plazma;
 using Plazma.Behaviors;
-using Plazma.Services;
+using Plazma.Factories;
 using PlazmaTesting;
 using Velaptor;
 using Velaptor.Content;
@@ -24,14 +24,13 @@ using Velaptor.Scene;
 public class VerticalMovementScene : SceneBase
 {
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly TrueRandomizerService randomService = new ();
-    private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
+    private ParticleEngine<ITexture>? engine;
     private Point mousePos;
 
     /// <summary>
-    /// Creates a new instance of <see cref="VerticalMovementScene"/>.
+    /// Initializes a new instance of the <see cref="VerticalMovementScene"/> class.
     /// </summary>
     public VerticalMovementScene()
     {
@@ -39,25 +38,6 @@ public class VerticalMovementScene : SceneBase
 
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
-
-        this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
-
-        var allSettings = new []
-        {
-            CreateSettings(),
-        };
-
-        var behaviorFactory = new BehaviorFactory();
-
-        var effect = new ParticleEffect("drop", allSettings)
-        {
-            SpawnLocation = new Vector2(400, 400),
-            SpawnRateMin = 62,
-            SpawnRateMax = 250,
-            TotalParticlesAliveAtOnce = 100,
-        };
-
-        this.engine.CreatePool(effect, behaviorFactory);
     }
 
     /// <summary>
@@ -65,9 +45,37 @@ public class VerticalMovementScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
+        this.engine = new ParticleEngine<ITexture>();
+
+        var allSettings = new[]
+        {
+            CreateSettings(),
+        };
+
+        var effect = new ParticleEffect("drop", allSettings)
+        {
+            SpawnLocation = new Vector2(400, 400),
+            SpawnRateMin = 62,
+            SpawnRateMax = 250,
+            TotalParticles = 100,
+        };
+
+        var poolFactory = new ParticlePoolFactory();
+        this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
         this.engine.LoadTextures();
 
         base.LoadContent();
+    }
+
+    /// <summary>
+    /// Unloads the content.
+    /// </summary>
+    public override void UnloadContent()
+    {
+        this.engine?.Dispose();
+        this.textureLoader.Dispose();
+
+        base.UnloadContent();
     }
 
     /// <summary>
@@ -91,11 +99,11 @@ public class VerticalMovementScene : SceneBase
     /// </summary>
     public override void Render()
     {
-        foreach (ParticlePool<ITexture> pool in this.engine.ParticlePools)
+        foreach (var pool in this.engine.ParticlePools)
         {
-            foreach (Particle particle in pool.Particles)
+            foreach (var particle in pool.Particles)
             {
-                if (particle.IsDead)
+                if (particle.IsAlive is false)
                 {
                     continue;
                 }
@@ -118,24 +126,22 @@ public class VerticalMovementScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private BehaviorSettings CreateSettings()
+    private EasingRandomBehaviorSettings CreateSettings()
     {
         const int changeMin = 1000;
         const int changeMax = 2000;
-        const int startMin = 200;
-        const int startMax = 400;
 
         return new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Y,
-            LifeTimeMinMilliseconds = 2500,
-            LifeTimeMaxMilliseconds = 5000,
+            ApplyToAttribute = BehaviorAttribute.Y,
+            LifeTimeMillisecondsMin = 2500,
+            LifeTimeMillisecondsMax = 5000,
+            RandomStartMin = WindowCenter.Y,
+            RandomStartMax = WindowCenter.Y,
             RandomChangeMin = changeMin,
             RandomChangeMax = changeMax,
-            RandomStartMin = startMin,
-            RandomStartMax = startMax,
-            UpdateRandomStartMin = () => this.mousePos.Y,
-            UpdateRandomStartMax = () => this.mousePos.Y,
+            UpdateRandomStartMin = (_) => this.mousePos.Y,
+            UpdateRandomStartMax = (_) => this.mousePos.Y,
         };
     }
 }

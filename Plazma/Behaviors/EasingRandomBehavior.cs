@@ -1,11 +1,10 @@
-﻿// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
+// <copyright file="EasingRandomBehavior.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace Plazma.Behaviors;
 
 using System;
-using System.Globalization;
 using Services;
 
 /// <summary>
@@ -14,8 +13,8 @@ using Services;
 /// </summary>
 public class EasingRandomBehavior : Behavior
 {
-    private readonly EasingRandomBehaviorSettings settings;
     private readonly IRandomizerService randomizer;
+    private EasingRandomBehaviorSettings settings;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="EasingRandomBehavior"/> class.
@@ -46,33 +45,26 @@ public class EasingRandomBehavior : Behavior
     /// <param name="timeElapsed">The amount of time that has elapsed for this update of the behavior.</param>
     public override void Update(TimeSpan timeElapsed)
     {
-        // TODO: Using 'ToString()' for the value provides tons of allocations and is not ideal.  Need to change how this works.
         Value = this.settings.EasingFunctionType switch
         {
-            EasingFunction.EaseOutBounce => EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime)
-                .ToString(CultureInfo.InvariantCulture),
-            EasingFunction.EaseIn => EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime).ToString(CultureInfo.InvariantCulture),
+            EasingFunction.EaseOutBounce => EasingFunctions.EaseOutBounce(ElapsedTime, Start, Change, LifeTime),
+            EasingFunction.EaseIn => EasingFunctions.EaseInQuad(ElapsedTime, Start, Change, LifeTime),
             _ => Value
         };
 
+        if (this.settings.UpdateValue is not null)
+        {
+            Value = this.settings.UpdateValue.Invoke(Value);
+        }
+
         if (this.settings.UpdateRandomStartMin is not null)
         {
-            this.settings.RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke() ?? 0f;
+            this.settings = this.settings with { RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke(Value) ?? 0f };
         }
 
         if (this.settings.UpdateRandomStartMax is not null)
         {
-            this.settings.RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke() ?? 0f;
-        }
-
-        if (this.settings.UpdateRandomChangeMin is not null)
-        {
-            this.settings.RandomChangeMin = this.settings.UpdateRandomChangeMin?.Invoke() ?? 0f;
-        }
-
-        if (this.settings.UpdateRandomChangeMax is not null)
-        {
-            this.settings.RandomChangeMax = this.settings.UpdateRandomChangeMax?.Invoke() ?? 0f;
+            this.settings = this.settings with { RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke(Value) ?? 0f };
         }
 
         base.Update(timeElapsed);
@@ -95,6 +87,6 @@ public class EasingRandomBehavior : Behavior
     {
         Start = this.randomizer.GetValue(this.settings.RandomStartMin, this.settings.RandomStartMax);
         Change = this.randomizer.GetValue(this.settings.RandomChangeMin, this.settings.RandomChangeMax);
-        LifeTime = this.randomizer.GetValue(this.settings.LifeTimeMinMilliseconds, this.settings.LifeTimeMaxMilliseconds);
+        LifeTime = this.randomizer.GetValue(this.settings.LifeTimeMillisecondsMin, this.settings.LifeTimeMillisecondsMax);
     }
 }

@@ -5,37 +5,41 @@
 namespace PlazmaTesting.Scenes;
 
 using System.Drawing;
+using System.Globalization;
 using System.Numerics;
 using Plazma;
 using Plazma.Behaviors;
-using Plazma.Services;
+using Plazma.Factories;
 using Velaptor;
 using Velaptor.Content;
 using Velaptor.Factories;
 using Velaptor.Graphics;
 using Velaptor.Graphics.Renderers;
+using Velaptor.Input;
 using Velaptor.Scene;
+using Velaptor.UI;
 
 /// <summary>
 /// Demonstrates the use of particle colors.
 /// </summary>
 public class ColorScene : SceneBase
 {
-    private const float TextureHalfWidth = 22.5f;
-    private const float TextureHalfHeight = 31.5f;
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly TrueRandomizerService randomService = new ();
-    private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
+    private readonly IAppInput<MouseState> mouse;
+    private ParticleEngine<ITexture>? engine;
+    private Label? lblInstructions;
+    private Label? lblSpread;
+    private float spread;
 
     /// <summary>
-    /// Creates a new instance of <see cref="ColorScene"/>.
+    /// Initializes a new instance of the <see cref="ColorScene"/> class.
     /// </summary>
     public ColorScene()
     {
+        this.mouse = InputFactory.CreateMouse();
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
     }
 
     /// <summary>
@@ -43,22 +47,51 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
-        var behaviorFactory = new BehaviorFactory();
+        this.spread = WindowSize.Height / 2f;
+        this.engine = new ParticleEngine<ITexture>();
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
         {
             SpawnRateMin = 62,
             SpawnRateMax = 62,
-            TotalParticlesAliveAtOnce = 100,
+            TotalParticles = 300,
         };
 
-        this.engine.CreatePool(effect, behaviorFactory);
+        var poolFactory = new ParticlePoolFactory();
+        this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
 
+        this.lblInstructions = new Label
+        {
+            Color = Color.White,
+            Text = "Scroll up to cluster and down to spread.",
+            Position = new Point(WindowCenter.X, 50),
+        };
+
+        this.lblSpread = new Label
+        {
+            Color = Color.White,
+            Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}",
+            Position = new Point(WindowCenter.X, 100),
+        };
+
+        AddControl(this.lblInstructions);
+        AddControl(this.lblSpread);
         base.LoadContent();
+    }
+
+    /// <summary>
+    /// Unloads the content.
+    /// </summary>
+    public override void UnloadContent()
+    {
+        this.engine?.Dispose();
+        this.textureLoader.Dispose();
+
+        base.UnloadContent();
     }
 
     /// <summary>
@@ -67,6 +100,17 @@ public class ColorScene : SceneBase
     /// <param name="frameTime">The time passed for the current frame.</param>
     public override void Update(FrameTime frameTime)
     {
+        var mouseState = this.mouse.GetState();
+
+        this.spread = mouseState.GetScrollDirection() switch
+        {
+            MouseScrollDirection.ScrollUp => this.spread - 50 <= 0 ? 0 : this.spread - 50,
+            MouseScrollDirection.ScrollDown => this.spread + 50 >= WindowSize.Height / 2f ? WindowSize.Height / 2f : this.spread + 50,
+            _ => this.spread,
+        };
+
+        this.lblSpread.Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}";
+
         this.engine.Update(frameTime.ElapsedTime);
         base.Update(frameTime);
     }
@@ -76,11 +120,11 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void Render()
     {
-        foreach (ParticlePool<ITexture> pool in this.engine.ParticlePools)
+        foreach (var pool in this.engine.ParticlePools)
         {
-            foreach (Particle particle in pool.Particles)
+            foreach (var particle in pool.Particles)
             {
-                if (particle.IsDead)
+                if (particle.IsAlive is false)
                 {
                     continue;
                 }
@@ -92,7 +136,8 @@ public class ColorScene : SceneBase
                 var srcRect = new Rectangle(0, 0, (int)pool.PoolTexture.Width, (int)pool.PoolTexture.Height);
                 var destRect = new Rectangle((int)renderPosX, (int)renderPosY, (int)pool.PoolTexture.Width, (int)pool.PoolTexture.Height);
 
-                this.textureRenderer.Render(pool.PoolTexture, srcRect, destRect, 1f, 0, particle.TintColor, RenderEffects.None);
+                var tintClr = particle.TintColor;
+                this.textureRenderer.Render(pool.PoolTexture, srcRect, destRect, particle.Size, 0, tintClr, RenderEffects.None);
             }
         }
 
@@ -103,49 +148,107 @@ public class ColorScene : SceneBase
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private BehaviorSettings[] CreateSettings()
+    private EasingRandomBehaviorSettings[] CreateSettings()
     {
         var windowCenter = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
 
-        var winHalfWidth = windowCenter.X;
-        var winHalfHeight = windowCenter.Y;
+        const int change = 400;
 
         var xPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.X,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
-            RandomChangeMin = -winHalfWidth - TextureHalfWidth,
-            RandomChangeMax = winHalfWidth + TextureHalfWidth,
-            RandomStartMin = windowCenter.X,
-            RandomStartMax = windowCenter.X,
+            ApplyToAttribute = BehaviorAttribute.X,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
+            RandomStartMin = windowCenter.X - this.spread,
+            RandomStartMax = windowCenter.X + this.spread,
+            UpdateRandomStartMin = (_) => windowCenter.X - this.spread,
+            UpdateRandomStartMax = (_) => windowCenter.X + this.spread,
+            RandomChangeMin = -change,
+            RandomChangeMax = change,
         };
 
         var yPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Y,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
-            RandomChangeMin = -winHalfHeight - TextureHalfHeight,
-            RandomChangeMax = winHalfHeight + TextureHalfHeight,
-            RandomStartMin = windowCenter.Y,
-            RandomStartMax = windowCenter.Y,
+            ApplyToAttribute = BehaviorAttribute.Y,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
+            RandomStartMin = windowCenter.Y - this.spread,
+            RandomStartMax = windowCenter.Y + this.spread,
+            UpdateRandomStartMin = (_) => windowCenter.Y - this.spread,
+            UpdateRandomStartMax = (_) => windowCenter.Y + this.spread,
+            RandomChangeMin = -change,
+            RandomChangeMax = change,
         };
 
-        var clrSettings = new ColorTransitionBehaviorSettings
+        var white = Color.White;
+        var purple = Color.MediumPurple;
+
+        var alphaSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Color,
-            EasingFunctionType = EasingFunction.EaseIn,
-            LifeTime = 1500,
-            StartColor = Color.White,
-            StopColor = Color.MediumPurple,
+            ApplyToAttribute = BehaviorAttribute.AlphaColorComponent,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
+            RandomStartMin = 255,
+            RandomStartMax = 255,
+            RandomChangeMin = -255f,
+            RandomChangeMax = -255f,
         };
 
-        return new BehaviorSettings[]
+        const float clrChangeTime = 1000f;
+        var redSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.RedColorComponent,
+            LifeTimeMillisecondsMin = clrChangeTime,
+            LifeTimeMillisecondsMax = clrChangeTime,
+            RandomStartMin = white.R,
+            RandomStartMax = white.R,
+            RandomChangeMin = purple.R - white.R,
+            RandomChangeMax = purple.R - white.R,
+        };
+
+        var greenSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.GreenColorComponent,
+            LifeTimeMillisecondsMin = clrChangeTime,
+            LifeTimeMillisecondsMax = clrChangeTime,
+            RandomStartMin = white.G,
+            RandomStartMax = white.G,
+            RandomChangeMin = purple.G - white.G,
+            RandomChangeMax = purple.G - white.G,
+        };
+
+        var blueSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.BlueColorComponent,
+            LifeTimeMillisecondsMin = clrChangeTime,
+            LifeTimeMillisecondsMax = clrChangeTime,
+            RandomStartMin = white.B,
+            RandomStartMax = white.B,
+            RandomChangeMin = purple.B - white.B,
+            RandomChangeMax = purple.B - white.B,
+        };
+
+        var sizeSettings = new EasingRandomBehaviorSettings
+        {
+            ApplyToAttribute = BehaviorAttribute.Size,
+            LifeTimeMillisecondsMin = 5000,
+            LifeTimeMillisecondsMax = 5000,
+            RandomStartMin = 0.3f,
+            RandomStartMax = 0.6f,
+            RandomChangeMin = -1f,
+            RandomChangeMax = -1f,
+            UpdateValue = (value) => value <= 0.0 ? 0.0 : value,
+        };
+
+        return new[]
         {
             xPosSettings,
             yPosSettings,
-            clrSettings
+            alphaSettings,
+            redSettings,
+            greenSettings,
+            blueSettings,
+            sizeSettings,
         };
     }
 }

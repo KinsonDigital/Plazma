@@ -1,4 +1,4 @@
-﻿// <copyright file="EasingRandomBehaviorSettingsTests.cs" company="KinsonDigital">
+// <copyright file="EasingRandomBehaviorSettingsTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -19,99 +19,120 @@ public class EasingRandomBehaviorSettingsTests
     [Fact]
     public void ApplyToAttribute_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.ApplyToAttribute = ParticleAttribute.Angle;
-        var actual = setting.ApplyToAttribute;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { ApplyToAttribute = BehaviorAttribute.Angle };
 
         // Assert
-        actual.Should().Be(ParticleAttribute.Angle);
+        setting.ApplyToAttribute.Should().Be(BehaviorAttribute.Angle);
     }
 
     [Fact]
-    public void StartMin_WhenSettingValue_ReturnsCorrectResult()
+    public void EasingFunctionType_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomStartMin = 1234f;
-        var actual = setting.RandomStartMin;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { EasingFunctionType = EasingFunction.EaseIn };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.EasingFunctionType.Should().Be(EasingFunction.EaseIn);
     }
 
     [Fact]
-    public void StartMax_WhenSettingValue_ReturnsCorrectResult()
+    public void RandomStartMin_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomStartMax = 1234f;
-        var actual = setting.RandomStartMax;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomStartMin = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.RandomStartMin.Should().Be(1234f);
     }
 
     [Fact]
-    public void ChangeMin_WhenSettingValue_ReturnsCorrectResult()
+    public void RandomStartMax_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomChangeMin = 1234f;
-        var actual = setting.RandomChangeMin;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomStartMax = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.RandomStartMax.Should().Be(1234f);
     }
 
     [Fact]
-    public void ChangeMax_WhenSettingValue_ReturnsCorrectResult()
+    public void RandomStopMin_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.RandomChangeMax = 1234f;
-        var actual = setting.RandomChangeMax;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomChangeMin = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.RandomChangeMin.Should().Be(1234f);
     }
 
     [Fact]
-    public void TotalTimeMin_WhenSettingValue_ReturnsCorrectResult()
+    public void RandomStopMax_WhenSettingValue_ReturnsCorrectResult()
     {
-        // Arrange
-        var setting = new EasingRandomBehaviorSettings();
-
-        // Act
-        setting.LifeTimeMinMilliseconds = 1234f;
-        var actual = setting.LifeTimeMinMilliseconds;
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { RandomChangeMax = 1234f };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.RandomChangeMax.Should().Be(1234f);
     }
 
     [Fact]
-    public void TotalTimeMax_WhenSettingValue_ReturnsCorrectResult()
+    public void UpdateValue_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var setting = new EasingRandomBehaviorSettings();
+        var func = (double value) => 123.0;
 
         // Act
-        setting.LifeTimeMaxMilliseconds = 1234f;
-        var actual = setting.LifeTimeMaxMilliseconds;
+        var setting = new EasingRandomBehaviorSettings { UpdateValue = func };
 
         // Assert
-        actual.Should().Be(1234f);
+        setting.UpdateValue.Should().BeSameAs(func);
+    }
+
+    [Fact]
+    public void UpdateRandomStartMin_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var func = (double value) => 123f;
+
+        // Act
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMin = func };
+
+        // Assert
+        setting.UpdateRandomStartMin.Should().BeSameAs(func);
+    }
+
+    [Fact]
+    public void UpdateRandomStartMax_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var func = (double value) => 123f;
+
+        // Act
+        var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMax = func };
+
+        // Assert
+        setting.UpdateRandomStartMax.Should().BeSameAs(func);
+    }
+
+    [Fact]
+    public void LifeTimeMillisecondsMin_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { LifeTimeMillisecondsMin = 1234f };
+
+        // Assert
+        setting.LifeTimeMillisecondsMin.Should().Be(1234f);
+    }
+
+    [Fact]
+    public void LifeTimeMillisecondsMax_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange & Act
+        var setting = new EasingRandomBehaviorSettings { LifeTimeMillisecondsMax = 1234f };
+
+        // Assert
+        setting.LifeTimeMillisecondsMax.Should().Be(1234f);
     }
     #endregion
 
@@ -122,13 +143,13 @@ public class EasingRandomBehaviorSettingsTests
         // Arrange
         var setting = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomChangeMin = 10,
             RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
+            LifeTimeMillisecondsMin = 50,
+            LifeTimeMillisecondsMax = 60,
         };
         var otherObj = new object();
 
@@ -145,24 +166,24 @@ public class EasingRandomBehaviorSettingsTests
         // Arrange
         var settingA = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomChangeMin = 10,
             RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
+            LifeTimeMillisecondsMin = 50,
+            LifeTimeMillisecondsMax = 60,
         };
 
         var settingB = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomChangeMin = 10,
             RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
+            LifeTimeMillisecondsMin = 50,
+            LifeTimeMillisecondsMax = 60,
         };
 
         // Act & Assert
@@ -171,8 +192,8 @@ public class EasingRandomBehaviorSettingsTests
         settingA.RandomChangeMax.Should().Be(settingB.RandomChangeMax);
         settingA.RandomStartMin.Should().Be(settingB.RandomStartMin);
         settingA.RandomStartMax.Should().Be(settingB.RandomStartMax);
-        settingA.LifeTimeMinMilliseconds.Should().Be(settingB.LifeTimeMinMilliseconds);
-        settingA.LifeTimeMaxMilliseconds.Should().Be(settingB.LifeTimeMaxMilliseconds);
+        settingA.LifeTimeMillisecondsMin.Should().Be(settingB.LifeTimeMillisecondsMin);
+        settingA.LifeTimeMillisecondsMax.Should().Be(settingB.LifeTimeMillisecondsMax);
     }
 
     [Fact]
@@ -181,24 +202,24 @@ public class EasingRandomBehaviorSettingsTests
         // Arrange
         var settingA = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.BlueColorComponent,
+            ApplyToAttribute = BehaviorAttribute.BlueColorComponent,
             RandomChangeMin = 100,
             RandomChangeMax = 200,
             RandomStartMin = 300,
             RandomStartMax = 400,
-            LifeTimeMinMilliseconds = 500,
-            LifeTimeMaxMilliseconds = 600,
+            LifeTimeMillisecondsMin = 500,
+            LifeTimeMillisecondsMax = 600,
         };
 
         var settingB = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
+            ApplyToAttribute = BehaviorAttribute.Angle,
             RandomChangeMin = 10,
             RandomChangeMax = 20,
             RandomStartMin = 30,
             RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
+            LifeTimeMillisecondsMin = 50,
+            LifeTimeMillisecondsMax = 60,
         };
 
         // Act
@@ -206,40 +227,6 @@ public class EasingRandomBehaviorSettingsTests
 
         // Assert
         actual.Should().BeFalse();
-    }
-
-    [Fact]
-    public void GetHashCode_WhenInvoked_ReturnsCorrectResult()
-    {
-        // Arrange
-        var settingA = new EasingRandomBehaviorSettings
-        {
-            ApplyToAttribute = ParticleAttribute.Angle,
-            RandomChangeMin = 10,
-            RandomChangeMax = 20,
-            RandomStartMin = 30,
-            RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
-        };
-
-        var settingB = new EasingRandomBehaviorSettings
-        {
-            ApplyToAttribute = ParticleAttribute.Angle,
-            RandomChangeMin = 10,
-            RandomChangeMax = 20,
-            RandomStartMin = 30,
-            RandomStartMax = 40,
-            LifeTimeMinMilliseconds = 50,
-            LifeTimeMaxMilliseconds = 60,
-        };
-
-        // Act
-        var settingAHashCode = settingA.GetHashCode();
-        var settingBHashCode = settingB.GetHashCode();
-
-        // Assert
-        settingBHashCode.Should().Be(settingAHashCode);
     }
     #endregion
 }

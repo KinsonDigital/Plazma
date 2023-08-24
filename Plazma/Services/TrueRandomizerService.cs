@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 /// <summary>
 /// Provides methods for randomizing numbers.
 /// </summary>
-public class TrueRandomizerService : IRandomizerService
+public sealed class TrueRandomizerService : IRandomizerService
 {
     // TODO: Create an issue to swap this for the 'RandomNumberGenerator' static methods instead
     private readonly RNGCryptoServiceProvider provider = new ();
@@ -85,16 +85,12 @@ public class TrueRandomizerService : IRandomizerService
 
     /// <inheritdoc/>
     [ExcludeFromCodeCoverage]
-    public void Dispose()
-    {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(this);
-    }
+    public void Dispose() => Dispose(disposing: true);
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
     /// <param name="disposing">True to dispose of managed resources.</param>
     [ExcludeFromCodeCoverage]
-    protected virtual void Dispose(bool disposing)
+    private void Dispose(bool disposing)
     {
         if (this.isDisposed)
         {

@@ -1,12 +1,20 @@
-﻿namespace PlazmaTesting;
+﻿// <copyright file="MainWindow.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace PlazmaTesting;
 
 using System.Drawing;
 using System.Text;
 using Scenes;
 using Velaptor;
-using Velaptor.Graphics.Renderers;
+using Velaptor.Batching;
+using Velaptor.Factories;
 using Velaptor.UI;
 
+/// <summary>
+/// The main window of the application.
+/// </summary>
 public class MainWindow : Window
 {
     private static readonly char[] UpperCaseChars =
@@ -17,32 +25,39 @@ public class MainWindow : Window
     };
     private readonly Button nextButton;
     private readonly Button previousButton;
+    private readonly IBatcher batcher;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MainWindow"/> class.
+    /// </summary>
     public MainWindow()
     {
         TypeOfBorder = WindowBorder.Fixed;
 
+        var rendererFactory = new RendererFactory();
+
+        this.batcher = rendererFactory.CreateBatcher();
         this.nextButton = new Button { Text = "-->" };
         this.previousButton = new Button { Text = "<--" };
 
         var horizontalMovementScene = new HorizontalMovementScene
         {
-            Name = SplitByUpperCase(nameof(HorizontalMovementScene))
+            Name = SplitByUpperCase(nameof(HorizontalMovementScene)),
         };
 
         var verticalMovementScene = new VerticalMovementScene
         {
-            Name = SplitByUpperCase(nameof(VerticalMovementScene))
+            Name = SplitByUpperCase(nameof(VerticalMovementScene)),
         };
 
         var colorScene = new ColorScene
         {
-            Name = SplitByUpperCase(nameof(ColorScene))
+            Name = SplitByUpperCase(nameof(ColorScene)),
         };
 
         var angleScene = new AngleScene
         {
-            Name = SplitByUpperCase(nameof(AngleScene))
+            Name = SplitByUpperCase(nameof(AngleScene)),
         };
 
         SceneManager.AddScene(verticalMovementScene, true);
@@ -51,6 +66,11 @@ public class MainWindow : Window
         SceneManager.AddScene(angleScene);
     }
 
+    public static Rectangle ButtonsArea { get; private set; }
+
+    /// <summary>
+    /// Loads the applications content.
+    /// </summary>
     protected override void OnLoad()
     {
         const int buttonSpacing = 15;
@@ -68,11 +88,20 @@ public class MainWindow : Window
         this.previousButton.Position = new Point(buttonGroupLeft, buttonTops);
         this.nextButton.Position = new Point(this.previousButton.Position.X + (int)this.previousButton.Width + buttonSpacing, buttonTops);
 
-        SceneManager.LoadContent();
+        var left = this.previousButton.Left;
+        var right = this.nextButton.Right;
+        var width = this.nextButton.Right - this.previousButton.Left;
+        var height = (int)Math.Max(this.previousButton.Height, this.nextButton.Height);
+
+        ButtonsArea = new Rectangle(left, right, width, height);
 
         base.OnLoad();
     }
 
+    /// <summary>
+    /// Updates the application.
+    /// </summary>
+    /// <param name="frameTime">The time passed for the current frame.</param>
     protected override void OnUpdate(FrameTime frameTime)
     {
         Title = $"Scene: {SceneManager.CurrentScene?.Name ?? "No Scene Loaded"}";
@@ -80,22 +109,23 @@ public class MainWindow : Window
         this.nextButton.Update(frameTime);
         this.previousButton.Update(frameTime);
 
-        SceneManager.Update(frameTime);
         base.OnUpdate(frameTime);
     }
 
+    /// <summary>
+    /// Renders the application.
+    /// </summary>
+    /// <param name="frameTime">The time passed for the current frame.</param>
     protected override void OnDraw(FrameTime frameTime)
     {
-        IRenderer.Begin();
+        base.OnDraw(frameTime);
 
-        SceneManager.Render();
+        this.batcher.Begin();
 
         this.nextButton.Render();
         this.previousButton.Render();
 
-        IRenderer.End();
-
-        base.OnDraw(frameTime);
+        this.batcher.End();
     }
 
     /// <summary>

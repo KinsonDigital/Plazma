@@ -1,15 +1,20 @@
-﻿namespace PlazmaTesting.Scenes;
+﻿// <copyright file="AngleScene.cs" company="KinsonDigital">
+// Copyright (c) KinsonDigital. All rights reserved.
+// </copyright>
+
+namespace PlazmaTesting.Scenes;
 
 using System.Drawing;
 using System.Numerics;
 using Plazma;
 using Plazma.Behaviors;
-using Plazma.Services;
+using Plazma.Factories;
 using Velaptor;
 using Velaptor.Content;
 using Velaptor.Factories;
 using Velaptor.Graphics;
 using Velaptor.Graphics.Renderers;
+using Velaptor.Input;
 using Velaptor.Scene;
 
 /// <summary>
@@ -17,21 +22,22 @@ using Velaptor.Scene;
 /// </summary>
 public class AngleScene : SceneBase
 {
-     private const float TextureHalfWidth = 22.5f;
+    private const float TextureHalfWidth = 22.5f;
     private const float TextureHalfHeight = 31.5f;
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
-    private readonly TrueRandomizerService randomService = new ();
-    private readonly ParticleEngine<ITexture> engine;
     private readonly ITextureRenderer textureRenderer;
+    private readonly IAppInput<MouseState> mouse;
+    private ParticleEngine<ITexture>? engine;
+    private MouseState prevMouseState;
 
     /// <summary>
-    /// Creates a new instance of <see cref="AngleScene"/>.
+    /// Initializes a new instance of the <see cref="AngleScene"/> class.
     /// </summary>
     public AngleScene()
     {
+        this.mouse = InputFactory.CreateMouse();
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>(this.textureLoader, this.randomService);
     }
 
     /// <summary>
@@ -39,17 +45,19 @@ public class AngleScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
-        var behaviorFactory = new BehaviorFactory();
+        this.engine = new ParticleEngine<ITexture>();
+
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
         {
             SpawnRateMin = 125,
             SpawnRateMax = 125,
-            TotalParticlesAliveAtOnce = 10,
+            TotalParticles = 50,
         };
 
-        this.engine.CreatePool(effect, behaviorFactory);
+        var poolFactory = new ParticlePoolFactory();
+        this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
@@ -58,12 +66,25 @@ public class AngleScene : SceneBase
     }
 
     /// <summary>
+    /// Unloads the content.
+    /// </summary>
+    public override void UnloadContent()
+    {
+        this.engine?.Dispose();
+        this.textureLoader.Dispose();
+
+        base.UnloadContent();
+    }
+
+    /// <summary>
     /// Updates the scene.
     /// </summary>
     /// <param name="frameTime">The time passed for the current frame.</param>
     public override void Update(FrameTime frameTime)
     {
+        ProcessMouseInput();
         this.engine.Update(frameTime.ElapsedTime);
+
         base.Update(frameTime);
     }
 
@@ -74,11 +95,11 @@ public class AngleScene : SceneBase
     {
         var clr = Color.LightGreen.DecreaseBrightness(0.2f);
 
-        foreach (ParticlePool<ITexture> pool in this.engine.ParticlePools)
+        foreach (var pool in this.engine.ParticlePools)
         {
-            foreach (Particle particle in pool.Particles)
+            foreach (var particle in pool.Particles)
             {
-                if (particle.IsDead)
+                if (particle.IsAlive is false)
                 {
                     continue;
                 }
@@ -98,10 +119,27 @@ public class AngleScene : SceneBase
     }
 
     /// <summary>
+    /// Processes mouse input.
+    /// </summary>
+    private void ProcessMouseInput()
+    {
+        var mouseState = this.mouse.GetState();
+
+        var mouseNotOverButtons = !MainWindow.ButtonsArea.Contains(mouseState.GetPosition());
+
+        if (this.prevMouseState.IsLeftButtonDown() && mouseState.IsLeftButtonUp() && mouseNotOverButtons)
+        {
+            this.engine.Enabled = !this.engine.Enabled;
+        }
+
+        this.prevMouseState = mouseState;
+    }
+
+    /// <summary>
     /// Creates the settings.
     /// </summary>
     /// <returns>The new settings.</returns>
-    private BehaviorSettings[] CreateSettings()
+    private EasingRandomBehaviorSettings[] CreateSettings()
     {
         var windowCenter = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
 
@@ -110,42 +148,42 @@ public class AngleScene : SceneBase
 
         var xPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.X,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
-            RandomChangeMin = -winHalfWidth - TextureHalfWidth,
-            RandomChangeMax = winHalfWidth + TextureHalfWidth,
+            ApplyToAttribute = BehaviorAttribute.X,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
             RandomStartMin = windowCenter.X,
             RandomStartMax = windowCenter.X,
+            RandomChangeMin = -winHalfWidth - TextureHalfWidth,
+            RandomChangeMax = winHalfWidth + TextureHalfWidth,
         };
 
         var yPosSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Y,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
-            RandomChangeMin = -winHalfHeight - TextureHalfHeight,
-            RandomChangeMax = winHalfHeight + TextureHalfHeight,
+            ApplyToAttribute = BehaviorAttribute.Y,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
             RandomStartMin = windowCenter.Y,
             RandomStartMax = windowCenter.Y,
+            RandomChangeMin = -winHalfHeight - TextureHalfHeight,
+            RandomChangeMax = winHalfHeight + TextureHalfHeight,
         };
 
         var angleSettings = new EasingRandomBehaviorSettings
         {
-            ApplyToAttribute = ParticleAttribute.Angle,
-            LifeTimeMinMilliseconds = 2000,
-            LifeTimeMaxMilliseconds = 2000,
-            RandomChangeMin = 360,
-            RandomChangeMax = 360,
+            ApplyToAttribute = BehaviorAttribute.Angle,
+            LifeTimeMillisecondsMin = 2000,
+            LifeTimeMillisecondsMax = 2000,
             RandomStartMin = 0,
             RandomStartMax = 0,
+            RandomChangeMin = 360,
+            RandomChangeMax = 360,
         };
 
-        return new BehaviorSettings[]
+        return new[]
         {
             xPosSettings,
             yPosSettings,
-            angleSettings
+            angleSettings,
         };
     }
 }

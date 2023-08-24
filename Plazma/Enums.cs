@@ -7,7 +7,7 @@ namespace Plazma;
 /// <summary>
 /// Represents the different types of particle attributes that a behavior can be applied to.
 /// </summary>
-public enum ParticleAttribute
+public enum BehaviorAttribute
 {
     /// <summary>
     /// The X position of a particle.
@@ -28,11 +28,6 @@ public enum ParticleAttribute
     /// The size of a particle.
     /// </summary>
     Size,
-
-    /// <summary>
-    /// The entire color of a particle.
-    /// </summary>
-    Color,
 
     /// <summary>
     /// The red color component of a particle color.

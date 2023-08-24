@@ -11,18 +11,18 @@ using System;
 /// </summary>
 public abstract class Behavior : IBehavior
 {
-    private readonly BehaviorSettings setting;
+    private readonly EasingRandomBehaviorSettings setting;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Behavior"/> class.
     /// </summary>
     /// <param name="settings">The settings used to dictate how the behavior makes a particle behave.</param>
-    public Behavior(BehaviorSettings settings) => this.setting = settings;
+    protected Behavior(EasingRandomBehaviorSettings settings) => this.setting = settings;
 
     /// <summary>
     /// Gets or sets the current value of the behavior.
     /// </summary>
-    public string Value { get; protected set; } = "0";
+    public double Value { get; protected set; }
 
     /// <summary>
     /// Gets or sets the current amount of time that has elapsed for the behavior in milliseconds.
@@ -32,12 +32,12 @@ public abstract class Behavior : IBehavior
     /// <summary>
     /// Gets the particle attribute to apply the behavior value to.
     /// </summary>
-    public ParticleAttribute ApplyToAttribute => this.setting.ApplyToAttribute;
+    public BehaviorAttribute BehaviorType => this.setting.ApplyToAttribute;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the behavior is enabled.
+    /// Gets a value indicating whether the behavior is enabled.
     /// </summary>
-    public bool Enabled { get; protected set; } = true;
+    public bool Enabled { get; private set; } = true;
 
     /// <inheritdoc/>
     public double LifeTime { get; set; }
@@ -57,7 +57,7 @@ public abstract class Behavior : IBehavior
     /// </summary>
     public virtual void Reset()
     {
-        Value = string.Empty;
+        Value = 0.0;
         ElapsedTime = 0;
         Enabled = true;
     }

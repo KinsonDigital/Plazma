@@ -6,7 +6,6 @@ namespace Plazma;
 
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Behaviors;
@@ -15,9 +14,9 @@ using Newtonsoft.Json;
 /// <summary>
 /// Holds the particle setup settings data for the <see cref="ParticleEngine{TTexture}"/> to consume.
 /// </summary>
-public class ParticleEffect
+public class ParticleEffect // : IEnumerable<IBehaviorSettings>
 {
-    private BehaviorSettings[] behaviorSettings = Array.Empty<BehaviorSettings>();
+    private EasingRandomBehaviorSettings[] behaviorSettings = Array.Empty<EasingRandomBehaviorSettings>();
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
@@ -32,7 +31,7 @@ public class ParticleEffect
     /// </summary>
     /// <param name="particleTextureName">The name of the texture used in the particle effect.</param>
     /// <param name="settings">The settings used to setup the particle effect.</param>
-    public ParticleEffect(string particleTextureName, BehaviorSettings[] settings)
+    public ParticleEffect(string particleTextureName, EasingRandomBehaviorSettings[] settings)
     {
         this.behaviorSettings = settings ?? throw new ArgumentNullException(nameof(settings), "Parameter must not be null.");
         ParticleTextureName = particleTextureName;
@@ -49,9 +48,10 @@ public class ParticleEffect
     public Vector2 SpawnLocation { get; set; }
 
     /// <summary>
-    /// Gets or sets the total number of particles that can be alive at once.
+    /// Gets or sets the total number of particles..
     /// </summary>
-    public int TotalParticlesAliveAtOnce { get; set; } = 1;
+    /// <remarks>This takes into account any particle regardless if it is alive or dead.</remarks>
+    public int TotalParticles { get; set; } = 1;
 
     /// <summary>
     /// Gets or sets the minimum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
@@ -68,7 +68,7 @@ public class ParticleEffect
     /// <summary>
     /// Gets or sets a value indicating whether particles will spawn at a limited rate.
     /// </summary>
-    public bool SpawnRateEnabled { get; set; } = true;
+    public bool LimitSpawnRate { get; set; } = true;
 
     /// <summary>
     /// Gets or sets a value indicating whether the bursting effect is enabled or disabled.
@@ -113,51 +113,9 @@ public class ParticleEffect
     /// <summary>
     /// Gets or sets the list of behavior settings that describe how the particle effect is setup.
     /// </summary>
-    public ReadOnlyCollection<BehaviorSettings> BehaviorSettings
+    public ReadOnlyCollection<EasingRandomBehaviorSettings> BehaviorSettings
     {
         get => new (this.behaviorSettings);
         set => this.behaviorSettings = value.ToArray();
-    }
-
-    /// <summary>
-    /// Determines whether the specified object is equal to the current object.
-    /// </summary>
-    /// <param name="obj">The object to compare with the current object.</param>
-    /// <returns>True if the specified object is equal to the current object; otherwise, false.</returns>
-    public override bool Equals(object? obj)
-    {
-        if (obj is not ParticleEffect effect)
-        {
-            return false;
-        }
-
-        return ParticleTextureName == effect.ParticleTextureName &&
-               SpawnLocation == effect.SpawnLocation &&
-               TotalParticlesAliveAtOnce == effect.TotalParticlesAliveAtOnce &&
-               SpawnRateMin == effect.SpawnRateMin &&
-               SpawnRateMax == effect.SpawnRateMax &&
-               UseColorsFromList == effect.UseColorsFromList &&
-               BehaviorSettings.ItemsAreEqual(effect.BehaviorSettings);
-    }
-
-    /// <summary>
-    /// Serves as the default hash function.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
-    [ExcludeFromCodeCoverage]
-    public override int GetHashCode()
-    {
-        var hash = default(HashCode);
-
-        hash.Add(ParticleTextureName);
-        hash.Add(SpawnLocation);
-
-        hash.Add(TotalParticlesAliveAtOnce);
-        hash.Add(SpawnRateMin);
-        hash.Add(SpawnRateMax);
-        hash.Add(UseColorsFromList);
-        hash.Add(BehaviorSettings);
-
-        return hash.ToHashCode();
     }
 }
