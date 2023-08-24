@@ -38,12 +38,10 @@ jobs:
             exit 1;
           }
 
-
           if ($releaseType -eq "") {
             Write-Host "::error::The release type input cannot be empty.";
             exit 1;
           }
-
 
           if ($releaseType -ne 'preview' -and $releaseType -ne 'production') {
             Write-Host "::error::The release type input must be either 'Preview' or 'Production'.";
@@ -56,7 +54,6 @@ jobs:
             Write-Host "::error::The 'release-version' workflow input cannot be empty.";
             exit 1;
           }
-
 
           $prodVersionRegex = "v[0-9]+\.[0-9]+\.[0-9]+";
           $prevVersionRegex = "v[0-9]+\.[0-9]+\.[0-9]+-preview\.[0-9]+";
@@ -74,7 +71,7 @@ jobs:
   prepare_release:
     name: Prepare ${{ inputs.release-type }} Release Of ${{ vars.PROJECT_NAME }}
     needs: print_validate_workflow
-    uses: KinsonDigital/Infrastructure/.github/workflows/prepare-release.yml@v12.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/prepare-release.yml@v12.1.1
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       release-type: "${{ inputs.release-type }}"
