@@ -1,6 +1,7 @@
 <div align="center">
 
-![logo](./Images/plazma-logo.svg)
+
+![logo](https://raw.githubusercontent.com/KinsonDigital/Plazma/preview/Images/plazma-logo.svg)
 
 </div>
 
