@@ -9,7 +9,7 @@ defaults:
 on:
   pull_request_target:
     types: opened
-    branches: [main, renovate/*]
+    branches: [main, preview, renovate/*]
 
 
 jobs:
