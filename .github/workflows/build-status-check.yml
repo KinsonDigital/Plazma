@@ -15,20 +15,24 @@ on:
 jobs:
   build_main_project:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.1.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
 
 
   build_testing_app:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.1.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Testing"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
 
 
   build_status_check:
