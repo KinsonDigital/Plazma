@@ -5,6 +5,7 @@
 namespace Plazma.Behaviors;
 
 using System;
+using System.Text.Json.Serialization;
 
 /// <summary>
 /// Stores settings for creating an <see cref="EasingRandomBehavior"/>.
@@ -48,6 +49,7 @@ public readonly record struct EasingRandomBehaviorSettings
     ///     The value returned from the delegate will be used as the new value for the behavior.
     /// </para>
     /// </remarks>
+    [JsonIgnore]
     public Func<double, double>? UpdateValue { get; init; }
 
     /// <summary>
@@ -62,6 +64,7 @@ public readonly record struct EasingRandomBehaviorSettings
     ///     The value returned from the delegate will be used as the new value for the <see cref="RandomStartMin"/>.
     /// </para>
     /// </remarks>
+    [JsonIgnore]
     public Func<double, float>? UpdateRandomStartMin { get; init; }
 
     /// <summary>
@@ -76,6 +79,7 @@ public readonly record struct EasingRandomBehaviorSettings
     ///     The value returned from the delegate will be used as the new value for the <see cref="RandomStartMax"/>.
     /// </para>
     /// </remarks>
+    [JsonIgnore]
     public Func<double, float>? UpdateRandomStartMax { get; init; }
 
     /// <summary>
