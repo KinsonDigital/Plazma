@@ -3,7 +3,6 @@ run-name: ✅Unit Testing Status Check (${{ github.base_ref }} branch)
 
 
 on:
-  workflow_dispatch:
   pull_request_target:
     branches: [main, preview]
 
@@ -11,8 +10,10 @@ on:
 jobs:
   run_tests:
     name: ${{ vars.PROJECT_NAME }} Test Status Check
-    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.0.0
+    uses: KinsonDigital/Infrastructure/.github/workflows/run-csharp-tests.yml@v13.1.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Tests"
       build-config: Debug
       net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
