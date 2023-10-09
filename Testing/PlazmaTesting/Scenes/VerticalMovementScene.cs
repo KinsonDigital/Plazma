@@ -34,7 +34,7 @@ public class VerticalMovementScene : SceneBase
     /// </summary>
     public VerticalMovementScene()
     {
-        this.mouse = InputFactory.CreateMouse();
+        this.mouse = HardwareFactory.GetMouse();
 
         var rendererFactory = new RendererFactory();
         this.textureRenderer = rendererFactory.CreateTextureRenderer();
