@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
         <LangVersion>11.0</LangVersion>
-        <Platforms>AnyCPU</Platforms>
+        <Platforms>x64</Platforms>
         <AssemblyTitle>ParticleEngineTests</AssemblyTitle>
         <Product>Kinson Digital - Particle Engine Tests</Product>
         <Copyright>Copyright © 2023 Kinson Digital</Copyright>
