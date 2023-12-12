@@ -27,7 +27,7 @@ public class ColorScene : SceneBase
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
-    private ParticleEngine<ITexture>? engine;
+    private readonly ParticleEngine<ITexture>? engine;
     private Label? lblInstructions;
     private Label? lblSpread;
     private float spread;
@@ -38,8 +38,8 @@ public class ColorScene : SceneBase
     public ColorScene()
     {
         this.mouse = HardwareFactory.GetMouse();
-        var rendererFactory = new RendererFactory();
-        this.textureRenderer = rendererFactory.CreateTextureRenderer();
+        this.textureRenderer = RendererFactory.CreateTextureRenderer();
+        this.engine = new ParticleEngine<ITexture>();
     }
 
     /// <summary>
@@ -48,7 +48,6 @@ public class ColorScene : SceneBase
     public override void LoadContent()
     {
         this.spread = WindowSize.Height / 2f;
-        this.engine = new ParticleEngine<ITexture>();
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
@@ -124,7 +123,7 @@ public class ColorScene : SceneBase
         {
             foreach (var particle in pool.Particles)
             {
-                if (particle.IsAlive is false)
+                if (!particle.IsAlive)
                 {
                     continue;
                 }

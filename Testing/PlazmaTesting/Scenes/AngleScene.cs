@@ -27,7 +27,7 @@ public class AngleScene : SceneBase
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
-    private ParticleEngine<ITexture>? engine;
+    private readonly ParticleEngine<ITexture>? engine;
     private MouseState prevMouseState;
 
     /// <summary>
@@ -36,8 +36,8 @@ public class AngleScene : SceneBase
     public AngleScene()
     {
         this.mouse = HardwareFactory.GetMouse();
-        var rendererFactory = new RendererFactory();
-        this.textureRenderer = rendererFactory.CreateTextureRenderer();
+        this.textureRenderer = RendererFactory.CreateTextureRenderer();
+        this.engine = new ParticleEngine<ITexture>();
     }
 
     /// <summary>
@@ -45,8 +45,6 @@ public class AngleScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
-        this.engine = new ParticleEngine<ITexture>();
-
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
@@ -99,7 +97,7 @@ public class AngleScene : SceneBase
         {
             foreach (var particle in pool.Particles)
             {
-                if (particle.IsAlive is false)
+                if (!particle.IsAlive)
                 {
                     continue;
                 }
