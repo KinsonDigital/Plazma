@@ -34,9 +34,7 @@ public class MainWindow : Window
     {
         TypeOfBorder = WindowBorder.Fixed;
 
-        var rendererFactory = new RendererFactory();
-
-        this.batcher = rendererFactory.CreateBatcher();
+        this.batcher = RendererFactory.CreateBatcher();
         this.nextButton = new Button { Text = "-->" };
         this.previousButton = new Button { Text = "<--" };
 
