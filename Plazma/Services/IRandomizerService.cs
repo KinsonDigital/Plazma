@@ -9,7 +9,7 @@ using System;
 /// <summary>
 /// Provides methods for randomizing numbers.
 /// </summary>
-public interface IRandomizerService : IDisposable
+public interface IRandomizerService
 {
     /// <summary>
     /// Returns a true/false value that represents the flip of a coin.

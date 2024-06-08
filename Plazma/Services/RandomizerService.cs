@@ -13,8 +13,6 @@ using System.Security.Cryptography;
 /// </summary>
 public sealed class RandomizerService : IRandomizerService
 {
-    private bool isDisposed;
-
     /// <summary>
     /// Initializes a new instance of the <see cref="RandomizerService"/> class.
     /// </summary>
@@ -55,27 +53,5 @@ public sealed class RandomizerService : IRandomizerService
         }
 
         return minValue == maxValue ? minValue : RandomNumberGenerator.GetInt32(minValue, maxValue + 1);
-    }
-
-    /// <inheritdoc/>
-    [ExcludeFromCodeCoverage]
-    public void Dispose() => Dispose(disposing: true);
-
-    /// <inheritdoc cref="IDisposable.Dispose"/>
-    /// <param name="disposing">True to dispose of managed resources.</param>
-    [ExcludeFromCodeCoverage]
-    private void Dispose(bool disposing)
-    {
-        if (this.isDisposed)
-        {
-            return;
-        }
-
-        if (disposing)
-        {
-            this.provider.Dispose();
-        }
-
-        this.isDisposed = true;
     }
 }
