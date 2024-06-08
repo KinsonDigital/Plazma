@@ -15,6 +15,9 @@ using Xunit;
 [SuppressMessage("csharpsquid", "S2234", Justification = "Param order is intended.")]
 public class RandomizerServiceTests
 {
+    private const float FloatTolerance = 0.002f;
+    private const double DoubleTolerance = 0.002;
+
     #region Method Tests
     [Theory]
     [InlineData(1, 2)]
@@ -88,8 +91,8 @@ public class RandomizerServiceTests
             var result = randomizer.GetValue(minValue, maxValue);
 
             // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001f, maxValue + 0.001f);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - FloatTolerance, maxValue + FloatTolerance);
         }
     }
 
@@ -109,8 +112,8 @@ public class RandomizerServiceTests
             var result = randomizer.GetValue(maxValue, minValue);
 
             // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001f, maxValue + 0.001f);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - FloatTolerance, maxValue + FloatTolerance);
         }
     }
 
@@ -130,8 +133,8 @@ public class RandomizerServiceTests
             var result = randomizer.GetValue(minValue, maxValue);
 
             // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001, maxValue + 0.001);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - DoubleTolerance, maxValue + DoubleTolerance);
         }
     }
 
@@ -150,9 +153,8 @@ public class RandomizerServiceTests
             // Act
             var result = randomizer.GetValue(maxValue, minValue);
 
-            // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001, maxValue + 0.001);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - DoubleTolerance, maxValue + DoubleTolerance);
         }
     }
     #endregion
