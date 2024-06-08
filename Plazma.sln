@@ -43,6 +43,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PerfResults", "PerfResults"
 		Performance\PerfResults\BASELINE-RandomPerf.md = Performance\PerfResults\BASELINE-RandomPerf.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnginePerf", "Performance\EnginePerf\EnginePerf.csproj", "{32D301FD-1E4D-431C-8C9D-E304E769C19F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{E2532556-570E-4416-B163-00CA1EAAE03C}.Debug|Any CPU.Build.0 = Debug|x64
 		{E2532556-570E-4416-B163-00CA1EAAE03C}.Release|Any CPU.ActiveCfg = Release|x64
 		{E2532556-570E-4416-B163-00CA1EAAE03C}.Release|Any CPU.Build.0 = Release|x64
+		{32D301FD-1E4D-431C-8C9D-E304E769C19F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32D301FD-1E4D-431C-8C9D-E304E769C19F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32D301FD-1E4D-431C-8C9D-E304E769C19F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32D301FD-1E4D-431C-8C9D-E304E769C19F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{D2B0088E-5452-48FE-B804-FA985A114635} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
 		{E2532556-570E-4416-B163-00CA1EAAE03C} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
 		{75849ED7-8558-4C14-A45D-317B5FE680A3} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
+		{32D301FD-1E4D-431C-8C9D-E304E769C19F} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E6732B6-A610-43DA-A1D7-1EC8EE1E6273}
