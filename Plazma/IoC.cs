@@ -28,7 +28,7 @@ internal static class IoC
     /// </summary>
     private static Container SetupContainer()
     {
-        IoCContainer.Register<IRandomizerService, TrueRandomizerService>(Lifestyle.Singleton);
+        IoCContainer.Register<IRandomizerService, RandomizerService>(Lifestyle.Singleton);
         IoCContainer.Register<IBehaviorFactory, BehaviorFactory>(Lifestyle.Singleton);
         IoCContainer.Register<IParticleFactory, ParticleFactory>(Lifestyle.Singleton);
 

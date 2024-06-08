@@ -1,4 +1,4 @@
-﻿// <copyright file="TrueRandomizerServiceTests.cs" company="KinsonDigital">
+﻿// <copyright file="RandomizerServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,10 +10,10 @@ using Plazma.Services;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="TrueRandomizerService"/> class.
+/// Tests the <see cref="RandomizerService"/> class.
 /// </summary>
 [SuppressMessage("csharpsquid", "S2234", Justification = "Param order is intended.")]
-public class TrueRandomizerServiceTests
+public class RandomizerServiceTests
 {
     #region Method Tests
     [Theory]
@@ -24,7 +24,7 @@ public class TrueRandomizerServiceTests
     public void GetValue_WhenInvokingWithIntValuesAndMinIsLessThanMax_ReturnsWithinRange(int minValue, int maxValue)
     {
         // Arrange
-        var randomizer = new TrueRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 1000; i++)
         {
@@ -44,7 +44,7 @@ public class TrueRandomizerServiceTests
     public void GetValue_WhenInvokingWithIntValuesAndMinIsGreaterThanMax_ReturnsWithinRange(int minValue, int maxValue)
     {
         // Arrange
-        var randomizer = new TrueRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 1000; i++)
         {
@@ -60,7 +60,7 @@ public class TrueRandomizerServiceTests
     public void GetValue_WhenInvokingWithIntValuesAndMinIsEqualToMax_ReturnsValueThatMatchesMinOrMax()
     {
         // Arrange
-        var randomizer = new TrueRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 1000; i++)
         {
@@ -80,7 +80,7 @@ public class TrueRandomizerServiceTests
     public void GetValue_WhenInvokingWithFloatValuesAndMinIsLessThanMax_ReturnsWithinRange(float minValue, float maxValue)
     {
         // Arrange
-        var randomizer = new TrueRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {
@@ -101,7 +101,7 @@ public class TrueRandomizerServiceTests
     public void GetValue_WhenInvokingWithFloatValuesAndMaxIsGreaterThanMin_ReturnsWithinRange(float minValue, float maxValue)
     {
         // Arrange
-        var randomizer = new TrueRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {
@@ -122,7 +122,7 @@ public class TrueRandomizerServiceTests
     public void GetValue_WhenInvokingWithDoubleValuesAndMinIsLessThanMax_ReturnsWithinRange(double minValue, double maxValue)
     {
         // Arrange
-        var randomizer = new TrueRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {
@@ -143,7 +143,7 @@ public class TrueRandomizerServiceTests
     public void GetValue_WhenInvokingWithDoubleValuesAndMaxIsGreaterThanMin_ReturnsWithinRange(double minValue, double maxValue)
     {
         // Arrange
-        var randomizer = new TrueRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {

@@ -1,4 +1,4 @@
-﻿// <copyright file="TrueRandomizerService.cs" company="KinsonDigital">
+﻿// <copyright file="RandomizerService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 /// <summary>
 /// Provides methods for randomizing numbers.
 /// </summary>
-public sealed class TrueRandomizerService : IRandomizerService
+public sealed class RandomizerService : IRandomizerService
 {
     // TODO: Create an issue to swap this for the 'RandomNumberGenerator' static methods instead
     private readonly RNGCryptoServiceProvider provider = new ();
@@ -19,9 +19,9 @@ public sealed class TrueRandomizerService : IRandomizerService
     private bool isDisposed;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="TrueRandomizerService"/> class.
+    /// Initializes a new instance of the <see cref="RandomizerService"/> class.
     /// </summary>
-    public TrueRandomizerService()
+    public RandomizerService()
     {
     }
 
