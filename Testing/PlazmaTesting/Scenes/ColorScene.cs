@@ -7,6 +7,8 @@ namespace PlazmaTesting.Scenes;
 using System.Drawing;
 using System.Globalization;
 using System.Numerics;
+using KdGui;
+using KdGui.Factories;
 using Plazma;
 using Plazma.Behaviors;
 using Plazma.Factories;
@@ -17,7 +19,6 @@ using Velaptor.Graphics;
 using Velaptor.Graphics.Renderers;
 using Velaptor.Input;
 using Velaptor.Scene;
-using Velaptor.UI;
 
 /// <summary>
 /// Demonstrates the use of particle colors.
@@ -28,8 +29,10 @@ public class ColorScene : SceneBase
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
     private readonly ParticleEngine<ITexture>? engine;
-    private Label? lblInstructions;
-    private Label? lblSpread;
+    private readonly IControlFactory ctrlFactory;
+    private IControlGroup? ctrlGroup;
+    private ILabel? lblInstructions;
+    private ILabel? lblSpread;
     private float spread;
 
     /// <summary>
@@ -40,6 +43,7 @@ public class ColorScene : SceneBase
         this.mouse = HardwareFactory.GetMouse();
         this.textureRenderer = RendererFactory.CreateTextureRenderer();
         this.engine = new ParticleEngine<ITexture>();
+        this.ctrlFactory = new ControlFactory();
     }
 
     /// <summary>
@@ -63,22 +67,19 @@ public class ColorScene : SceneBase
         this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
         this.engine.LoadTextures();
 
-        this.lblInstructions = new Label
-        {
-            Color = Color.White,
-            Text = "Scroll up to cluster and down to spread.",
-            Position = new Point(WindowCenter.X, 50),
-        };
+        this.lblInstructions = this.ctrlFactory.CreateLabel();
+        this.lblInstructions.Text = "Scroll the mouse wheel up to cluster and down to spread.";
 
-        this.lblSpread = new Label
-        {
-            Color = Color.White,
-            Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}",
-            Position = new Point(WindowCenter.X, 100),
-        };
+        this.lblSpread = this.ctrlFactory.CreateLabel();
+        this.lblSpread.Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}";
 
-        AddControl(this.lblInstructions);
-        AddControl(this.lblSpread);
+        this.ctrlGroup = this.ctrlFactory.CreateControlGroup();
+        this.ctrlGroup.Title = "Color";
+
+        this.ctrlGroup.Initialized += CtrlGroupOnInitialized;
+        this.ctrlGroup.Add(this.lblInstructions);
+        this.ctrlGroup.Add(this.lblSpread);
+
         base.LoadContent();
     }
 
@@ -87,6 +88,7 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void UnloadContent()
     {
+        this.ctrlGroup.Initialized -= CtrlGroupOnInitialized;
         this.engine?.Dispose();
         this.textureLoader.Dispose();
 
@@ -140,7 +142,20 @@ public class ColorScene : SceneBase
             }
         }
 
+        this.ctrlGroup.Render();
+
         base.Render();
+    }
+
+    /// <summary>
+    /// Updates the position of the control group.
+    /// </summary>
+    private void CtrlGroupOnInitialized(object? sender, EventArgs e)
+    {
+        var winHalfWidth = (int)WindowSize.Width / 2;
+        var grpHalfWidth = this.ctrlGroup.Width / 2;
+
+        this.ctrlGroup.Position = new Point(winHalfWidth - grpHalfWidth, 15);
     }
 
     /// <summary>
@@ -239,15 +254,15 @@ public class ColorScene : SceneBase
             UpdateValue = (value) => value <= 0.0 ? 0.0 : value,
         };
 
-        return new[]
-        {
+        return
+        [
             xPosSettings,
             yPosSettings,
             alphaSettings,
             redSettings,
             greenSettings,
             blueSettings,
-            sizeSettings,
-        };
+            sizeSettings
+        ];
     }
 }

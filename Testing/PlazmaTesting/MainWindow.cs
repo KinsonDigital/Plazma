@@ -6,10 +6,10 @@ namespace PlazmaTesting;
 
 using System.Drawing;
 using System.Text;
+using KdGui;
+using KdGui.Factories;
 using Scenes;
 using Velaptor;
-using Velaptor.Batching;
-using Velaptor.Factories;
 using Velaptor.UI;
 
 /// <summary>
@@ -18,14 +18,14 @@ using Velaptor.UI;
 public class MainWindow : Window
 {
     private static readonly char[] UpperCaseChars =
-    {
+    [
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
         'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
         'U', 'V', 'W', 'X', 'Y', 'Z',
-    };
-    private readonly Button nextButton;
-    private readonly Button previousButton;
-    private readonly IBatcher batcher;
+    ];
+    private readonly IControlFactory ctrlFactory;
+    private IControlGroup? ctrlGroup;
+    private INextPrevious? nextPrevButton;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -34,9 +34,7 @@ public class MainWindow : Window
     {
         TypeOfBorder = WindowBorder.Fixed;
 
-        this.batcher = RendererFactory.CreateBatcher();
-        this.nextButton = new Button { Text = "-->" };
-        this.previousButton = new Button { Text = "<--" };
+        this.ctrlFactory = new ControlFactory();
 
         var horizontalMovementScene = new HorizontalMovementScene
         {
@@ -64,36 +62,38 @@ public class MainWindow : Window
         SceneManager.AddScene(angleScene);
     }
 
-    public static Rectangle ButtonsArea { get; private set; }
-
     /// <summary>
     /// Loads the applications content.
     /// </summary>
     protected override void OnLoad()
     {
-        const int buttonSpacing = 15;
-        const int rightMargin = 15;
+        this.nextPrevButton = this.ctrlFactory.CreateNextPrevious();
 
-        this.nextButton.Click += (_, _) => SceneManager.NextScene();
+        this.ctrlGroup = this.ctrlFactory.CreateControlGroup();
 
-        this.previousButton.Click += (_, _) => SceneManager.PreviousScene();
+        // NOTE: Remember, every group needs to have a different title so the
+        // underlying ImGui group is unique.
+        this.ctrlGroup.Title = "Prev/Next Group";
+        this.ctrlGroup.Initialized += CtrlGroupOnInitialized;
+        this.ctrlGroup.Width = 200;
+        this.ctrlGroup.TitleBarVisible = false;
+        this.ctrlGroup.AutoSizeToFitContent = true;
 
-        this.nextButton.LoadContent();
-        this.previousButton.LoadContent();
+        this.ctrlGroup.Add(this.nextPrevButton);
 
-        var buttonTops = (int)(Height - (new[] { this.nextButton.Height, this.previousButton.Height }.Max() + 20));
-        var buttonGroupLeft = (int)(Width - (this.nextButton.Width + this.previousButton.Width + buttonSpacing + rightMargin));
-        this.previousButton.Position = new Point(buttonGroupLeft, buttonTops);
-        this.nextButton.Position = new Point(this.previousButton.Position.X + (int)this.previousButton.Width + buttonSpacing, buttonTops);
-
-        var left = this.previousButton.Left;
-        var right = this.nextButton.Right;
-        var width = this.nextButton.Right - this.previousButton.Left;
-        var height = (int)Math.Max(this.previousButton.Height, this.nextButton.Height);
-
-        ButtonsArea = new Rectangle(left, right, width, height);
+        this.nextPrevButton.Next += NextPrev_OnNextClicked;
+        this.nextPrevButton.Previous += NextPrev_OnPreviousClicked;
 
         base.OnLoad();
+    }
+
+    protected override void OnUnload()
+    {
+        this.ctrlGroup.Initialized -= CtrlGroupOnInitialized;
+        this.nextPrevButton.Next -= NextPrev_OnNextClicked;
+        this.nextPrevButton.Previous -= NextPrev_OnPreviousClicked;
+
+        base.OnUnload();
     }
 
     /// <summary>
@@ -103,9 +103,6 @@ public class MainWindow : Window
     protected override void OnUpdate(FrameTime frameTime)
     {
         Title = $"Scene: {SceneManager.CurrentScene?.Name ?? "No Scene Loaded"}";
-
-        this.nextButton.Update(frameTime);
-        this.previousButton.Update(frameTime);
 
         base.OnUpdate(frameTime);
     }
@@ -118,12 +115,7 @@ public class MainWindow : Window
     {
         base.OnDraw(frameTime);
 
-        this.batcher.Begin();
-
-        this.nextButton.Render();
-        this.previousButton.Render();
-
-        this.batcher.End();
+        this.ctrlGroup.Render();
     }
 
     /// <summary>
@@ -159,4 +151,11 @@ public class MainWindow : Window
 
         return result.TrimEnd(' ');
     }
+
+    private void CtrlGroupOnInitialized(object? sender, EventArgs e) =>
+        this.ctrlGroup.Position = new Point((int)Width - (this.ctrlGroup.Width + 15), (int)Height - (this.ctrlGroup.Height + 15));
+
+    private void NextPrev_OnNextClicked(object? sender, EventArgs e) => SceneManager.NextScene();
+
+    private void NextPrev_OnPreviousClicked(object? sender, EventArgs e) => SceneManager.PreviousScene();
 }

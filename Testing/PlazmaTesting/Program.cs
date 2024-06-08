@@ -2,7 +2,5 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-using PlazmaTesting;
-
-var game = new MainWindow();
+var game = new PlazmaTesting.MainWindow();
 game.Show();
