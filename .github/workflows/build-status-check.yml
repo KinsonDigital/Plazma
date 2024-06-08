@@ -14,7 +14,7 @@ on:
 
 jobs:
   build_main_project:
-    name: ${{ vars.PROJECT_NAME }} Build Status Check
+    name: Build Main Project
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
@@ -26,8 +26,21 @@ jobs:
       cicd-pat: ${{ secrets.CICD_TOKEN }}
 
 
-  build_testing_app:
-    name: ${{ vars.PROJECT_NAME }} Build Status Check
+  build_testing_project:
+    name: Build Testing Project
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
+    with:
+      project-name: "${{ vars.PROJECT_NAME }}Testing"
+      build-config: Debug
+      net-sdk-version: "${{ vars.NET_SDK_VERSION }}"
+      checkout-ref: ${{ github.event.pull_request.head.ref }}
+      checkout-repository: ${{ github.event.pull_request.head.repo.full_name }}
+    secrets:
+      cicd-pat: ${{ secrets.CICD_TOKEN }}
+
+
+  build_random_perf_app:
+    name: Build Random Perf Project
     uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
     with:
       project-name: "${{ vars.PROJECT_NAME }}Testing"
@@ -41,7 +54,7 @@ jobs:
 
   build_status_check:
     name: ${{ vars.PROJECT_NAME }} Build Status Check
-    needs: [build_main_project, build_testing_app]
+    needs: [build_main_project, build_testing_project, build_random_perf_app]
     runs-on: ubuntu-latest
     steps:
       - name: Print Success Message
