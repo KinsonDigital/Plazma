@@ -78,9 +78,8 @@ public class EasingRandomBehaviorTests
 
     #region Method Tests
     [Theory]
-    //              easingFunction             start      change  lifeTime      elapsedTime    expected
-    [InlineData(EasingFunction.EaseOutBounce,   13,         400,    800,            200,        13)]
-    [InlineData(EasingFunction.EaseIn,          100,        600,    1000,           113,        100)]
+    [InlineData(EasingFunction.EaseOutBounce, 13, 400, 800, 200, 13)]
+    [InlineData(EasingFunction.EaseIn, 100, 600, 1000, 113, 100)]
     public void Update_WhenInvoked_CorrectlySetsBehaviorValue(
         EasingFunction easingFunction,
         int start,

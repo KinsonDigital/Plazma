@@ -117,34 +117,4 @@ public static class ExtensionMethods
     /// <returns>True if the string contains non number characters.</returns>
     public static bool ContainsNonNumberCharacters(this string value) =>
         !string.IsNullOrEmpty(value) && Array.Exists(value.ToCharArray(), c => !ValidNumChars.Contains(c));
-
-    /// <summary>
-    /// Returns a value indicating if each item in a given list position is
-    /// equal to the items in the same position of th given <paramref name="compareItems"/> list.
-    /// </summary>
-    /// <typeparam name="T">The type of item in the lists.</typeparam>
-    /// <param name="items">The current instance of <see cref="IEnumerable{T}"/> items.</param>
-    /// <param name="compareItems">The items to compare to the this list of items.</param>
-    /// <returns>True if each arrays are equal.</returns>
-    public static bool ItemsAreEqual<T>(this IEnumerable<T>? items, IEnumerable<T>? compareItems)
-        where T : class
-    {
-        var enumeratedItems = items is null ? Array.Empty<T>() : items.ToArray();
-        var enumeratedCompareItems = compareItems is null ? Array.Empty<T>() : compareItems.ToArray();
-
-        if (enumeratedItems.Length != enumeratedCompareItems.Length)
-        {
-            return false;
-        }
-
-        for (var i = 0; i < enumeratedItems.Length; i++)
-        {
-            if (!enumeratedItems[i].Equals(enumeratedCompareItems[i]))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
 }

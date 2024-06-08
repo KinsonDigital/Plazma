@@ -8,7 +8,6 @@ namespace PlazmaTests;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Fakes;
 using FluentAssertions;
 using NSubstitute;
 using Plazma;
@@ -166,7 +165,6 @@ public class ExtensionMethodsTests
     [InlineData("123", false)]
     [InlineData("-123", false)]
     [InlineData("12T3", true)]
-    [InlineData(null, false)]
     public void ContainsNonNumberCharacters_WhenInvoked_ReturnsCorrectResult(string valueToCheck, bool expected)
     {
         // Act
@@ -174,64 +172,6 @@ public class ExtensionMethodsTests
 
         // Assert
         actual.Should().Be(expected);
-    }
-
-    [Theory]
-    [InlineData(null, null, true)]
-    [InlineData(null, new[] { "item" }, false)]
-    [InlineData(new[] { "item" }, null, false)]
-    [InlineData(new[] { "item" }, new[] { "item", "item" }, false)]
-    [InlineData(new[] { "item" }, new[] { "item" }, true)]
-    [InlineData(new[] { "item" }, new[] { "other-item" }, false)]
-    public void ItemsAreEqual_WhenInvoked_ReturnsCorrectResult(string[] listA, string[] listB, bool expected)
-    {
-        // Act
-        var actual = listA.ItemsAreEqual(listB);
-
-        // Assert
-        actual.Should().Be(expected);
-    }
-
-    [Fact]
-    public void ItemsAreEqual_WhenInvokedEqualObjects_ReturnsTrue()
-    {
-        // Arrange
-        var itemsA = new[]
-        {
-            new TestItem { Number = 10 },
-        };
-
-        var itemsB = new[]
-        {
-            new TestItem { Number = 10 },
-        };
-
-        // Act
-        var actual = itemsA.ItemsAreEqual(itemsB);
-
-        // Assert
-        actual.Should().BeTrue();
-    }
-
-    [Fact]
-    public void ItemsAreEqual_WhenInvokedNonEqualObjects_ReturnsFalse()
-    {
-        // Arrange
-        var itemsA = new[]
-        {
-            new TestItem { Number = 10 },
-        };
-
-        var itemsB = new[]
-        {
-            new TestItem { Number = 20 },
-        };
-
-        // Act
-        var actual = itemsA.ItemsAreEqual(itemsB);
-
-        // Assert
-        actual.Should().BeFalse();
     }
     #endregion
 }

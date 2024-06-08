@@ -6,6 +6,7 @@ namespace PlazmaTesting;
 
 using Plazma;
 using Velaptor.Content;
+using Velaptor.ExtensionMethods;
 using Velaptor.Factories;
 
 /// <summary>
