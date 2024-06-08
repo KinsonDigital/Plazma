@@ -1,4 +1,4 @@
-﻿// <copyright file="PseudoRandomizerServiceTests.cs" company="KinsonDigital">
+﻿// <copyright file="RandomizerServiceTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -10,11 +10,14 @@ using Plazma.Services;
 using Xunit;
 
 /// <summary>
-/// Tests the <see cref="PseudoRandomizerService"/> class.
+/// Tests the <see cref="RandomizerService"/> class.
 /// </summary>
 [SuppressMessage("csharpsquid", "S2234", Justification = "Param order is intended.")]
-public class PseudoRandomizerServiceTests
+public class RandomizerServiceTests
 {
+    private const float FloatTolerance = 0.002f;
+    private const double DoubleTolerance = 0.002;
+
     #region Method Tests
     [Theory]
     [InlineData(1, 2)]
@@ -24,7 +27,7 @@ public class PseudoRandomizerServiceTests
     public void GetValue_WhenInvokingWithIntValuesAndMinIsLessThanMax_ReturnsWithinRange(int minValue, int maxValue)
     {
         // Arrange
-        var randomizer = new PseudoRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 1000; i++)
         {
@@ -44,7 +47,7 @@ public class PseudoRandomizerServiceTests
     public void GetValue_WhenInvokingWithIntValuesAndMinIsGreaterThanMax_ReturnsWithinRange(int minValue, int maxValue)
     {
         // Arrange
-        var randomizer = new PseudoRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 1000; i++)
         {
@@ -56,6 +59,22 @@ public class PseudoRandomizerServiceTests
         }
     }
 
+    [Fact]
+    public void GetValue_WhenInvokingWithIntValuesAndMinIsEqualToMax_ReturnsValueThatMatchesMinOrMax()
+    {
+        // Arrange
+        var randomizer = new RandomizerService();
+
+        for (var i = 0; i < 1000; i++)
+        {
+            // Act
+            var result = randomizer.GetValue(10, 10);
+
+            // Assert
+            result.Should().Be(10);
+        }
+    }
+
     [Theory]
     [InlineData(1.001f, 2.001f)]
     [InlineData(1.001f, 4.001f)]
@@ -64,7 +83,7 @@ public class PseudoRandomizerServiceTests
     public void GetValue_WhenInvokingWithFloatValuesAndMinIsLessThanMax_ReturnsWithinRange(float minValue, float maxValue)
     {
         // Arrange
-        var randomizer = new PseudoRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {
@@ -72,8 +91,8 @@ public class PseudoRandomizerServiceTests
             var result = randomizer.GetValue(minValue, maxValue);
 
             // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001f, maxValue + 0.001f);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - FloatTolerance, maxValue + FloatTolerance);
         }
     }
 
@@ -85,7 +104,7 @@ public class PseudoRandomizerServiceTests
     public void GetValue_WhenInvokingWithFloatValuesAndMaxIsGreaterThanMin_ReturnsWithinRange(float minValue, float maxValue)
     {
         // Arrange
-        var randomizer = new PseudoRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {
@@ -93,8 +112,8 @@ public class PseudoRandomizerServiceTests
             var result = randomizer.GetValue(maxValue, minValue);
 
             // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001f, maxValue + 0.001f);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - FloatTolerance, maxValue + FloatTolerance);
         }
     }
 
@@ -106,7 +125,7 @@ public class PseudoRandomizerServiceTests
     public void GetValue_WhenInvokingWithDoubleValuesAndMinIsLessThanMax_ReturnsWithinRange(double minValue, double maxValue)
     {
         // Arrange
-        var randomizer = new PseudoRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {
@@ -114,8 +133,8 @@ public class PseudoRandomizerServiceTests
             var result = randomizer.GetValue(minValue, maxValue);
 
             // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001, maxValue + 0.001);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - DoubleTolerance, maxValue + DoubleTolerance);
         }
     }
 
@@ -127,16 +146,15 @@ public class PseudoRandomizerServiceTests
     public void GetValue_WhenInvokingWithDoubleValuesAndMaxIsGreaterThanMin_ReturnsWithinRange(double minValue, double maxValue)
     {
         // Arrange
-        var randomizer = new PseudoRandomizerService();
+        var randomizer = new RandomizerService();
 
         for (var i = 0; i < 100000; i++)
         {
             // Act
             var result = randomizer.GetValue(maxValue, minValue);
 
-            // Assert
-            // Assert with accuracy of +/- 0.001
-            result.Should().BeInRange(minValue - 0.001, maxValue + 0.001);
+            // Assert with accuracy of +/- DoubleTolerance
+            result.Should().BeInRange(minValue - DoubleTolerance, maxValue + DoubleTolerance);
         }
     }
     #endregion

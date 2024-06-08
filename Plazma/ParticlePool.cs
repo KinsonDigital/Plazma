@@ -272,7 +272,6 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
 
         if (disposing)
         {
-            this.randomService.Dispose();
             this.textureLoader.Dispose();
             this.particles.Clear();
         }

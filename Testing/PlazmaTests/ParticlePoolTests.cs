@@ -650,7 +650,6 @@ public class ParticlePoolTests : Tests
         sut.Dispose();
 
         // Assert
-        this.mockRandomizerService.Received(1).Dispose();
         this.mockTextureLoader.Received(1).Dispose();
     }
     #endregion
