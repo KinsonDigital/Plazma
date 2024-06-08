@@ -38,6 +38,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RandomPerf", "Performance\R
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Performance", "Performance", "{B8F324FC-FA09-42B5-A095-262BBB3F2963}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PerfResults", "PerfResults", "{75849ED7-8558-4C14-A45D-317B5FE680A3}"
+	ProjectSection(SolutionItems) = preProject
+		Performance\PerfResults\BASELINE-RandomPerf.md = Performance\PerfResults\BASELINE-RandomPerf.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +74,7 @@ Global
 		{AF6A9738-F676-408A-B1B9-E7F43631BC08} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
 		{D2B0088E-5452-48FE-B804-FA985A114635} = {E204672C-F241-4BB7-AAE4-5147BC5B4FF5}
 		{E2532556-570E-4416-B163-00CA1EAAE03C} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
+		{75849ED7-8558-4C14-A45D-317B5FE680A3} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E6732B6-A610-43DA-A1D7-1EC8EE1E6273}
