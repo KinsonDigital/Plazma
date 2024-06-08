@@ -3,6 +3,7 @@
 // </copyright>
 
 // ReSharper disable ArrangeMethodOrOperatorBody
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace RandomPerf;
 
 using BenchmarkDotNet.Attributes;

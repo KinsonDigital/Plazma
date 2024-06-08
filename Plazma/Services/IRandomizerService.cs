@@ -4,7 +4,7 @@
 
 namespace Plazma.Services;
 
-using System;
+using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// Provides methods for randomizing numbers.
@@ -15,6 +15,7 @@ public interface IRandomizerService
     /// Returns a true/false value that represents the flip of a coin.
     /// </summary>
     /// <returns>A random value between 0 and 1.  50% chance.</returns>
+    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Part of the public API.")]
     bool FlipCoin();
 
     /// <summary>
