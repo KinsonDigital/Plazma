@@ -1,4 +1,4 @@
-﻿// <copyright file="RandomizerService.cs" company="KinsonDigital">
+// <copyright file="RandomizerService.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -13,9 +13,6 @@ using System.Security.Cryptography;
 /// </summary>
 public sealed class RandomizerService : IRandomizerService
 {
-    // TODO: Create an issue to swap this for the 'RandomNumberGenerator' static methods instead
-    private readonly RNGCryptoServiceProvider provider = new ();
-    private readonly byte[] uint32Buffer = new byte[4];
     private bool isDisposed;
 
     /// <summary>
@@ -39,10 +36,8 @@ public sealed class RandomizerService : IRandomizerService
         {
             return (float)Math.Round(GetValue(maxValueAsInt, minValueAsInt) / 1000f, 3);
         }
-        else
-        {
-            return (float)Math.Round(GetValue(minValueAsInt, maxValueAsInt) / 1000f, 3);
-        }
+
+        return (float)Math.Round(GetValue(minValueAsInt, maxValueAsInt) / 1000f, 3);
     }
 
     /// <inheritdoc/>
@@ -59,28 +54,7 @@ public sealed class RandomizerService : IRandomizerService
             (minValue, maxValue) = (maxValue, minValue);
         }
 
-        if (minValue == maxValue)
-        {
-            return minValue;
-        }
-
-        maxValue += 1;
-
-        var diff = (long)(maxValue - minValue);
-
-        while (true)
-        {
-            this.provider.GetBytes(this.uint32Buffer);
-
-            var rand = Math.Abs((int)BitConverter.ToUInt32(this.uint32Buffer, 0));
-            var max = 1 + (long)int.MaxValue;
-            var remainder = max % diff;
-
-            if (rand < max - remainder)
-            {
-                return (int)(minValue + (rand % diff));
-            }
-        }
+        return minValue == maxValue ? minValue : RandomNumberGenerator.GetInt32(minValue, maxValue + 1);
     }
 
     /// <inheritdoc/>
