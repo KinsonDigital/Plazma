@@ -6,8 +6,6 @@ namespace Plazma;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
@@ -17,13 +15,6 @@ using Behaviors;
 public readonly record struct Particle
 {
     private readonly List<IBehavior> behaviors = new ();
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="Particle"/> class.
-    /// </summary>
-    public Particle()
-    {
-    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Particle"/> class.
@@ -62,65 +53,13 @@ public readonly record struct Particle
     public bool IsAlive { get; init; }
 
     /// <inheritdoc/>
-    public ImmutableArray<BehaviorAttribute> Behaviors => this.behaviors.Select(b => b.BehaviorType).ToImmutableArray();
+    /// Gets the list of particle behaviors.
+    public List<IBehavior> Behaviors => this.behaviors;
 
     /// <summary>
     /// Updates the particle.
     /// </summary>
     /// <param name="timeElapsed">The amount of time that has elapsed since the last frame.</param>
-    public void Update(TimeSpan timeElapsed)
-    {
-        IsAlive = false;
-
-        static byte ClampClrValue(float value)
-        {
-            return (byte)(value < 0 ? 0 : value);
-        }
-
-        // Apply the behavior values to the particle attributes
-        foreach (var behavior in this.behaviors)
-        {
-            if (behavior.Enabled)
-            {
-                behavior.Update(timeElapsed);
-                IsAlive = true;
-
-                var value = (float)behavior.Value;
-
-                switch (behavior.BehaviorType)
-                {
-                    case BehaviorAttribute.X:
-                        Position = new Vector2(value, Position.Y);
-                        break;
-                    case BehaviorAttribute.Y:
-                        Position = new Vector2(Position.X, value);
-                        break;
-                    case BehaviorAttribute.Angle:
-                        Angle = value;
-                        break;
-                    case BehaviorAttribute.Size:
-                        Size = value;
-                        break;
-                    case BehaviorAttribute.AlphaColorComponent:
-                        TintColor = Color.FromArgb(ClampClrValue(value), TintColor.R, TintColor.G, TintColor.B);
-                        break;
-                    case BehaviorAttribute.RedColorComponent:
-                        TintColor = Color.FromArgb(TintColor.A, ClampClrValue(value), TintColor.G, TintColor.B);
-                        break;
-                    case BehaviorAttribute.GreenColorComponent:
-                        TintColor = Color.FromArgb(TintColor.A, TintColor.R, ClampClrValue(value), TintColor.B);
-                        break;
-                    case BehaviorAttribute.BlueColorComponent:
-                        TintColor = Color.FromArgb(TintColor.A, TintColor.R, TintColor.G, ClampClrValue(value));
-                        break;
-                    default:
-                        throw new InvalidEnumArgumentException(nameof(BehaviorAttribute), (int)behavior.BehaviorType, typeof(BehaviorAttribute));
-                }
-            }
-        }
-    }
-
-    /// <inheritdoc/>
     public void AddBehavior(IBehavior behavior)
     {
         if (this.behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
@@ -142,21 +81,5 @@ public readonly record struct Particle
         }
 
         this.behaviors.Remove(behavior);
-    }
-
-    /// <summary>
-    /// Resets the particle.
-    /// </summary>
-    public void Reset()
-    {
-        foreach (var behavior in this.behaviors)
-        {
-            behavior.Reset();
-        }
-
-        Size = 1;
-        Angle = 0;
-        TintColor = Color.White;
-        IsAlive = true;
     }
 }

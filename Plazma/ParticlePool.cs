@@ -137,11 +137,11 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
             this.spawnRateElapsed = 0;
         }
 
-        foreach (var t in this.particles)
+        for (var i = 0; i < this.particles.Count; i++)
         {
-            if (t.IsAlive)
+            if (this.particles[i].IsAlive)
             {
-                t.Update(timeElapsed);
+                this.particles[i] = UpdateParticle(this.particles[i], timeElapsed);
             }
         }
     }
@@ -172,6 +172,97 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose() => Dispose(true);
+
+    /// <summary>
+    /// Updates the given <paramref name="particle"/> and returns it updated.
+    /// </summary>
+    /// <param name="particle">The particle to update.</param>
+    /// <param name="timeElapsed">The amount of time that has passed since the last frame.</param>
+    /// <returns>The updated particle.</returns>
+    /// <exception cref="InvalidEnumArgumentException">
+    ///     Thrown if the particle behavior attribute is an invalid enumeration value.
+    /// </exception>
+    private Particle UpdateParticle(Particle particle, TimeSpan timeElapsed)
+    {
+        particle = particle with { IsAlive = false };
+
+        // Apply the behavior values to the particle attributes
+        foreach (var behavior in particle.Behaviors)
+        {
+            if (behavior.Enabled)
+            {
+                behavior.Update(timeElapsed);
+                particle = particle with { IsAlive = true };
+
+                var value = (float)behavior.Value;
+
+                switch (behavior.BehaviorType)
+                {
+                    case BehaviorAttribute.X:
+                        particle = particle with { Position = particle.Position with { X = value } };
+                        break;
+                    case BehaviorAttribute.Y:
+                        particle = particle with { Position = particle.Position with { Y = value } };
+                        break;
+                    case BehaviorAttribute.Angle:
+                        particle = particle with { Angle = value };
+                        break;
+                    case BehaviorAttribute.Size:
+                        particle = particle with { Size = value };
+                        break;
+                    case BehaviorAttribute.AlphaColorComponent:
+                        particle = particle with
+                        {
+                            TintColor = Color.FromArgb(
+                                ClampClrValue(value),
+                                particle.TintColor.R,
+                                particle.TintColor.G,
+                                particle.TintColor.B)
+                        };
+                        break;
+                    case BehaviorAttribute.RedColorComponent:
+                        particle = particle with
+                        {
+                            TintColor = Color.FromArgb(
+                                particle.TintColor.A,
+                                ClampClrValue(value),
+                                particle.TintColor.G,
+                                particle.TintColor.B)
+                        };
+                        break;
+                    case BehaviorAttribute.GreenColorComponent:
+                        particle = particle with
+                        {
+                            TintColor = Color.FromArgb(
+                                particle.TintColor.A,
+                                particle.TintColor.R,
+                                ClampClrValue(value),
+                                particle.TintColor.B)
+                        };
+                        break;
+                    case BehaviorAttribute.BlueColorComponent:
+                        particle = particle with
+                        {
+                            TintColor = Color.FromArgb(
+                                particle.TintColor.A,
+                                particle.TintColor.R,
+                                particle.TintColor.G,
+                                ClampClrValue(value))
+                        };
+                        break;
+                    default:
+                        throw new InvalidEnumArgumentException(nameof(BehaviorAttribute), (int)behavior.BehaviorType, typeof(BehaviorAttribute));
+                }
+            }
+        }
+
+        return particle;
+
+        static byte ClampClrValue(float value)
+        {
+            return (byte)(value < 0 ? 0 : value);
+        }
+    }
 
     /// <summary>
     /// Manages the timings for the burst effect on and off cycle.
@@ -206,15 +297,27 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// </summary>
     private void SpawnNewParticle()
     {
-        foreach (var t in this.particles)
+        for (var i = 0; i < this.particles.Count; i++)
         {
-            if (t.IsAlive)
+            if (this.particles[i].IsAlive)
             {
                 continue;
             }
 
-            t.Reset();
-            t.Position = Effect.SpawnLocation;
+            foreach (var behavior in this.particles[i].Behaviors)
+            {
+                behavior.Reset();
+            }
+
+            this.particles[i] = this.particles[i] with
+            {
+                Size = 1,
+                Angle = 0,
+                TintColor = Color.White,
+                IsAlive = true,
+            };
+
+            this.particles[i] = this.particles[i] with { Position = Effect.SpawnLocation };
 
             this.LivingParticlesCountChanged?.Invoke(this, EventArgs.Empty);
 
