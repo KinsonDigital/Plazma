@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel;
+using System.Drawing;
 using Behaviors;
 using Factories;
 using Services;
@@ -147,7 +149,13 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     }
 
     /// <inheritdoc/>
-    public void KillAllParticles() => this.particles.ForEach(p => p.IsAlive = false);
+    public void KillAllParticles()
+    {
+        for (var i = 0; i < this.particles.Count; i++)
+        {
+            this.particles[i] = this.particles[i] with { IsAlive = false };
+        }
+    }
 
     /// <inheritdoc/>
     public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
@@ -350,9 +358,8 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         {
             var behaviors = new List<IBehavior>();
 
-            for (var s = 0; s < Effect.BehaviorSettings.Count; s++)
+            foreach (var settings in Effect.BehaviorSettings)
             {
-                var settings = Effect.BehaviorSettings[s];
                 var newBehavior = this.behaviorFactory.CreateEasingRandomBehavior(settings);
                 behaviors.Add(newBehavior);
             }
