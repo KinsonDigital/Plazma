@@ -28,38 +28,39 @@ public readonly record struct Particle
     }
 
     /// <summary>
-    /// Gets or sets the position of the <see cref="Particle"/>.
+    /// Gets the position of the <see cref="Particle"/>.
     /// </summary>
     public Vector2 Position { get; init; }
 
     /// <summary>
-    /// Gets or sets the angle of the <see cref="Particle"/>.
+    /// Gets the angle of the <see cref="Particle"/>.
     /// </summary>
     public float Angle { get; init; }
 
     /// <summary>
-    /// Gets or sets the color that the texture will be tinted to.
+    /// Gets the color that the texture will be tinted to.
     /// </summary>
     public Color TintColor { get; init; } = Color.White;
 
     /// <summary>
-    /// Gets or sets the size of the <see cref="Particle"/>.
+    /// Gets the size of the <see cref="Particle"/>.
     /// </summary>
     public float Size { get; init; } = 1;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the <see cref="Particle"/> is alive or dead.
+    /// Gets a value indicating whether the <see cref="Particle"/> is alive or dead.
     /// </summary>
     public bool IsAlive { get; init; }
 
-    /// <inheritdoc/>
+    /// <summary>
     /// Gets the list of particle behaviors.
+    /// </summary>
     public List<IBehavior> Behaviors => this.behaviors;
 
     /// <summary>
-    /// Updates the particle.
+    /// Adds the given <paramref name="behavior"/>.
     /// </summary>
-    /// <param name="timeElapsed">The amount of time that has elapsed since the last frame.</param>
+    /// <param name="behavior">The behavior to add.</param>
     public void AddBehavior(IBehavior behavior)
     {
         if (this.behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
@@ -70,7 +71,10 @@ public readonly record struct Particle
         this.behaviors.Add(behavior);
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Removes the given <paramref name="behaviorType"/>.
+    /// </summary>
+    /// <param name="behaviorType">The type of behavior to remove.</param>
     public void RemoveBehavior(BehaviorAttribute behaviorType)
     {
         var behavior = this.behaviors.Find(b => b.BehaviorType == behaviorType);
