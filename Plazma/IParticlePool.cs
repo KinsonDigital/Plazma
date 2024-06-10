@@ -61,7 +61,7 @@ public interface IParticlePool<out TTexture> : IDisposable
     /// <summary>
     /// Gets the list of particle in the pool.
     /// </summary>
-    ImmutableArray<IParticle> Particles { get; }
+    ImmutableArray<Particle> Particles { get; }
 
     /// <summary>
     /// Gets the particle effect of the pool.

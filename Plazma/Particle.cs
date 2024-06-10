@@ -13,8 +13,8 @@ using System.Linq;
 using System.Numerics;
 using Behaviors;
 
-/// <inheritdoc cref="IParticle"/>
-public class Particle : IParticle
+/// <inheritdoc cref="Particle"/>
+public readonly record struct Particle
 {
     private readonly List<IBehavior> behaviors = new ();
 
@@ -39,27 +39,27 @@ public class Particle : IParticle
     /// <summary>
     /// Gets or sets the position of the <see cref="Particle"/>.
     /// </summary>
-    public Vector2 Position { get; set; }
+    public Vector2 Position { get; init; }
 
     /// <summary>
     /// Gets or sets the angle of the <see cref="Particle"/>.
     /// </summary>
-    public float Angle { get; set; }
+    public float Angle { get; init; }
 
     /// <summary>
     /// Gets or sets the color that the texture will be tinted to.
     /// </summary>
-    public Color TintColor { get; set; } = Color.White;
+    public Color TintColor { get; init; } = Color.White;
 
     /// <summary>
     /// Gets or sets the size of the <see cref="Particle"/>.
     /// </summary>
-    public float Size { get; set; } = 1;
+    public float Size { get; init; } = 1;
 
     /// <summary>
     /// Gets or sets a value indicating whether the <see cref="Particle"/> is alive or dead.
     /// </summary>
-    public bool IsAlive { get; set; }
+    public bool IsAlive { get; init; }
 
     /// <inheritdoc/>
     public ImmutableArray<BehaviorAttribute> Behaviors => this.behaviors.Select(b => b.BehaviorType).ToImmutableArray();

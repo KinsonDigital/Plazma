@@ -164,20 +164,15 @@ public class ParticlePoolTests : Tests
             TotalParticles = 3,
         };
 
-        var mockParticleA = Substitute.For<IParticle>();
-        mockParticleA.IsAlive.Returns(true);
+        var particleA = new Particle { IsAlive = true };
+        var particleB = new Particle { IsAlive = true };
+        var particleC = new Particle { IsAlive = true };
 
-        var mockParticleB = Substitute.For<IParticle>();
-        mockParticleB.IsAlive.Returns(false);
-
-        var mockParticleC = Substitute.For<IParticle>();
-        mockParticleC.IsAlive.Returns(true);
-
-        var particles = new List<IParticle>
+        var particles = new List<Particle>
         {
-            mockParticleA,
-            mockParticleB,
-            mockParticleC,
+            particleA,
+            particleB,
+            particleC,
         };
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
@@ -213,20 +208,15 @@ public class ParticlePoolTests : Tests
             TotalParticles = 3,
         };
 
-        var mockParticleA = Substitute.For<IParticle>();
-        mockParticleA.IsAlive.Returns(true);
+        var particleA = new Particle { IsAlive = true };
+        var particleB = new Particle { IsAlive = false };
+        var particleC = new Particle { IsAlive = true };
 
-        var mockParticleB = Substitute.For<IParticle>();
-        mockParticleB.IsAlive.Returns(false);
-
-        var mockParticleC = Substitute.For<IParticle>();
-        mockParticleC.IsAlive.Returns(true);
-
-        var particles = new List<IParticle>
+        var particles = new List<Particle>
         {
-            mockParticleA,
-            mockParticleB,
-            mockParticleC,
+            particleA,
+            particleB,
+            particleC,
         };
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
@@ -371,16 +361,13 @@ public class ParticlePoolTests : Tests
 
         var livingParticleUsed = false;
 
-        var mockAliveParticle = Substitute.For<IParticle>();
-        mockAliveParticle.IsAlive.Returns(true);
-
-        var mockDeadParticle = Substitute.For<IParticle>();
-        mockDeadParticle.IsAlive.Returns(false);
+        var aliveParticle = new Particle { IsAlive = true };
+        var deadParticle = new Particle { IsAlive = false };
 
         this.mockParticleFactory
             .Create(Arg.Any<IBehavior[]>()).Returns((_) =>
             {
-                var newParticle = livingParticleUsed ? mockDeadParticle : mockAliveParticle;
+                var newParticle = livingParticleUsed ? deadParticle : aliveParticle;
 
                 livingParticleUsed = true;
 
@@ -417,11 +404,8 @@ public class ParticlePoolTests : Tests
 
         var livingParticleUsed = false;
 
-        var mockAliveParticle = Substitute.For<IParticle>();
-        mockAliveParticle.IsAlive.Returns(true);
-
-        var mockDeadParticle = Substitute.For<IParticle>();
-        mockDeadParticle.IsAlive.Returns(false);
+        var mockAliveParticle = new Particle { IsAlive = true };
+        var mockDeadParticle = new Particle { IsAlive = false };
 
         this.mockParticleFactory
             .Create(Arg.Any<IBehavior[]>()).Returns((_) =>
@@ -576,11 +560,11 @@ public class ParticlePoolTests : Tests
 
         this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>()).Returns(behavior);
 
-        var mockParticleA = Substitute.For<IParticle>();
-        var mockParticleB = Substitute.For<IParticle>();
+        var particleA = default(Particle);
+        var particleB = default(Particle);
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .ReturnsForAnyArgs(mockParticleA, mockParticleB);
+            .ReturnsForAnyArgs(particleA, particleB);
 
         var sut = CreateSystemUnderTest(effect);
 
@@ -588,8 +572,9 @@ public class ParticlePoolTests : Tests
         sut.AddBehavior(settings);
 
         // Assert
-        mockParticleA.Received(1).AddBehavior(Arg.Any<EasingRandomBehavior>());
-        mockParticleB.Received(1).AddBehavior(Arg.Any<EasingRandomBehavior>());
+        particleA.Behaviors.Should().ContainSingle();
+        particleB.Behaviors.Should().ContainSingle();
+
         this.mockBehaviorFactory.Received(2).CreateEasingRandomBehavior(settings);
     }
 
@@ -597,11 +582,11 @@ public class ParticlePoolTests : Tests
     public void RemoveBehavior_WhenInvoked_AddsNewBehavior()
     {
         // Arrange
-        var mockParticleA = Substitute.For<IParticle>();
-        var mockParticleB = Substitute.For<IParticle>();
+        var particleA = default(Particle);
+        var particleB = default(Particle);
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .Returns(mockParticleA, mockParticleB);
+            .Returns(particleA, particleB);
 
         var effect = new ParticleEffect { TotalParticles = 2 };
         var angleSettings = new EasingRandomBehaviorSettings
@@ -634,8 +619,8 @@ public class ParticlePoolTests : Tests
         sut.RemoveBehavior(BehaviorAttribute.BlueColorComponent);
 
         // Assert
-        mockParticleA.Received(1).RemoveBehavior(BehaviorAttribute.BlueColorComponent);
-        mockParticleB.Received(1).RemoveBehavior(BehaviorAttribute.BlueColorComponent);
+        particleA.Behaviors.Should().BeEmpty();
+        particleB.Behaviors.Should().BeEmpty();
     }
 
     [Fact]
