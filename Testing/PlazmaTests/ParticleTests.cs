@@ -1,11 +1,10 @@
-// <copyright file="ParticleTests.cs" company="KinsonDigital">
+﻿// <copyright file="ParticleTests.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
 namespace PlazmaTests;
 
 using System;
-using System.ComponentModel;
 using System.Numerics;
 using FluentAssertions;
 using Plazma;
@@ -42,7 +41,7 @@ public class ParticleTests : Tests
     public void Position_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var sut = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle([])
         {
             Position = new Vector2(11, 22),
         };
@@ -59,7 +58,7 @@ public class ParticleTests : Tests
     public void Angle_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var sut = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle([])
         {
             Angle = 1234f,
         };
@@ -76,7 +75,7 @@ public class ParticleTests : Tests
     public void Size_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var sut = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle([])
         {
             Size = 1019f,
         };
@@ -93,7 +92,7 @@ public class ParticleTests : Tests
     public void IsAlive_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var sut = new Particle(Array.Empty<IBehavior>())
+        var sut = new Particle([])
         {
             IsAlive = true,
         };
@@ -110,7 +109,7 @@ public class ParticleTests : Tests
         // Arrange
         var mockBehavior = Substitute.For<IBehavior>();
 
-        var sut = new Particle();
+        var sut = default(Particle);
 
         // Act
         sut.AddBehavior(mockBehavior);
@@ -141,7 +140,7 @@ public class ParticleTests : Tests
         var mockBehavior = Substitute.For<IBehavior>();
         mockBehavior.BehaviorType.Returns(BehaviorAttribute.Angle);
 
-        var sut = new Particle();
+        var sut = default(Particle);
 
         // Act
         sut.RemoveBehavior(BehaviorAttribute.Angle);
