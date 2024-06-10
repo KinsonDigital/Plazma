@@ -56,7 +56,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// <param name="randomizer">Used for generating random values when a particle is spawned.</param>
     /// <param name="behaviorFactory">Creates behaviors.</param>
     /// <param name="particleFactory">Creates particles.</param>
-    /// <param name="effect">The particle effect to be applied to all of the particles in the pool.</param>
+    /// <param name="effect">The particle effect to be applied to all the particles in the pool.</param>
     internal ParticlePool(
         ITextureLoader<TTexture> textureLoader,
         IRandomizerService randomizer,
@@ -202,7 +202,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     }
 
     /// <summary>
-    /// Resets all of the particles.
+    /// Resets all the particles.
     /// </summary>
     private void SpawnNewParticle()
     {
@@ -223,7 +223,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     }
 
     /// <summary>
-    /// Returns a random time in milliseconds that the <see cref="Particle"/> will be spawned next.
+    /// Returns a random time in milliseconds that a <see cref="Particle"/> will be spawned next.
     /// </summary>
     /// <returns>A randomized spawn rate.</returns>
     private int GetRandomSpawnRate()
@@ -237,7 +237,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     }
 
     /// <summary>
-    /// Generates all of the particles.
+    /// Generates all the particles.
     /// </summary>
     private void CreateAllParticles()
     {

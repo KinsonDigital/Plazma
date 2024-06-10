@@ -412,7 +412,7 @@ public class ParticlePoolTests : Tests
             LimitSpawnRate = false,
         };
 
-        // Make sure that the spawn rate will never be greater then the time elapsed
+        // Make sure that the spawn rate will never be greater than the time elapsed
         this.mockRandomizerService.GetValue(Arg.Any<double>(), Arg.Any<double>()).Returns(100);
 
         var livingParticleUsed = false;
