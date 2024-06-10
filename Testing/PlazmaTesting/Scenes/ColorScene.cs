@@ -51,6 +51,11 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
+        if (IsLoaded)
+        {
+            return;
+        }
+
         this.spread = WindowSize.Height / 2f;
         var allSettings = CreateSettings();
 
@@ -88,6 +93,11 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void UnloadContent()
     {
+        if (!IsLoaded)
+        {
+            return;
+        }
+
         this.ctrlGroup.Initialized -= CtrlGroupOnInitialized;
         this.engine?.Dispose();
         this.textureLoader.Dispose();
