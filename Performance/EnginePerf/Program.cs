@@ -6,7 +6,9 @@ namespace EnginePerf;
 
 // ReSharper disable once RedundantUsingDirective
 using BenchmarkDotNet.Running;
-using Plazma;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
+using Benchmarks;
 
 /// <summary>
 /// Main class for the application.
@@ -16,21 +18,13 @@ internal static class Program
     /// <summary>
     /// Main entry point for the application.
     /// </summary>
-    /// <param name="args">Application arguments.</param>
-    public static void Main(string[] args)
+    public static void Main()
     {
 #if DEBUG
-        var effect = new ParticleEffect();
-        var fakeTextureLoader = new FakeTextureLoader();
-        var pool = new ParticlePool<IFakeTexture>(effect, fakeTextureLoader);
-
-        var engine = new ParticleEngine<IFakeTexture>();
-        engine.AddPool(pool);
-        engine.LoadTextures();
-
-        engine.Update(new TimeSpan(0, 0, 0, 0, 0));
+        var benchmark = new LimitSpawnRateBenchmarks();
+        benchmark.LimitSpawnRate();
 #else
-        var summary = BenchmarkRunner.Run<Benchmarks>();
+        var summary = BenchmarkRunner.Run<LimitSpawnRateBenchmarks>();
 
         Console.WriteLine(summary);
         Console.ReadLine();
