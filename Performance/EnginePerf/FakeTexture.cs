@@ -4,6 +4,7 @@
 
 namespace EnginePerf;
 
+/// <inheritdoc/>
 public class FakeTexture : IFakeTexture
 {
 }

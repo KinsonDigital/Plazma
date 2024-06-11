@@ -8,6 +8,7 @@ namespace Plazma;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 /// <summary>
 /// Manages multiple <see cref="Particle"/>s with various settings that dictate
@@ -18,7 +19,7 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     where TTexture : class
 {
     // TODO: Convert to iterable and IEnumerable for particle pools
-    private readonly List<IParticlePool<TTexture>> particlePools = new ();
+    private readonly List<IParticlePool<TTexture>> particlePools = [];
     private bool isDisposed;
 
     /// <summary>
@@ -39,7 +40,7 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     public bool TexturesLoaded => this.particlePools.Count > 0 && this.particlePools.TrueForAll(p => p.TextureLoaded);
 
     /// <summary>
-    /// Adds the given particle <paramref name="pool"/> t o he engine.
+    /// Adds the given particle <paramref name="pool"/> to the engine.
     /// </summary>
     /// <param name="pool">The particle pool to add.</param>
     public void AddPool(IParticlePool<TTexture> pool) => this.particlePools.Add(pool);
@@ -73,6 +74,7 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     /// <summary>
     /// Kills all the particles.
     /// </summary>
+    [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Part of public API.")]
     public void KillAllParticles() => this.particlePools.ForEach(p => p.KillAllParticles());
 
     /// <summary>

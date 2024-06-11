@@ -4,12 +4,12 @@
 
 namespace EnginePerf;
 
-// ReSharper disable once RedundantUsingDirective
+// ReSharper disable RedundantUsingDirective
 using BenchmarkDotNet.Running;
 using System.Diagnostics;
-using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 using Benchmarks;
+
+// ReSharper enable RedundantUsingDirective
 
 /// <summary>
 /// Main class for the application.

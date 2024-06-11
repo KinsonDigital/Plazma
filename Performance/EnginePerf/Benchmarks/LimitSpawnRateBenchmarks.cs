@@ -12,7 +12,7 @@ using Plazma;
 /// Runs performance benchmarks for various parts of the <see cref="ParticleEngine{TTexture}"/>.
 /// </summary>
 [MemoryDiagnoser]
-[Config(typeof(AnitiVirusFriendlyConfig))]
+[Config(typeof(AntiVirusFriendlyConfig))]
 public class LimitSpawnRateBenchmarks
 {
     private ParticleEngine<IFakeTexture>? engine;

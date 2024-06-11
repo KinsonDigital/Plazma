@@ -4,6 +4,9 @@
 
 namespace EnginePerf;
 
+/// <summary>
+/// Used to represent a fake texture for testing purposes.
+/// </summary>
 public interface IFakeTexture
 {
 }
