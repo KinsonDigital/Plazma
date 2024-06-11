@@ -23,7 +23,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     private readonly ITextureLoader<TTexture> textureLoader;
     private readonly IBehaviorFactory behaviorFactory;
     private readonly IParticleFactory particleFactory;
-    private readonly List<Particle> particles = new ();
+    private readonly List<Particle> particles = [];
     private int spawnRate;
     private double spawnRateElapsed;
     private int burstOnTimeElapsed;

@@ -13,9 +13,9 @@ using Behaviors;
 /// <summary>
 /// Holds the particle setup settings data for the <see cref="ParticleEngine{TTexture}"/> to consume.
 /// </summary>
-public class ParticleEffect // : IEnumerable<IBehaviorSettings>
+public class ParticleEffect
 {
-    private EasingRandomBehaviorSettings[] behaviorSettings = Array.Empty<EasingRandomBehaviorSettings>();
+    private EasingRandomBehaviorSettings[] behaviorSettings = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
