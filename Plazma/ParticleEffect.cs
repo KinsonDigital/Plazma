@@ -28,7 +28,7 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
     /// </summary>
     /// <param name="particleTextureName">The name of the texture used in the particle effect.</param>
-    /// <param name="settings">The settings used to setup the particle effect.</param>
+    /// <param name="settings">The settings used to set up the particle effect.</param>
     public ParticleEffect(string particleTextureName, EasingRandomBehaviorSettings[] settings)
     {
         this.behaviorSettings = settings ?? throw new ArgumentNullException(nameof(settings), "Parameter must not be null.");
@@ -46,7 +46,7 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     public Vector2 SpawnLocation { get; set; }
 
     /// <summary>
-    /// Gets or sets the total number of particles..
+    /// Gets or sets the total number of particles.
     /// </summary>
     /// <remarks>This takes into account any particle regardless if it is alive or dead.</remarks>
     public int TotalParticles { get; set; } = 1;
@@ -94,12 +94,12 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     public int BurstSpawnRateMax { get; set; } = 250;
 
     /// <summary>
-    /// Gets or sets the amount of time that the bursting effect will run in it's on cycle.
+    /// Gets or sets the amount of time that the bursting effect will run in its on cycle.
     /// </summary>
     public int BurstOnMilliseconds { get; set; } = 3000;
 
     /// <summary>
-    /// Gets or sets the amount of time that the bursting effect will run in it's off cycle.
+    /// Gets or sets the amount of time that the bursting effect will run in its off cycle.
     /// </summary>
     public int BurstOffMilliseconds { get; set; } = 1000;
 
@@ -109,7 +109,7 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     public bool UseColorsFromList { get; set; }
 
     /// <summary>
-    /// Gets or sets the list of behavior settings that describe how the particle effect is setup.
+    /// Gets or sets the list of behavior settings that describe how the particle effect is set up.
     /// </summary>
     public ReadOnlyCollection<EasingRandomBehaviorSettings> BehaviorSettings
     {
