@@ -15,36 +15,42 @@ using Plazma;
 [Config(typeof(AnitiVirusFriendlyConfig))]
 public class LimitSpawnRateBenchmarks
 {
-    private ParticleEngine<IFakeTexture> engine;
+    private ParticleEngine<IFakeTexture>? engine;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="LimitSpawnRateBenchmarks"/> class.
+    /// Gets the total number of particles and iterations to run for each benchmark.
     /// </summary>
-    public LimitSpawnRateBenchmarks()
-    {
-        // var effect = new ParticleEffect { LimitSpawnRate = false, };
-        //
-        // var fakeTextureLoader = new FakeTextureLoader();
-        // var pool = new ParticlePool<IFakeTexture>(effect, fakeTextureLoader);
-        //
-        // this.engine = new ParticleEngine<IFakeTexture>();
-        // this.engine.AddPool(pool);
-        // this.engine.LoadTextures();
-    }
+    public static RunStats[] TotalParticlesAndIterations =>
+    [
+        new RunStats { TotalParticles = 1_000, TotalIterations = 150_000 },
+        new RunStats { TotalParticles = 10_000, TotalIterations = 150_000 },
+        new RunStats { TotalParticles = 100_000, TotalIterations = 1_500 },
+    ];
 
+    /// <summary>
+    /// Gets or sets the run states to use for the benchmark.
+    /// </summary>
+    [ParamsSource(nameof(TotalParticlesAndIterations))]
+    public RunStats RunStats { get; set; }
+
+    /// <summary>
+    /// Sets up the benchmark for the entire run.
+    /// </summary>
     [GlobalSetup]
-    public void GlobalSetup()
-    {
-        this.engine = new ParticleEngine<IFakeTexture>();
-    }
+    public void GlobalSetup() => this.engine = new ParticleEngine<IFakeTexture>();
 
+    /// <summary>
+    /// Sets up the benchmark for each iteration.
+    /// </summary>
     [IterationSetup]
     public void IterationSetup()
     {
+        ArgumentNullException.ThrowIfNull(this.engine);
+
         var effect = new ParticleEffect
         {
             LimitSpawnRate = false,
-            TotalParticles = TotalParticles,
+            TotalParticles = RunStats.TotalParticles,
         };
 
         var fakeTextureLoader = new FakeTextureLoader();
@@ -53,21 +59,27 @@ public class LimitSpawnRateBenchmarks
         this.engine.LoadTextures();
     }
 
+    /// <summary>
+    /// Cleans up the benchmark for each iteration.
+    /// </summary>
     [IterationCleanup]
     public void IterationCleanup()
     {
+        ArgumentNullException.ThrowIfNull(this.engine);
+
         this.engine.ClearPools();
     }
 
-    [Params(1_000, 10_000)]
-    public int TotalParticles { get; set; }
-
+    /// <summary>
+    /// Runs the engine to measure the performance of the spawn rate limitation and
+    /// other core processes of the engine.
+    /// </summary>
     [Benchmark(Description = "Limit Spawn Rate")]
     public void LimitSpawnRate()
     {
-        for (var i = 0; i < 150_000; i++)
+        for (var i = 0; i < RunStats.TotalIterations; i++)
         {
-            this.engine.Update(new TimeSpan(0, 0, 0, 0, 16));
+            this.engine?.Update(new TimeSpan(0, 0, 0, 0, 16));
         }
     }
 }

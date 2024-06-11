@@ -1,4 +1,4 @@
-﻿// <copyright file="Program.cs" company="KinsonDigital">
+// <copyright file="Program.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
@@ -6,6 +6,7 @@ namespace EnginePerf;
 
 // ReSharper disable once RedundantUsingDirective
 using BenchmarkDotNet.Running;
+using System.Diagnostics;
 using BenchmarkDotNet.Jobs;
 using BenchmarkDotNet.Toolchains.InProcess.NoEmit;
 using Benchmarks;
@@ -22,6 +23,8 @@ internal static class Program
     {
 #if DEBUG
         var benchmark = new LimitSpawnRateBenchmarks();
+        benchmark.GlobalSetup();
+        benchmark.IterationSetup();
         benchmark.LimitSpawnRate();
 #else
         var summary = BenchmarkRunner.Run<LimitSpawnRateBenchmarks>();
