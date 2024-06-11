@@ -24,6 +24,37 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     private readonly IBehaviorFactory behaviorFactory;
     private readonly IParticleFactory particleFactory;
     private readonly List<Particle> particles = [];
+    private readonly Dictionary<BehaviorAttribute, UpdateFunction> updateFunctions = new ()
+    {
+        { BehaviorAttribute.X, (particle, value) => particle with { Position = particle.Position with { X = value } } },
+        { BehaviorAttribute.Y, (particle, value) => particle with { Position = particle.Position with { Y = value } } },
+        { BehaviorAttribute.Angle, (particle, value) => particle with { Angle = value } },
+        { BehaviorAttribute.Size, (particle, value) => particle with { Size = value } },
+        {
+            BehaviorAttribute.AlphaColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb((byte)Math.Clamp(value, 0f, 255f), particle.TintColor.R, particle.TintColor.G, particle.TintColor.B)
+            }
+        },
+        {
+            BehaviorAttribute.RedColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb(particle.TintColor.A, (byte)Math.Clamp(value, 0f, 255f), particle.TintColor.G, particle.TintColor.B)
+            }
+        },
+        {
+            BehaviorAttribute.GreenColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb(particle.TintColor.A, particle.TintColor.R, (byte)Math.Clamp(value, 0f, 255f), particle.TintColor.B)
+            }
+        },
+        {
+            BehaviorAttribute.BlueColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb(particle.TintColor.A, particle.TintColor.R, particle.TintColor.G, (byte)Math.Clamp(value, 0f, 255f))
+            }
+        },
+    };
     private int spawnRate;
     private double spawnRateElapsed;
     private int burstOnTimeElapsed;
@@ -81,6 +112,8 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         CreateAllParticles();
         this.spawnRate = GetRandomSpawnRate();
     }
+
+    private delegate Particle UpdateFunction(Particle particle, float value);
 
     /// <inheritdoc/>
     [SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = "Part of the public API.")]
@@ -197,79 +230,27 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         // Apply the behavior values to the particle attributes
         foreach (var behavior in particle.Behaviors)
         {
-            if (behavior.Enabled)
+            if (!behavior.Enabled)
             {
-                behavior.Update(timeElapsed);
-                particle = particle with { IsAlive = true };
+                continue;
+            }
 
-                var value = (float)behavior.Value;
+            behavior.Update(timeElapsed);
+            particle = particle with { IsAlive = true };
 
-                switch (behavior.BehaviorType)
-                {
-                    case BehaviorAttribute.X:
-                        particle = particle with { Position = particle.Position with { X = value } };
-                        break;
-                    case BehaviorAttribute.Y:
-                        particle = particle with { Position = particle.Position with { Y = value } };
-                        break;
-                    case BehaviorAttribute.Angle:
-                        particle = particle with { Angle = value };
-                        break;
-                    case BehaviorAttribute.Size:
-                        particle = particle with { Size = value };
-                        break;
-                    case BehaviorAttribute.AlphaColorComponent:
-                        particle = particle with
-                        {
-                            TintColor = Color.FromArgb(
-                                ClampClrValue(value),
-                                particle.TintColor.R,
-                                particle.TintColor.G,
-                                particle.TintColor.B)
-                        };
-                        break;
-                    case BehaviorAttribute.RedColorComponent:
-                        particle = particle with
-                        {
-                            TintColor = Color.FromArgb(
-                                particle.TintColor.A,
-                                ClampClrValue(value),
-                                particle.TintColor.G,
-                                particle.TintColor.B)
-                        };
-                        break;
-                    case BehaviorAttribute.GreenColorComponent:
-                        particle = particle with
-                        {
-                            TintColor = Color.FromArgb(
-                                particle.TintColor.A,
-                                particle.TintColor.R,
-                                ClampClrValue(value),
-                                particle.TintColor.B)
-                        };
-                        break;
-                    case BehaviorAttribute.BlueColorComponent:
-                        particle = particle with
-                        {
-                            TintColor = Color.FromArgb(
-                                particle.TintColor.A,
-                                particle.TintColor.R,
-                                particle.TintColor.G,
-                                ClampClrValue(value))
-                        };
-                        break;
-                    default:
-                        throw new InvalidEnumArgumentException(nameof(BehaviorAttribute), (int)behavior.BehaviorType, typeof(BehaviorAttribute));
-                }
+            var value = (float)behavior.Value;
+
+            if (this.updateFunctions.TryGetValue(behavior.BehaviorType, out var updateFunction))
+            {
+                particle = updateFunction(particle, value);
+            }
+            else
+            {
+                throw new InvalidEnumArgumentException(nameof(BehaviorAttribute), (int)behavior.BehaviorType, typeof(BehaviorAttribute));
             }
         }
 
         return particle;
-
-        static byte ClampClrValue(float value)
-        {
-            return (byte)(value < 0 ? 0 : value);
-        }
     }
 
     /// <summary>
