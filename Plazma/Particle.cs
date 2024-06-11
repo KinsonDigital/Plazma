@@ -14,8 +14,6 @@ using Behaviors;
 /// <inheritdoc cref="Particle"/>
 public readonly record struct Particle
 {
-    private readonly List<IBehavior> behaviors = new ();
-
     /// <summary>
     /// Initializes a new instance of the <see cref="Particle"/> class.
     /// </summary>
@@ -24,7 +22,7 @@ public readonly record struct Particle
     {
         ArgumentNullException.ThrowIfNull(behaviors);
 
-        this.behaviors = behaviors.ToList();
+        Behaviors = behaviors.ToList();
     }
 
     /// <summary>
@@ -55,7 +53,7 @@ public readonly record struct Particle
     /// <summary>
     /// Gets the list of particle behaviors.
     /// </summary>
-    public List<IBehavior> Behaviors => this.behaviors;
+    public List<IBehavior> Behaviors { get; } = [];
 
     /// <summary>
     /// Adds the given <paramref name="behavior"/>.
@@ -63,12 +61,12 @@ public readonly record struct Particle
     /// <param name="behavior">The behavior to add.</param>
     public void AddBehavior(IBehavior behavior)
     {
-        if (this.behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
+        if (Behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
         {
             return;
         }
 
-        this.behaviors.Add(behavior);
+        Behaviors.Add(behavior);
     }
 
     /// <summary>
@@ -77,13 +75,13 @@ public readonly record struct Particle
     /// <param name="behaviorType">The type of behavior to remove.</param>
     public void RemoveBehavior(BehaviorAttribute behaviorType)
     {
-        var behavior = this.behaviors.Find(b => b.BehaviorType == behaviorType);
+        var behavior = Behaviors.Find(b => b.BehaviorType == behaviorType);
 
         if (behavior is null)
         {
             return;
         }
 
-        this.behaviors.Remove(behavior);
+        Behaviors.Remove(behavior);
     }
 }
