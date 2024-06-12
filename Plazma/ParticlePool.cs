@@ -55,7 +55,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
             }
         },
     };
-    private int spawnRate;
+    private float spawnRate;
     private double spawnRateElapsed;
     private int burstOnTimeElapsed;
     private int burstOffTimeElapsed;
@@ -310,7 +310,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// Returns a random time in milliseconds that a <see cref="Particle"/> will be spawned next.
     /// </summary>
     /// <returns>A randomized spawn rate.</returns>
-    private int GetRandomSpawnRate()
+    private float GetRandomSpawnRate()
     {
         var minRate = BurstEnabled && InBurstMode ? Effect.BurstSpawnRateMin : Effect.SpawnRateMin;
         var maxRate = BurstEnabled && InBurstMode ? Effect.BurstSpawnRateMax : Effect.SpawnRateMax;

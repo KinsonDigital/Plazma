@@ -55,13 +55,13 @@ public class ParticleEffect
     /// Gets or sets the minimum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
     /// </summary>
     /// <remarks>Decrease this value to spawn particles faster over time.</remarks>
-    public int SpawnRateMin { get; set; } = 250;
+    public float SpawnRateMin { get; set; } = 250;
 
     /// <summary>
     /// Gets or sets the maximum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
     /// </summary>
     /// <remarks>Decrease this value to spawn particles faster over time.</remarks>
-    public int SpawnRateMax { get; set; } = 1000;
+    public float SpawnRateMax { get; set; } = 1000;
 
     /// <summary>
     /// Gets or sets a value indicating whether particles will spawn at a limited rate.
@@ -85,23 +85,23 @@ public class ParticleEffect
     /// Gets or sets the minimum particle spawn rate that can be randomly generated
     /// when <see cref="BurstEnabled"/> is enabled.
     /// </summary>
-    public int BurstSpawnRateMin { get; set; }
+    public float BurstSpawnRateMin { get; set; }
 
     /// <summary>
     /// Gets or sets the maximum particle spawn rate that can be randomly generated
     /// when <see cref="BurstEnabled"/> is enabled.
     /// </summary>
-    public int BurstSpawnRateMax { get; set; } = 250;
+    public float BurstSpawnRateMax { get; set; } = 250;
 
     /// <summary>
     /// Gets or sets the amount of time that the bursting effect will run in its on cycle.
     /// </summary>
-    public int BurstOnMilliseconds { get; set; } = 3000;
+    public float BurstOnMilliseconds { get; set; } = 3000;
 
     /// <summary>
     /// Gets or sets the amount of time that the bursting effect will run in its off cycle.
     /// </summary>
-    public int BurstOffMilliseconds { get; set; } = 1000;
+    public float BurstOffMilliseconds { get; set; } = 1000;
 
     /// <summary>
     /// Gets or sets a value indicating whether the colors will be randomly chosen from a list.
