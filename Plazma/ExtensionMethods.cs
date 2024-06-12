@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 /// <summary>
 /// Provides extensions to various things to help make better code.
@@ -117,4 +118,25 @@ public static class ExtensionMethods
     /// <returns>True if the string contains non number characters.</returns>
     public static bool ContainsNonNumberCharacters(this string value) =>
         !string.IsNullOrEmpty(value) && Array.Exists(value.ToCharArray(), c => !ValidNumChars.Contains(c));
+
+    /// <summary>
+    /// Loops through the given <paramref name="items"/> in a performant manner and runs the given
+    /// <paramref name="func"/> for each item to run any required custom logic.
+    /// </summary>
+    /// <param name="items">The items to loop over.</param>
+    /// <param name="func">The function invoked to run custom logic.</param>
+    /// <typeparam name="T">The type of items.</typeparam>
+    /// <remarks>
+    ///     WARNING: Do not change the order or add or remove items in the list
+    ///     while this method is running.
+    /// </remarks>
+    public static void ForMarshalAsSpan<T>(this List<T> items, Func<T, T> func)
+    {
+        var particleList = CollectionsMarshal.AsSpan(items);
+
+        for (var i = 0; i < particleList.Length; i++)
+        {
+            particleList[i] = func(particleList[i]);
+        }
+    }
 }

@@ -172,23 +172,11 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
             this.spawnRateElapsed = 0;
         }
 
-        for (var i = 0; i < this.particles.Count; i++)
-        {
-            if (this.particles[i].IsAlive)
-            {
-                this.particles[i] = UpdateParticle(this.particles[i], timeElapsed);
-            }
-        }
+        this.particles.ForMarshalAsSpan((p) => p.IsAlive ? UpdateParticle(p, timeElapsed) : p);
     }
 
     /// <inheritdoc/>
-    public void KillAllParticles()
-    {
-        for (var i = 0; i < this.particles.Count; i++)
-        {
-            this.particles[i] = this.particles[i] with { IsAlive = false };
-        }
-    }
+    public void KillAllParticles() => this.particles.ForMarshalAsSpan((p) => p with { IsAlive = false });
 
     /// <inheritdoc/>
     public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
