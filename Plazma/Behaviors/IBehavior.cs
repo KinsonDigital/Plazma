@@ -14,12 +14,12 @@ public interface IBehavior
     /// <summary>
     /// Gets the current value of the behavior.
     /// </summary>
-    double Value { get; }
+    float Value { get; }
 
     /// <summary>
     /// Gets the current amount of time that has elapsed for the behavior.
     /// </summary>
-    double ElapsedTime { get; }
+    float ElapsedTime { get; }
 
     /// <summary>
     /// Gets the particle attribute to apply the behavior result to.
@@ -38,7 +38,7 @@ public interface IBehavior
     ///     Once the amount of time has elapsed the lifetime of the
     ///     behavior, the behavior will be disabled.
     /// </remarks>
-    double LifeTime { get; }
+    float LifeTime { get; }
 
     /// <summary>
     /// Updates the behavior.
