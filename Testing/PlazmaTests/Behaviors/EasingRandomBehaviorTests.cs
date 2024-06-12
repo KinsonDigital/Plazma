@@ -78,15 +78,15 @@ public class EasingRandomBehaviorTests
 
     #region Method Tests
     [Theory]
-    [InlineData(EasingFunction.EaseOutBounce, 13, 400, 800, 200, 13)]
-    [InlineData(EasingFunction.EaseIn, 100, 600, 1000, 113, 100)]
+    [InlineData(EasingFunction.EaseOutBounce, 13f, 400f, 800f, 200f, 13f)]
+    [InlineData(EasingFunction.EaseIn, 100f, 600f, 1000f, 113f, 100f)]
     public void Update_WhenInvoked_CorrectlySetsBehaviorValue(
         EasingFunction easingFunction,
         int start,
         int change,
         int lifeTime,
         int elapsedTime,
-        double expected)
+        float expected)
     {
         // Arrange
         this.mockRandomizerService.GetValue(11f, 11f).Returns(start);

@@ -32,12 +32,12 @@ public class EasingRandomBehavior : Behavior
     /// <summary>
     /// Gets or sets the starting value of the easing behavior.
     /// </summary>
-    public double Start { get; set; }
+    public float Start { get; set; }
 
     /// <summary>
     /// Gets or sets the amount of change to apply to the behavior value over time.
     /// </summary>
-    public double Change { get; set; }
+    public float Change { get; set; }
 
     /// <summary>
     /// Updates the behavior.
