@@ -34,6 +34,7 @@ public class ColorScene : SceneBase
     private ILabel? lblInstructions;
     private ILabel? lblSpread;
     private float spread;
+    private MouseState prevMouseState;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ColorScene"/> class.
@@ -74,6 +75,7 @@ public class ColorScene : SceneBase
 
         this.lblInstructions = this.ctrlFactory.CreateLabel();
         this.lblInstructions.Text = "Scroll the mouse wheel up to cluster and down to spread.";
+        this.lblInstructions.Text += "\nClick the left mouse button to kill all particles.";
 
         this.lblSpread = this.ctrlFactory.CreateLabel();
         this.lblSpread.Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}";
@@ -113,6 +115,11 @@ public class ColorScene : SceneBase
     {
         var mouseState = this.mouse.GetState();
 
+        if (mouseState.IsLeftButtonUp() && this.prevMouseState.IsLeftButtonDown())
+        {
+            this.engine.KillAllParticles();
+        }
+
         this.spread = mouseState.GetScrollDirection() switch
         {
             MouseScrollDirection.ScrollUp => this.spread - 50 <= 0 ? 0 : this.spread - 50,
@@ -123,6 +130,9 @@ public class ColorScene : SceneBase
         this.lblSpread.Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}";
 
         this.engine.Update(frameTime.ElapsedTime);
+
+        this.prevMouseState = mouseState;
+
         base.Update(frameTime);
     }
 
