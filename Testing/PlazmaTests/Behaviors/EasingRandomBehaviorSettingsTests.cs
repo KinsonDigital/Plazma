@@ -80,7 +80,7 @@ public class EasingRandomBehaviorSettingsTests
     public void UpdateValue_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var func = (double value) => 123.0;
+        var func = (float value) => 123.0f;
 
         // Act
         var setting = new EasingRandomBehaviorSettings { UpdateValue = func };
@@ -93,7 +93,7 @@ public class EasingRandomBehaviorSettingsTests
     public void UpdateRandomStartMin_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var func = (double value) => 123f;
+        var func = (float value) => 123f;
 
         // Act
         var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMin = func };
@@ -106,7 +106,7 @@ public class EasingRandomBehaviorSettingsTests
     public void UpdateRandomStartMax_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var func = (double value) => 123f;
+        var func = (float value) => 123f;
 
         // Act
         var setting = new EasingRandomBehaviorSettings { UpdateRandomStartMax = func };
