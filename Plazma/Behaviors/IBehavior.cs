@@ -32,10 +32,10 @@ public interface IBehavior
     bool Enabled { get; }
 
     /// <summary>
-    /// Gets the life time of the behavior in milliseconds.
+    /// Gets the lifetime of the behavior in milliseconds.
     /// </summary>
     /// <remarks>
-    ///     Once the amount of time has elapsed the life time of the
+    ///     Once the amount of time has elapsed the lifetime of the
     ///     behavior, the behavior will be disabled.
     /// </remarks>
     double LifeTime { get; }

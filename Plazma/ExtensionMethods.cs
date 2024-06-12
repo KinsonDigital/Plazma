@@ -16,7 +16,7 @@ using System.Runtime.InteropServices;
 /// </summary>
 public static class ExtensionMethods
 {
-    private static readonly char[] ValidNumChars = { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    private static readonly char[] ValidNumChars = ['-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
     /// <summary>
     /// Returns a random value between the given <paramref name="minValue"/> and <paramref name="maxValue"/>.
@@ -51,7 +51,7 @@ public static class ExtensionMethods
     /// <typeparam name="T">The type of object in list to count.</typeparam>
     /// <param name="items">The list of items to count based on the predicate.</param>
     /// <param name="predicate">The predicate that when returns true, counts the item.</param>
-    /// <returns>The number of items that match the predicate..</returns>
+    /// <returns>The number of items that match the predicate.</returns>
     [SuppressMessage("csharpsquid", "S3267", Justification = "Not needed.")]
     public static int Count<T>(this List<T>? items, Predicate<T> predicate)
     {
@@ -84,7 +84,7 @@ public static class ExtensionMethods
     /// <typeparam name="T">The type of object in list to count.</typeparam>
     /// <param name="items">The list of items to count based on the predicate.</param>
     /// <param name="predicate">The predicate that when returns true, counts the item.</param>
-    /// <returns>The number of items that match the predicate..</returns>
+    /// <returns>The number of items that match the predicate.</returns>
     [SuppressMessage("csharpsquid", "S3267", Justification = "Not needed.")]
     public static int Count<T>(this T[]? items, Predicate<T> predicate)
     {
