@@ -2,14 +2,17 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-
 // ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable ArrangeMethodOrOperatorBody
 namespace ParticlePoolPerf;
 
 using BenchmarkDotNet.Attributes;
 using PerfShared;
 using Plazma;
 
+/// <summary>
+/// Performance benchmarks for the <see cref="ParticlePool{TTexture}"/> class.
+/// </summary>
 [MemoryDiagnoser]
 public class Benchmarks
 {
@@ -43,7 +46,7 @@ public class Benchmarks
     // [Benchmark]
     public void Update()
     {
-        this.pool.Update(new TimeSpan(0, 0, 0, 0, 16));
+        this.pool?.Update(new TimeSpan(0, 0, 0, 0, 16));
     }
 
     /// <summary>
@@ -52,6 +55,6 @@ public class Benchmarks
     [Benchmark]
     public void KillAllParticles()
     {
-        this.pool.KillAllParticles();
+        this.pool?.KillAllParticles();
     }
 }

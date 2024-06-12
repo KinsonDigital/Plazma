@@ -2,10 +2,11 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+#pragma warning disable SA1200
 using BenchmarkDotNet.Running;
-using ParticlePoolPerf;
+#pragma warning restore SA1200
 
-var summary = BenchmarkRunner.Run<Benchmarks>();
+var summary = BenchmarkRunner.Run<ParticlePoolPerf.Benchmarks>();
 
 Console.WriteLine(summary);
 Console.ReadLine();
