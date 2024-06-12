@@ -274,7 +274,7 @@ public class ColorScene : SceneBase
             RandomStartMax = 0.6f,
             RandomChangeMin = -1f,
             RandomChangeMax = -1f,
-            UpdateValue = (value) => value <= 0.0 ? 0.0 : value,
+            UpdateValue = (value) => value <= 0.0f ? 0.0f : value,
         };
 
         return
