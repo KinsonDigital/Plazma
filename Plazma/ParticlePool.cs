@@ -7,11 +7,11 @@ namespace Plazma;
 
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
 using System.Drawing;
 using Behaviors;
+using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using Factories;
 using Services;
 
@@ -129,14 +129,14 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     public bool LimitSpawnRate
     {
         get => Effect.LimitSpawnRate;
-        set => Effect.LimitSpawnRate = value;
+        set => Effect = Effect with { LimitSpawnRate = value };
     }
 
     /// <inheritdoc/>
     public bool BurstEnabled
     {
         get => Effect.BurstEnabled;
-        set => Effect.BurstEnabled = value;
+        set => Effect = Effect with { BurstEnabled = value };
     }
 
     /// <inheritdoc/>
@@ -146,7 +146,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     public ImmutableArray<Particle> Particles => [..this.particles];
 
     /// <inheritdoc/>
-    public ParticleEffect Effect { get; }
+    public ParticleEffect Effect { get; set; }
 
     /// <inheritdoc/>
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Part of the public API.")]

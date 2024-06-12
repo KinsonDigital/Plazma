@@ -45,7 +45,7 @@ public class ParticlePoolTests : Tests
     public void Ctor_WithNullParticleEffectWhenUsing2ParamCtor_ThrowsException()
     {
         // Arrange & Act
-        var act = () => new ParticlePool<IDisposable>(null, this.mockTextureLoader);
+        var act = () => new ParticlePool<IDisposable>(default, this.mockTextureLoader);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -57,7 +57,7 @@ public class ParticlePoolTests : Tests
     public void Ctor_WithNullTextureLoaderWhenUsing2ParamCtor_ThrowsException()
     {
         // Arrange & Act
-        var act = () => new ParticlePool<IDisposable>(new ParticleEffect(), null);
+        var act = () => new ParticlePool<IDisposable>(default, null);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -74,7 +74,7 @@ public class ParticlePoolTests : Tests
             this.mockRandomizerService,
             this.mockBehaviorFactory,
             this.mockParticleFactory,
-            new ParticleEffect());
+            default);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -91,7 +91,7 @@ public class ParticlePoolTests : Tests
             null,
             this.mockBehaviorFactory,
             this.mockParticleFactory,
-            new ParticleEffect());
+            default);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -108,7 +108,7 @@ public class ParticlePoolTests : Tests
             this.mockRandomizerService,
             null,
             this.mockParticleFactory,
-            new ParticleEffect());
+            default);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -125,7 +125,7 @@ public class ParticlePoolTests : Tests
             this.mockRandomizerService,
             this.mockBehaviorFactory,
             null,
-            new ParticleEffect());
+            default);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -142,7 +142,7 @@ public class ParticlePoolTests : Tests
             this.mockRandomizerService,
             this.mockBehaviorFactory,
             this.mockParticleFactory,
-            null);
+            default);
 
         // Assert
         act.Should().Throw<ArgumentNullException>()
@@ -244,7 +244,7 @@ public class ParticlePoolTests : Tests
     public void LimitSpawnRate_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var effect = new ParticleEffect();
+        var effect = default(ParticleEffect);
 
         var sut = CreateSystemUnderTest(effect);
 
@@ -628,7 +628,7 @@ public class ParticlePoolTests : Tests
     public void Dispose_WhenInvoked2Times_DisposesOfPoolOneTime()
     {
         // Arrange
-        var sut = CreateSystemUnderTest(new ParticleEffect());
+        var sut = CreateSystemUnderTest(default);
 
         // Act
         sut.Dispose();

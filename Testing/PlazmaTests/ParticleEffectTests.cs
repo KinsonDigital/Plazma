@@ -4,7 +4,6 @@
 
 namespace PlazmaTests;
 
-using System;
 using System.Numerics;
 using FluentAssertions;
 using Plazma;
@@ -21,7 +20,7 @@ public class ParticleEffectTests
     public void Ctor_WhenInvoked_SetsParticleTextureName()
     {
         // Act
-        var effect = new ParticleEffect("effect-name", Array.Empty<EasingRandomBehaviorSettings>());
+        var effect = new ParticleEffect("effect-name", []);
 
         // Assert
         effect.ParticleTextureName.Should().Be("effect-name");
@@ -62,7 +61,7 @@ public class ParticleEffectTests
         var effect = CreateEffect();
 
         // Act
-        effect.SpawnLocation = new Vector2(11, 22);
+        effect = effect with { SpawnLocation = new Vector2(11, 22) };
         var actual = effect.SpawnLocation;
 
         // Assert
@@ -76,7 +75,7 @@ public class ParticleEffectTests
         var effect = CreateEffect();
 
         // Act
-        effect.TotalParticles = 1234;
+        effect = effect with { TotalParticles = 1234 };
         var actual = effect.TotalParticles;
 
         // Assert
@@ -90,7 +89,7 @@ public class ParticleEffectTests
         var effect = CreateEffect();
 
         // Act
-        effect.SpawnRateMin = 1234;
+        effect = effect with { SpawnRateMin = 1234 };
         var actual = effect.SpawnRateMin;
 
         // Assert
@@ -104,7 +103,7 @@ public class ParticleEffectTests
         var effect = CreateEffect();
 
         // Act
-        effect.SpawnRateMax = 1234;
+        effect = effect with { SpawnRateMax = 1234 };
         var actual = effect.SpawnRateMax;
 
         // Assert
@@ -118,7 +117,7 @@ public class ParticleEffectTests
         var effect = CreateEffect();
 
         // Act
-        effect.UseColorsFromList = true;
+        effect = effect with { UseColorsFromList = true };
         var actual = effect.UseColorsFromList;
 
         // Assert
@@ -130,5 +129,5 @@ public class ParticleEffectTests
     /// Creates a <see cref="ParticleEffect"/> instance for the purpose of testing.
     /// </summary>
     /// <returns>The instance to return.</returns>
-    private static ParticleEffect CreateEffect() => new ("test-texture", Array.Empty<EasingRandomBehaviorSettings>());
+    private static ParticleEffect CreateEffect() => new ("test-texture", []);
 }
