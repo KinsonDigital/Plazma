@@ -85,7 +85,10 @@ public class HorizontalMovementScene : SceneBase
         var mouseState = this.mouse.GetState();
         this.mousePos = mouseState.GetPosition();
 
-        this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(this.mousePos.X, this.mousePos.Y);
+        this.engine.ParticlePools[0].Effect = this.engine.ParticlePools[0].Effect with
+        {
+            SpawnLocation = new Vector2(this.mousePos.X, this.mousePos.Y)
+        };
 
         base.Update(frameTime);
     }

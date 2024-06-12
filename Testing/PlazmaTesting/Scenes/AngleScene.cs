@@ -53,7 +53,10 @@ public class AngleScene : SceneBase
         var poolFactory = new ParticlePoolFactory();
         this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
-        this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
+        this.engine.ParticlePools[0].Effect = this.engine.ParticlePools[0].Effect with
+        {
+            SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f)
+        };
         this.engine.LoadTextures();
 
         base.LoadContent();
