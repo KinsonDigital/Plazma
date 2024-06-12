@@ -254,19 +254,23 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
 
         this.burstOffTimeElapsed += (int)timeElapsed.TotalMilliseconds;
 
-        if (this.burstOffTimeElapsed >= Effect.BurstOffMilliseconds)
+        if (this.burstOffTimeElapsed < Effect.BurstOffMilliseconds)
         {
-            this.burstOnTimeElapsed += (int)timeElapsed.TotalMilliseconds;
-
-            InBurstMode = false;
-
-            if (this.burstOnTimeElapsed >= Effect.BurstOnMilliseconds)
-            {
-                InBurstMode = true;
-                this.burstOffTimeElapsed = 0;
-                this.burstOnTimeElapsed = 0;
-            }
+            return;
         }
+
+        this.burstOnTimeElapsed += (int)timeElapsed.TotalMilliseconds;
+
+        InBurstMode = false;
+
+        if (this.burstOnTimeElapsed < Effect.BurstOnMilliseconds)
+        {
+            return;
+        }
+
+        InBurstMode = true;
+        this.burstOffTimeElapsed = 0;
+        this.burstOnTimeElapsed = 0;
     }
 
     /// <summary>
