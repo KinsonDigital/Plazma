@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
@@ -45,6 +45,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PerfResults", "PerfResults"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnginePerf", "Performance\EnginePerf\EnginePerf.csproj", "{32D301FD-1E4D-431C-8C9D-E304E769C19F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerfShared", "Performance\PerfShared\PerfShared.csproj", "{A5790981-C319-48BD-9790-34F2C2E775B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{32D301FD-1E4D-431C-8C9D-E304E769C19F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32D301FD-1E4D-431C-8C9D-E304E769C19F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32D301FD-1E4D-431C-8C9D-E304E769C19F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{960AD89D-364C-4455-8C7A-3B2D4188A0A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{960AD89D-364C-4455-8C7A-3B2D4188A0A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{960AD89D-364C-4455-8C7A-3B2D4188A0A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{960AD89D-364C-4455-8C7A-3B2D4188A0A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{E2532556-570E-4416-B163-00CA1EAAE03C} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
 		{75849ED7-8558-4C14-A45D-317B5FE680A3} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
 		{32D301FD-1E4D-431C-8C9D-E304E769C19F} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
+		{960AD89D-364C-4455-8C7A-3B2D4188A0A1} = {B8F324FC-FA09-42B5-A095-262BBB3F2963}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E6732B6-A610-43DA-A1D7-1EC8EE1E6273}

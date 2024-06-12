@@ -7,6 +7,7 @@ namespace EnginePerf;
 // ReSharper disable RedundantUsingDirective
 using BenchmarkDotNet.Running;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Benchmarks;
 
 // ReSharper enable RedundantUsingDirective

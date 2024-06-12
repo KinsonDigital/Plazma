@@ -6,6 +6,7 @@
 namespace EnginePerf.Benchmarks;
 
 using BenchmarkDotNet.Attributes;
+using PerfShared;
 using Plazma;
 
 /// <summary>
