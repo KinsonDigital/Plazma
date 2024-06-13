@@ -17,6 +17,16 @@ public readonly record struct Particle
     /// <summary>
     /// Initializes a new instance of the <see cref="Particle"/> class.
     /// </summary>
+    public Particle()
+        : this([])
+    {
+        // NOTE: Do not remove this constructor.
+        // This is required to ensure that the Behaviors property is initialized.
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Particle"/> class.
+    /// </summary>
     /// <param name="behaviors">The list of behaviors to add to the <see cref="Particle"/>.</param>
     public Particle(IBehavior[] behaviors)
     {
