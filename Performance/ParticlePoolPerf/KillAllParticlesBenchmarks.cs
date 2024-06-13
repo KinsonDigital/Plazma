@@ -1,9 +1,9 @@
-﻿// <copyright file="Benchmarks.cs" company="KinsonDigital">
+﻿// <copyright file="KillAllParticlesBenchmarks.cs" company="KinsonDigital">
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
-// ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ArrangeMethodOrOperatorBody
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 namespace ParticlePoolPerf;
 
 using BenchmarkDotNet.Attributes;
@@ -11,10 +11,9 @@ using PerfShared;
 using Plazma;
 
 /// <summary>
-/// Performance benchmarks for the <see cref="ParticlePool{TTexture}"/> class.
+/// Performance benchmarks for the <see cref="ParticlePool{TTexture}"/>.<see cref="ParticlePool{TTexture}.KillAllParticles"/> method.
 /// </summary>
-[MemoryDiagnoser]
-public class Benchmarks
+public class KillAllParticlesBenchmarks
 {
     private ParticlePool<IFakeTexture>? pool;
 
@@ -32,21 +31,11 @@ public class Benchmarks
     {
         var effect = new ParticleEffect
         {
-            LimitSpawnRate = false,
+            LimitSpawnRate = true,
             TotalParticles = TotalParticles,
         };
         var fakeTextureLoader = new FakeTextureLoader();
-
         this.pool = new ParticlePool<IFakeTexture>(effect, fakeTextureLoader);
-    }
-
-    /// <summary>
-    /// Runs the benchmark for the <see cref="ParticlePool{TTexture}.Update(TimeSpan)"/> method.
-    /// </summary>
-    [Benchmark]
-    public void Update()
-    {
-        this.pool?.Update(new TimeSpan(0, 0, 0, 0, 16));
     }
 
     /// <summary>

@@ -58,7 +58,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="$(AssemblyName)Tests" />
+        <InternalsVisibleTo Include="EnginePerf" />
+        <InternalsVisibleTo Include="ParticlePoolPerf" />
+        <InternalsVisibleTo Include="RandomPerf" />
+        <InternalsVisibleTo Include="$(AssemblyName)Perf" />
         <InternalsVisibleTo Include="DynamicProxyGenAssembly2" />
     </ItemGroup>
 
