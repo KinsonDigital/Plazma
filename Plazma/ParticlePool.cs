@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable ForCanBeConvertedToForeach
 #pragma warning disable CA1303 // Do not pass literals as localized parameters
 namespace Plazma;
 
@@ -183,37 +184,37 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// <inheritdoc/>
     public void AddBehavior(EasingRandomBehaviorSettings behaviorSettings)
     {
-        foreach (var particle in Particles)
+        for (var i = 0; i < Particles.Length; i++)
         {
             var behavior = this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings);
 
-            if (particle.Behaviors?.Exists(b => b.BehaviorType == behavior.BehaviorType) ?? false)
+            if (Particles[i].Behaviors?.Exists(b => b.BehaviorType == behavior.BehaviorType) ?? false)
             {
                 return;
             }
 
-            particle.Behaviors?.Add(behavior);
+            Particles[i].Behaviors?.Add(behavior);
         }
     }
 
     /// <inheritdoc/>
     public void RemoveBehavior(BehaviorAttribute behaviorType)
     {
-        foreach (var particle in Particles)
+        for (var i = 0; i < Particles.Length; i++)
         {
-            if (particle.Behaviors is null)
+            if (Particles[i].Behaviors is null)
             {
                 continue;
             }
 
-            var behavior = particle.Behaviors.Find(b => b.BehaviorType == behaviorType);
+            var behavior = Particles[i].Behaviors?.Find(b => b.BehaviorType == behaviorType);
 
             if (behavior is null)
             {
                 return;
             }
 
-            particle.Behaviors.Remove(behavior);
+            Particles[i].Behaviors?.Remove(behavior);
         }
     }
 
@@ -356,9 +357,9 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         {
             var behaviors = new List<IBehavior>();
 
-            foreach (var settings in Effect.BehaviorSettings)
+            for (var j = 0; j < Effect.BehaviorSettings.Count; j++)
             {
-                var newBehavior = this.behaviorFactory.CreateEasingRandomBehavior(settings);
+                var newBehavior = this.behaviorFactory.CreateEasingRandomBehavior(Effect.BehaviorSettings[j]);
                 behaviors.Add(newBehavior);
             }
 

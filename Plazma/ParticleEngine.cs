@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable ForCanBeConvertedToForeach
 #pragma warning disable CA1303 // Do not pass literals as localized parameters
 namespace Plazma;
 
@@ -51,9 +52,9 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     /// <remarks>This will properly dispose of the texture for each pool.</remarks>
     public void ClearPools()
     {
-        foreach (var pool in this.particlePools)
+        for (var i = 0; i < this.particlePools.Count; i++)
         {
-            pool.Dispose();
+            this.particlePools[i].Dispose();
         }
 
         this.particlePools.Clear();
@@ -65,9 +66,9 @@ public sealed class ParticleEngine<TTexture> : IDisposable
     /// </summary>
     public void LoadTextures()
     {
-        foreach (var pool in this.particlePools)
+        for (var i = 0; i < this.particlePools.Count; i++)
         {
-            pool.LoadTexture();
+            this.particlePools[i].LoadTexture();
         }
     }
 
@@ -110,10 +111,12 @@ public sealed class ParticleEngine<TTexture> : IDisposable
 
         if (disposing)
         {
-            foreach (var pool in ParticlePools)
+            for (var i = 0; i < this.particlePools.Count; i++)
             {
-                pool.Dispose();
+                this.particlePools[i].Dispose();
             }
+
+            this.particlePools.Clear();
         }
 
         this.isDisposed = true;

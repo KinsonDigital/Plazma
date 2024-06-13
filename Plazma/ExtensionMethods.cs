@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable ForCanBeConvertedToForeach
 #pragma warning disable CA1303 // Do not pass literals as localized parameters
 namespace Plazma;
 
@@ -67,9 +68,9 @@ public static class ExtensionMethods
 
         var result = 0;
 
-        foreach (var t in items)
+        for (var i = 0; i < items.Count; i++)
         {
-            if (predicate(t))
+            if (predicate(items[i]))
             {
                 result++;
             }
@@ -100,9 +101,9 @@ public static class ExtensionMethods
 
         var result = 0;
 
-        foreach (var t in items)
+        for (var i = 0; i < items.Length; i++)
         {
-            if (predicate(t))
+            if (predicate(items[i]))
             {
                 result++;
             }
