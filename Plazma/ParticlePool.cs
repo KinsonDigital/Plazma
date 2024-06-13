@@ -69,7 +69,6 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     [ExcludeFromCodeCoverage(Justification = "Uses non-testable IoC container.")]
     public ParticlePool(ParticleEffect effect, ITextureLoader<TTexture> textureLoader)
     {
-        ArgumentNullException.ThrowIfNull(effect);
         ArgumentNullException.ThrowIfNull(textureLoader);
 
         Effect = effect;
@@ -186,21 +185,14 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     {
         foreach (var particle in Particles)
         {
-            if (particle.Behaviors is null)
-            {
-                const string exMsg = "The particle's behaviors list is null.  Make sure that the particle was not created" +
-                    " using the 'default' keyword.";
-                throw new InvalidOperationException(exMsg);
-            }
-
             var behavior = this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings);
 
-            if (particle.Behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
+            if (particle.Behaviors?.Exists(b => b.BehaviorType == behavior.BehaviorType) ?? false)
             {
                 return;
             }
 
-            particle.Behaviors.Add(behavior);
+            particle.Behaviors?.Add(behavior);
         }
     }
 
