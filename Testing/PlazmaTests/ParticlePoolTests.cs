@@ -125,9 +125,44 @@ public class ParticlePoolTests : Tests
     #region Prop Tests
     [Fact]
     [Trait(Category, Props)]
+    public void TotalLivingParticles_WhenDisposed_ReturnsZer0o()
+    {
+        // Arrange
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
+        var effect = new ParticleEffect(ParticleTextureName, settings)
+        {
+            SpawnLocation = new Vector2(11, 22),
+            UseColorsFromList = true,
+            TotalParticles = 3,
+        };
+
+        var createLiving = true;
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns((_) =>
+            {
+                var newParticle = new Particle { IsAlive = createLiving };
+
+                createLiving = !createLiving;
+
+                return newParticle;
+            });
+
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var actual = sut.TotalLivingParticles;
+
+        // Assert
+        actual.Should().Be(0);
+    }
+
+    [Fact]
+    [Trait(Category, Props)]
     public void TotalLivingParticles_WhenGettingValue_ReturnsCorrectResult()
     {
-        // Arrange & Act
+        // Arrange
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
@@ -150,15 +185,53 @@ public class ParticlePoolTests : Tests
 
         var sut = CreateSystemUnderTest(effect);
 
+        // Act
+        var actual = sut.TotalLivingParticles;
+
         // Assert
-        sut.TotalLivingParticles.Should().Be(2);
+        actual.Should().Be(2);
+    }
+
+    [Fact]
+    [Trait(Category, Props)]
+    public void TotalDeadParticles_WhenDisposed_ReturnsZer0o()
+    {
+        // Arrange
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
+        var effect = new ParticleEffect(ParticleTextureName, settings)
+        {
+            SpawnLocation = new Vector2(11, 22),
+            UseColorsFromList = true,
+            TotalParticles = 3,
+        };
+
+        var createLiving = true;
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns((_) =>
+            {
+                var newParticle = new Particle { IsAlive = createLiving };
+
+                createLiving = !createLiving;
+
+                return newParticle;
+            });
+
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var actual = sut.TotalDeadParticles;
+
+        // Assert
+        actual.Should().Be(0);
     }
 
     [Fact]
     [Trait(Category, Props)]
     public void TotalDeadParticles_WhenGettingValue_ReturnsCorrectResult()
     {
-        // Arrange & Act
+        // Arrange
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
@@ -194,8 +267,11 @@ public class ParticlePoolTests : Tests
 
         var sut = CreateSystemUnderTest(effect);
 
+        // Act
+        var actual = sut.TotalDeadParticles;
+
         // Assert
-        sut.TotalDeadParticles.Should().Be(1);
+        actual.Should().Be(1);
     }
 
     [Fact]
@@ -266,6 +342,7 @@ public class ParticlePoolTests : Tests
     }
 
     [Fact]
+    [Trait(Category, Props)]
     public void Particles_WhenGettingValue_ReturnsCorrectResult()
     {
         // Arrange
@@ -276,6 +353,22 @@ public class ParticlePoolTests : Tests
 
         // Assert
         sut.Particles.Should().HaveCount(4);
+    }
+
+    [Fact]
+    [Trait(Category, Props)]
+    public void Particles_WhenGettingValueWhileDisposed_ReturnsZero()
+    {
+        // Arrange
+        var effect = new ParticleEffect { TotalParticles = 4, };
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var actual = sut.Particles;
+
+        // Assert
+        actual.Should().BeEmpty();
     }
 
     [Fact]
@@ -294,16 +387,60 @@ public class ParticlePoolTests : Tests
         this.mockTextureLoader.LoadTexture(Arg.Any<string>()).Returns(mockTexture);
 
         var sut = CreateSystemUnderTest(effect);
-
-        // Act
         sut.LoadTexture();
 
+        // Act
+        var actual = sut.TextureLoaded;
+
         // Assert
-        sut.TextureLoaded.Should().BeTrue();
+        actual.Should().BeTrue();
+    }
+
+    [Fact]
+    [Trait(Category, Props)]
+    public void TextureLoaded_WhenGettingValueWhileDisposed_ReturnsFalse()
+    {
+        // Arrange
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
+        var effect = new ParticleEffect(ParticleTextureName, settings)
+        {
+            SpawnLocation = new Vector2(11, 22),
+            BurstOffMilliseconds = 10,
+            BurstOnMilliseconds = 10,
+        };
+        var mockTexture = Substitute.For<IDisposable>();
+        this.mockTextureLoader.LoadTexture(Arg.Any<string>()).Returns(mockTexture);
+
+        var sut = CreateSystemUnderTest(effect);
+        sut.LoadTexture();
+        sut.Dispose();
+
+        // Act
+        var actual = sut.TextureLoaded;
+
+        // Assert
+        actual.Should().BeFalse();
     }
     #endregion
 
     #region Method Tests
+    [Fact]
+    [Trait(Category, Methods)]
+    public void Update_WhileDisposed_ThrowsException()
+    {
+        // Arrange
+        var effect = new ParticleEffect(ParticleTextureName, [new ()]);
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.Update(100.ToMillisecondsTimeSpan());
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage("Cannot access a disposed object.\nObject name: 'ParticlePool'.");
+    }
+
     [Theory]
     [InlineData(true, 0)]
     [InlineData(false, 1)]
@@ -414,6 +551,23 @@ public class ParticlePoolTests : Tests
 
     [Fact]
     [Trait(Category, Methods)]
+    public void KillAllParticles_WhileDisposed_ThrowsException()
+    {
+        // Arrange
+        var effect = new ParticleEffect(ParticleTextureName, [new ()]);
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.KillAllParticles();
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage("Cannot access a disposed object.\nObject name: 'ParticlePool'.");
+    }
+
+    [Fact]
+    [Trait(Category, Methods)]
     public void KillAllParticles_WhenInvoked_KillsAllParticles()
     {
         // Arrange
@@ -440,6 +594,23 @@ public class ParticlePoolTests : Tests
 
     [Fact]
     [Trait(Category, Methods)]
+    public void LoadTexture_WhileDisposed_ThrowsException()
+    {
+        // Arrange
+        var effect = new ParticleEffect(ParticleTextureName, [new ()]);
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.LoadTexture();
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage("Cannot access a disposed object.\nObject name: 'ParticlePool'.");
+    }
+
+    [Fact]
+    [Trait(Category, Methods)]
     public void LoadTexture_WhenInvoked_LoadsTextureWithEffectTextureName()
     {
         // Arrange
@@ -461,6 +632,23 @@ public class ParticlePoolTests : Tests
 
         // Assert
         this.mockTextureLoader.Received(1).LoadTexture(ParticleTextureName);
+    }
+
+    [Fact]
+    [Trait(Category, Methods)]
+    public void AddBehavior_WhileDisposed_ThrowsException()
+    {
+        // Arrange
+        var effect = new ParticleEffect(ParticleTextureName, [new ()]);
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.AddBehavior(default);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage("Cannot access a disposed object.\nObject name: 'ParticlePool'.");
     }
 
     [Fact]
@@ -503,6 +691,23 @@ public class ParticlePoolTests : Tests
         particleB.Behaviors.Should().ContainSingle();
 
         this.mockBehaviorFactory.Received(2).CreateEasingRandomBehavior(settings);
+    }
+
+    [Fact]
+    [Trait(Category, Methods)]
+    public void RemoveBehavior_WhileDisposed_ThrowsException()
+    {
+        // Arrange
+        var effect = new ParticleEffect(ParticleTextureName, [new ()]);
+        var sut = CreateSystemUnderTest(effect);
+        sut.Dispose();
+
+        // Act
+        var act = () => sut.RemoveBehavior(BehaviorAttribute.Angle);
+
+        // Assert
+        act.Should().Throw<ObjectDisposedException>()
+            .WithMessage("Cannot access a disposed object.\nObject name: 'ParticlePool'.");
     }
 
     [Fact]

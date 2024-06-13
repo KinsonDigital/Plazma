@@ -120,10 +120,10 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     public event EventHandler<EventArgs>? LivingParticlesCountChanged;
 
     /// <inheritdoc/>
-    public int TotalLivingParticles => this.particles.Count(p => p.IsAlive);
+    public int TotalLivingParticles => this.isDisposed ? 0 : this.particles.Count(p => p.IsAlive);
 
     /// <inheritdoc/>
-    public int TotalDeadParticles => this.particles.Count(p => p.IsAlive is false);
+    public int TotalDeadParticles => this.isDisposed ? 0 : this.particles.Count(p => p.IsAlive is false);
 
     /// <inheritdoc/>
     public bool LimitSpawnRate
@@ -143,7 +143,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     public bool InBurstMode { get; set; }
 
     /// <inheritdoc/>
-    public ImmutableArray<Particle> Particles => [..this.particles];
+    public ImmutableArray<Particle> Particles => this.isDisposed ? [] : [..this.particles];
 
     /// <inheritdoc/>
     public ParticleEffect Effect { get; set; }
@@ -153,11 +153,16 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     public TTexture? PoolTexture { get; private set; }
 
     /// <inheritdoc/>
-    public bool TextureLoaded => PoolTexture != null;
+    public bool TextureLoaded => !this.isDisposed && PoolTexture != null;
 
     /// <inheritdoc/>
     public void Update(TimeSpan timeElapsed)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
         this.spawnRateElapsed += timeElapsed.TotalMilliseconds;
 
         ManageBurstEffectTimings(timeElapsed);
@@ -176,14 +181,35 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     }
 
     /// <inheritdoc/>
-    public void KillAllParticles() => this.particles.ForMarshalAsSpan((p) => p with { IsAlive = false });
+    public void KillAllParticles()
+    {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
+        this.particles.ForMarshalAsSpan((p) => p with { IsAlive = false });
+    }
 
     /// <inheritdoc/>
-    public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
+    public void LoadTexture()
+    {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
+        PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
+    }
 
     /// <inheritdoc/>
     public void AddBehavior(EasingRandomBehaviorSettings behaviorSettings)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
         for (var i = 0; i < Particles.Length; i++)
         {
             var behavior = this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings);
@@ -200,6 +226,11 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// <inheritdoc/>
     public void RemoveBehavior(BehaviorAttribute behaviorType)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
         for (var i = 0; i < Particles.Length; i++)
         {
             if (Particles[i].Behaviors is null)
