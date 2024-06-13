@@ -53,35 +53,5 @@ public readonly record struct Particle
     /// <summary>
     /// Gets the list of particle behaviors.
     /// </summary>
-    public List<IBehavior> Behaviors { get; } = [];
-
-    /// <summary>
-    /// Adds the given <paramref name="behavior"/>.
-    /// </summary>
-    /// <param name="behavior">The behavior to add.</param>
-    public void AddBehavior(IBehavior behavior)
-    {
-        if (Behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
-        {
-            return;
-        }
-
-        Behaviors.Add(behavior);
-    }
-
-    /// <summary>
-    /// Removes the given <paramref name="behaviorType"/>.
-    /// </summary>
-    /// <param name="behaviorType">The type of behavior to remove.</param>
-    public void RemoveBehavior(BehaviorAttribute behaviorType)
-    {
-        var behavior = Behaviors.Find(b => b.BehaviorType == behaviorType);
-
-        if (behavior is null)
-        {
-            return;
-        }
-
-        Behaviors.Remove(behavior);
-    }
+    public List<IBehavior>? Behaviors { get; } = [];
 }

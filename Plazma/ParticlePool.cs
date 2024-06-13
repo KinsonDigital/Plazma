@@ -186,7 +186,21 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     {
         foreach (var particle in Particles)
         {
-            particle.AddBehavior(this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings));
+            if (particle.Behaviors is null)
+            {
+                const string exMsg = "The particle's behaviors list is null.  Make sure that the particle was not created" +
+                    " using the 'default' keyword.";
+                throw new InvalidOperationException(exMsg);
+            }
+
+            var behavior = this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings);
+
+            if (particle.Behaviors.Exists(b => b.BehaviorType == behavior.BehaviorType))
+            {
+                return;
+            }
+
+            particle.Behaviors.Add(behavior);
         }
     }
 
@@ -195,7 +209,19 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     {
         foreach (var particle in Particles)
         {
-            particle.RemoveBehavior(behaviorType);
+            if (particle.Behaviors is null)
+            {
+                continue;
+            }
+
+            var behavior = particle.Behaviors.Find(b => b.BehaviorType == behaviorType);
+
+            if (behavior is null)
+            {
+                return;
+            }
+
+            particle.Behaviors.Remove(behavior);
         }
     }
 
