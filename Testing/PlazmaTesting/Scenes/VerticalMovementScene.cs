@@ -26,7 +26,7 @@ public class VerticalMovementScene : SceneBase
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
-    private readonly ParticleEngine<ITexture>? engine;
+    private ParticleEngine<ITexture>? engine;
     private Point mousePos;
 
     /// <summary>
@@ -36,7 +36,6 @@ public class VerticalMovementScene : SceneBase
     {
         this.mouse = HardwareFactory.GetMouse();
         this.textureRenderer = RendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>();
     }
 
     /// <summary>
@@ -44,6 +43,11 @@ public class VerticalMovementScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
+        if (IsLoaded)
+        {
+            return;
+        }
+
         var allSettings = new[]
         {
             CreateSettings(),
@@ -58,6 +62,8 @@ public class VerticalMovementScene : SceneBase
         };
 
         var poolFactory = new ParticlePoolFactory();
+
+        this.engine = new ParticleEngine<ITexture>();
         this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
         this.engine.LoadTextures();
 
@@ -69,6 +75,11 @@ public class VerticalMovementScene : SceneBase
     /// </summary>
     public override void UnloadContent()
     {
+        if (!IsLoaded)
+        {
+            return;
+        }
+
         this.engine?.Dispose();
         this.textureLoader.Dispose();
 

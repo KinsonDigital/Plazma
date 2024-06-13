@@ -28,8 +28,8 @@ public class ColorScene : SceneBase
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
-    private readonly ParticleEngine<ITexture>? engine;
     private readonly IControlFactory ctrlFactory;
+    private ParticleEngine<ITexture>? engine;
     private IControlGroup? ctrlGroup;
     private ILabel? lblInstructions;
     private ILabel? lblSpread;
@@ -43,7 +43,6 @@ public class ColorScene : SceneBase
     {
         this.mouse = HardwareFactory.GetMouse();
         this.textureRenderer = RendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>();
         this.ctrlFactory = new ControlFactory();
     }
 
@@ -68,6 +67,7 @@ public class ColorScene : SceneBase
         };
 
         var poolFactory = new ParticlePoolFactory();
+        this.engine = new ParticleEngine<ITexture>();
         this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
         this.engine.ParticlePools[0].Effect = this.engine.ParticlePools[0].Effect with
