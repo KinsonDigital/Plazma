@@ -43,7 +43,7 @@ public class Benchmarks
     /// <summary>
     /// Runs the benchmark for the <see cref="ParticlePool{TTexture}.Update(TimeSpan)"/> method.
     /// </summary>
-    // [Benchmark]
+    [Benchmark]
     public void Update()
     {
         this.pool?.Update(new TimeSpan(0, 0, 0, 0, 16));
