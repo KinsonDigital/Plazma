@@ -241,9 +241,16 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     {
         particle = particle with { IsAlive = false };
 
-        // Apply the behavior values to the particle attributes
-        foreach (var behavior in particle.Behaviors)
+        if (particle.Behaviors is null)
         {
+            return particle;
+        }
+
+        // Apply the behavior values to the particle attributes
+        for (var i = 0; i < particle.Behaviors?.Count; i++)
+        {
+            var behavior = particle.Behaviors[i];
+
             if (!behavior.Enabled)
             {
                 continue;
@@ -252,7 +259,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
             behavior.Update(timeElapsed);
             particle = particle with { IsAlive = true };
 
-            var value = (float)behavior.Value;
+            var value = behavior.Value;
 
             if (this.updateFunctions.TryGetValue(behavior.BehaviorType, out var updateFunction))
             {
@@ -311,9 +318,9 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
                 continue;
             }
 
-            foreach (var behavior in this.particles[i].Behaviors)
+            for (var j = 0; j < this.particles[i].Behaviors?.Count; j++)
             {
-                behavior.Reset();
+                this.particles[i].Behaviors?[j].Reset();
             }
 
             this.particles[i] = this.particles[i] with
