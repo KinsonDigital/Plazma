@@ -40,6 +40,11 @@ public class EasingRandomBehavior : Behavior
     public float Change { get; set; }
 
     /// <summary>
+    /// Gets the settings for the behavior.
+    /// </summary>
+    public EasingRandomBehaviorSettings Settings => this.settings;
+
+    /// <summary>
     /// Updates the behavior.
     /// </summary>
     /// <param name="timeElapsed">The amount of time that has elapsed for this update of the behavior.</param>
