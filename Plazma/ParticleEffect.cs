@@ -21,6 +21,7 @@ public readonly record struct ParticleEffect
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
     /// </summary>
     public ParticleEffect()
+        : this(string.Empty, [])
     {
     }
 
