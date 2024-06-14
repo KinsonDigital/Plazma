@@ -233,19 +233,9 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
 
         for (var i = 0; i < Particles.Length; i++)
         {
-            if (Particles[i].Behaviors is null)
-            {
-                continue;
-            }
-
             var behavior = Particles[i].Behaviors?.Find(b => b.BehaviorType == behaviorType);
 
-            if (behavior is null)
-            {
-                return;
-            }
-
-            Particles[i].Behaviors?.Remove(behavior);
+            Particles[i].Behaviors?.Remove(behavior!);
         }
     }
 
@@ -264,11 +254,6 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     private Particle UpdateParticle(Particle particle, TimeSpan timeElapsed)
     {
         particle = particle with { IsAlive = false };
-
-        if (particle.Behaviors is null)
-        {
-            return particle;
-        }
 
         // Apply the behavior values to the particle attributes
         for (var i = 0; i < particle.Behaviors?.Count; i++)
