@@ -173,5 +173,20 @@ public class ExtensionMethodsTests
         // Assert
         actual.Should().Be(expected);
     }
+
+    [Fact]
+    public void ForMarshalAsSpan_WhenInvoked_WorksCorrectlyWithoutException()
+    {
+        // Arrange
+        var expected = new List<int> { 2, 4, 6, 8 };
+        var numbers = new List<int> { 1, 2, 3, 4 };
+
+        // Act
+        var act = () => numbers.ForMarshalAsSpan((value) => value * 2);
+
+        // Assert
+        act.Should().NotThrow();
+        numbers.Should().BeEquivalentTo(expected);
+    }
     #endregion
 }
