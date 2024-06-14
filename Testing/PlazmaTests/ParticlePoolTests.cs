@@ -6,7 +6,9 @@ namespace PlazmaTests;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using FluentAssertions;
@@ -39,6 +41,22 @@ public class ParticlePoolTests : Tests
         this.mockBehaviorFactory = Substitute.For<IBehaviorFactory>();
         this.mockParticleFactory = Substitute.For<IParticleFactory>();
     }
+
+#pragma warning disable SA1514
+    #region Test Data
+    /// <summary>
+    /// Gets the data used to test the change of a particle's color component.
+    /// </summary>
+    public static TheoryData<BehaviorAttribute, Color> ColorAttrData =>
+        new ()
+        {
+            { BehaviorAttribute.AlphaColorComponent, Color.FromArgb(100, 20, 30, 40) },
+            { BehaviorAttribute.RedColorComponent, Color.FromArgb(10, 100, 30, 40) },
+            { BehaviorAttribute.GreenColorComponent, Color.FromArgb(10, 20, 100, 40) },
+            { BehaviorAttribute.BlueColorComponent, Color.FromArgb(10, 20, 30, 100) },
+        };
+    #endregion
+#pragma warning restore SA1514
 
     #region Constructor Tests
     [Fact]
@@ -131,22 +149,21 @@ public class ParticlePoolTests : Tests
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            UseColorsFromList = true,
-            TotalParticles = 3,
+            SpawnLocation = new Vector2(11, 22), UseColorsFromList = true, TotalParticles = 3,
         };
 
         var createLiving = true;
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .Returns((_) =>
-            {
-                var newParticle = new Particle { IsAlive = createLiving };
+            .Returns(
+                (_) =>
+                {
+                    var newParticle = new Particle { IsAlive = createLiving };
 
-                createLiving = !createLiving;
+                    createLiving = !createLiving;
 
-                return newParticle;
-            });
+                    return newParticle;
+                });
 
         var sut = CreateSystemUnderTest(effect);
         sut.Dispose();
@@ -166,22 +183,21 @@ public class ParticlePoolTests : Tests
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            UseColorsFromList = true,
-            TotalParticles = 3,
+            SpawnLocation = new Vector2(11, 22), UseColorsFromList = true, TotalParticles = 3,
         };
 
         var createLiving = true;
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .Returns((_) =>
-            {
-                var newParticle = new Particle { IsAlive = createLiving };
+            .Returns(
+                (_) =>
+                {
+                    var newParticle = new Particle { IsAlive = createLiving };
 
-                createLiving = !createLiving;
+                    createLiving = !createLiving;
 
-                return newParticle;
-            });
+                    return newParticle;
+                });
 
         var sut = CreateSystemUnderTest(effect);
 
@@ -200,22 +216,21 @@ public class ParticlePoolTests : Tests
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            UseColorsFromList = true,
-            TotalParticles = 3,
+            SpawnLocation = new Vector2(11, 22), UseColorsFromList = true, TotalParticles = 3,
         };
 
         var createLiving = true;
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .Returns((_) =>
-            {
-                var newParticle = new Particle { IsAlive = createLiving };
+            .Returns(
+                (_) =>
+                {
+                    var newParticle = new Particle { IsAlive = createLiving };
 
-                createLiving = !createLiving;
+                    createLiving = !createLiving;
 
-                return newParticle;
-            });
+                    return newParticle;
+                });
 
         var sut = CreateSystemUnderTest(effect);
         sut.Dispose();
@@ -235,35 +250,29 @@ public class ParticlePoolTests : Tests
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            UseColorsFromList = true,
-            TotalParticles = 3,
+            SpawnLocation = new Vector2(11, 22), UseColorsFromList = true, TotalParticles = 3,
         };
 
         var particleA = new Particle { IsAlive = true };
         var particleB = new Particle { IsAlive = false };
         var particleC = new Particle { IsAlive = true };
 
-        var particles = new List<Particle>
-        {
-            particleA,
-            particleB,
-            particleC,
-        };
+        var particles = new List<Particle> { particleA, particleB, particleC, };
 
         this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .Returns((_) =>
-            {
-                if (particles.Count <= 0)
+            .Returns(
+                (_) =>
                 {
-                    throw new AssertionFailedException("Attempting to use a test particle that does not exist.");
-                }
+                    if (particles.Count <= 0)
+                    {
+                        throw new AssertionFailedException("Attempting to use a test particle that does not exist.");
+                    }
 
-                var newParticle = particles[0];
-                particles.RemoveAt(0);
+                    var newParticle = particles[0];
+                    particles.RemoveAt(0);
 
-                return newParticle;
-            });
+                    return newParticle;
+                });
 
         var sut = CreateSystemUnderTest(effect);
 
@@ -295,15 +304,10 @@ public class ParticlePoolTests : Tests
     public void BurstEnabled_WhenSettingValue_ReturnsCorrectResult()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
-        {
-            new (),
-        };
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            TotalParticles = 99,
-            UseColorsFromList = true,
+            SpawnLocation = new Vector2(11, 22), TotalParticles = 99, UseColorsFromList = true,
         };
         var sut = CreateSystemUnderTest(effect);
 
@@ -325,10 +329,7 @@ public class ParticlePoolTests : Tests
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            BurstOffMilliseconds = 10,
-            BurstOnMilliseconds = 10,
-            BurstEnabled = burstingEnabled,
+            SpawnLocation = new Vector2(11, 22), BurstOffMilliseconds = 10, BurstOnMilliseconds = 10, BurstEnabled = burstingEnabled,
         };
 
         var sut = CreateSystemUnderTest(effect);
@@ -379,9 +380,7 @@ public class ParticlePoolTests : Tests
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            BurstOffMilliseconds = 10,
-            BurstOnMilliseconds = 10,
+            SpawnLocation = new Vector2(11, 22), BurstOffMilliseconds = 10, BurstOnMilliseconds = 10,
         };
         var mockTexture = Substitute.For<IDisposable>();
         this.mockTextureLoader.LoadTexture(Arg.Any<string>()).Returns(mockTexture);
@@ -404,9 +403,7 @@ public class ParticlePoolTests : Tests
         var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22),
-            BurstOffMilliseconds = 10,
-            BurstOnMilliseconds = 10,
+            SpawnLocation = new Vector2(11, 22), BurstOffMilliseconds = 10, BurstOnMilliseconds = 10,
         };
         var mockTexture = Substitute.For<IDisposable>();
         this.mockTextureLoader.LoadTexture(Arg.Any<string>()).Returns(mockTexture);
@@ -441,23 +438,216 @@ public class ParticlePoolTests : Tests
             .WithMessage("Cannot access a disposed object.\nObject name: 'ParticlePool'.");
     }
 
+    [Fact]
+    public void Update_WithInvalidBehaviorType_ThrowsException()
+    {
+        // Arrange
+        const string expected = "The value of argument 'BehaviorAttribute' (900) is invalid for Enum " +
+                                "type 'BehaviorAttribute'. (Parameter 'BehaviorAttribute')";
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.BehaviorType.Returns((BehaviorAttribute)900); // Force an invalid value
+        mockBehavior.Enabled.Returns(true);
+
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>())
+            .Returns(mockBehavior);
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(_ => new Particle([mockBehavior]));
+
+        var effect = new ParticleEffect
+        {
+            BurstEnabled = false,
+            LimitSpawnRate = false,
+            SpawnRateMin = 10,
+            SpawnRateMax = 20,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+
+        // Act
+        var act = () => sut.Update(0.ToMillisecondsTimeSpan());
+
+        // Assert
+        act.Should().Throw<InvalidEnumArgumentException>()
+            .WithMessage(expected);
+    }
+
+    [Fact]
+    public void Update_WhenParticleHasNoBehaviors_DoesNotThrowException()
+    {
+        // Arrange
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(_ => default);
+
+        var effect = new ParticleEffect
+        {
+            BurstEnabled = false,
+            LimitSpawnRate = false,
+            SpawnRateMin = 10,
+            SpawnRateMax = 20,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+
+        // Act
+        var act = () => sut.Update(0.ToMillisecondsTimeSpan());
+
+        // Assert
+        act.Should().NotThrow<NullReferenceException>();
+    }
+
     [Theory]
-    [InlineData(true, 0)]
-    [InlineData(false, 1)]
+    [InlineData(BehaviorAttribute.X, 10, 100, 30, 30)]
+    [InlineData(BehaviorAttribute.Y, 10, 10, 30, 100)]
+    public void Update_WhenInvokedWithXAndYBehaviorAttribute_UpdatesParticleXAndY(
+        BehaviorAttribute attribute,
+        float startX,
+        float endX,
+        float startY,
+        float endY)
+    {
+        // Arrange
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.BehaviorType.Returns(attribute);
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns(100);
+
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>())
+            .Returns(mockBehavior);
+
+        var particle = new Particle([mockBehavior])
+        {
+            Position = new Vector2(startX, startY),
+            IsAlive = true,
+        };
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(_ => particle);
+
+        var effect = new ParticleEffect
+        {
+            BurstEnabled = false,
+            LimitSpawnRate = false,
+            SpawnRateMin = 10,
+            SpawnRateMax = 20,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+
+        // Act
+        sut.Update(0.ToMillisecondsTimeSpan());
+
+        // Assert
+        sut.Particles[0].Position.Should().Be(new Vector2(endX, endY));
+    }
+
+    [Theory]
+    [MemberData(nameof(ColorAttrData))]
+    public void Update_WhenInvokedWithColorBehaviorAttribute_UpdatesParticleColorComponent(
+        BehaviorAttribute attribute,
+        Color expected)
+    {
+        // Arrange
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.BehaviorType.Returns(attribute);
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns(100);
+
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>())
+            .Returns(mockBehavior);
+
+        var particle = new Particle([mockBehavior])
+        {
+            IsAlive = true,
+            TintColor = Color.FromArgb(10, 20, 30, 40),
+        };
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(_ => particle);
+
+        var effect = new ParticleEffect
+        {
+            BurstEnabled = false,
+            LimitSpawnRate = false,
+            SpawnRateMin = 10,
+            SpawnRateMax = 20,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+
+        // Act
+        sut.Update(0.ToMillisecondsTimeSpan());
+
+        // Assert
+        sut.Particles[0].TintColor.Should().Be(expected);
+    }
+
+    // [Fact]
+    [Theory]
+    [InlineData(BehaviorAttribute.Angle, 10, 100, 30, 30)]
+    [InlineData(BehaviorAttribute.Size, 10, 10, 30, 100)]
+    public void Update_WhenInvokedWithAngleAndSizeBehaviorAttribute_UpdatesParticleAngleAndSize(
+        BehaviorAttribute attribute,
+        float startAngle,
+        float endAngle,
+        float startSize,
+        float endSize)
+    {
+        // Arrange
+        var mockBehavior = Substitute.For<IBehavior>();
+        mockBehavior.BehaviorType.Returns(attribute);
+        mockBehavior.Enabled.Returns(true);
+        mockBehavior.Value.Returns(100);
+
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>())
+            .Returns(mockBehavior);
+
+        var particle = new Particle([mockBehavior])
+        {
+            IsAlive = true,
+            Angle = startAngle,
+            Size = startSize,
+        };
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(_ => particle);
+
+        var effect = new ParticleEffect
+        {
+            BurstEnabled = false,
+            LimitSpawnRate = false,
+            SpawnRateMin = 10,
+            SpawnRateMax = 20,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+
+        // Act
+        sut.Update(0.ToMillisecondsTimeSpan());
+
+        // Assert
+        sut.Particles[0].Angle.Should().Be(endAngle);
+        sut.Particles[0].Size.Should().Be(endSize);
+    }
+
+    [Theory]
+    [InlineData(true, 0, false)]
+    [InlineData(false, 2, true)]
     [Trait(Category, Methods)]
-    public void Update_WithSpawnRateIsLimiting_GeneratesCorrectNumberOfLivingParticles(bool limitSpawnRate, int expectedLivingParticles)
+    public void Update_WithSpawnRateIsLimiting_GeneratesCorrectNumberOfLivingParticles(
+        bool limitSpawnRate,
+        int expectedLivingParticles,
+        bool expectedIsAlive)
     {
         // Arrange
         var effect = new ParticleEffect(ParticleTextureName, [new ()])
         {
-            SpawnLocation = new Vector2(11f, 22f),
-            UseColorsFromList = true,
-            TotalParticles = 4,
-            LimitSpawnRate = limitSpawnRate,
+            SpawnLocation = new Vector2(11f, 22f), UseColorsFromList = true, TotalParticles = 4, LimitSpawnRate = limitSpawnRate,
         };
 
         this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(1000);
-        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>()).Returns(callInfo =>
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>()).Returns(
+            callInfo =>
             {
                 var settings = callInfo.Arg<EasingRandomBehaviorSettings>();
 
@@ -465,14 +655,15 @@ public class ParticlePoolTests : Tests
             });
 
         this.mockParticleFactory
-            .Create(Arg.Any<IBehavior[]>()).Returns(callInfo =>
-            {
-                var behaviors = callInfo.Arg<IBehavior[]>();
+            .Create(Arg.Any<IBehavior[]>()).Returns(
+                callInfo =>
+                {
+                    var behaviors = callInfo.Arg<IBehavior[]>();
 
-                var newParticle = new Particle(behaviors) { IsAlive = false };
+                    var newParticle = new Particle(behaviors) { IsAlive = false };
 
-                return newParticle;
-            });
+                    return newParticle;
+                });
 
         var sut = CreateSystemUnderTest(effect);
 
@@ -480,9 +671,15 @@ public class ParticlePoolTests : Tests
 
         // Act
         sut.Update(timeElapsed);
+        sut.Update(timeElapsed);
 
         // Assert
+        sut.Particles.Should().HaveCount(4);
         sut.TotalLivingParticles.Should().Be(expectedLivingParticles);
+        sut.Particles[0].IsAlive.Should().Be(expectedIsAlive);
+        sut.Particles[1].IsAlive.Should().Be(expectedIsAlive);
+        sut.Particles[2].IsAlive.Should().BeFalse();
+        sut.Particles[3].IsAlive.Should().BeFalse();
     }
 
     [Theory]
@@ -492,10 +689,7 @@ public class ParticlePoolTests : Tests
     public void Update_WhenGeneratingRandomSpawnRate_CorrectlyUsesMinAndMax(float rateMin, float rateMax)
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
-        {
-            new (),
-        };
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
             SpawnLocation = new Vector2(11f, 22f),
@@ -517,17 +711,14 @@ public class ParticlePoolTests : Tests
     [InlineData(false, 111f, 222f, 2)]
     [InlineData(true, 333f, 444f, 1)]
     [Trait(Category, Methods)]
-    public void Update_IfBursting_ReturnsCorrectSpawnRate(
+    public void Update_WithBurstingEnabled_ReturnsCorrectSpawnRate(
         bool burstingEnabled,
         float expectedRateMin,
         float expectedRateMax,
         int expectedCallCount)
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
-        {
-            new (),
-        };
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
             BurstOffMilliseconds = 10f,
@@ -542,11 +733,68 @@ public class ParticlePoolTests : Tests
         var sut = CreateSystemUnderTest(effect);
 
         // Act
-        sut.Update(new TimeSpan(0, 0, 0, 0, 16));
-        // var unused = sut.InBurstMode;
+        sut.Update(16.ToMillisecondsTimeSpan());
 
         // Assert
         this.mockRandomizerService.Received(expectedCallCount).GetValue(expectedRateMin, expectedRateMax);
+    }
+
+    [Theory]
+    [InlineData(14, true, false)]
+    [InlineData(100, false, true)]
+    public void Update_WithBurstingEnabled_SetsInBurstMode(int updateTime, bool startBurstMode, bool expectedBurstMode)
+    {
+        // Arrange
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
+        var effect = new ParticleEffect(ParticleTextureName, settings)
+        {
+            BurstOffMilliseconds = 16f,
+            BurstOnMilliseconds = 32f,
+            SpawnRateMin = 111f,
+            SpawnRateMax = 222f,
+            BurstSpawnRateMin = 333f,
+            BurstSpawnRateMax = 444f,
+            BurstEnabled = true,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+        sut.InBurstMode = startBurstMode;
+
+        // Act
+        sut.Update(updateTime.ToMillisecondsTimeSpan());
+        sut.Update(updateTime.ToMillisecondsTimeSpan());
+
+        // Assert
+        sut.InBurstMode.Should().Be(expectedBurstMode);
+    }
+
+    [Fact]
+    public void Update_WithDisabledBehavior_BehaviorUpdateIsNotInvoked()
+    {
+        // Arrange
+        var mockBehavior = Substitute.For<IBehavior>();
+
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>())
+            .Returns(mockBehavior);
+
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(_ => new Particle([mockBehavior]));
+
+        var effect = new ParticleEffect
+        {
+            BurstEnabled = false,
+            LimitSpawnRate = false,
+            SpawnRateMin = 10,
+            SpawnRateMax = 20,
+        };
+
+        var sut = CreateSystemUnderTest(effect);
+
+        // Act
+        sut.Update(0.ToMillisecondsTimeSpan());
+
+        // Assert
+        mockBehavior.DidNotReceive().Update(Arg.Any<TimeSpan>());
     }
 
     [Fact]
@@ -571,13 +819,12 @@ public class ParticlePoolTests : Tests
     public void KillAllParticles_WhenInvoked_KillsAllParticles()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
-        {
-            new (),
-        };
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22), SpawnRateMin = 33, SpawnRateMax = 44,
+            SpawnLocation = new Vector2(11, 22),
+            SpawnRateMin = 33,
+            SpawnRateMax = 44,
             TotalParticles = 99,
             UseColorsFromList = true,
         };
@@ -614,13 +861,12 @@ public class ParticlePoolTests : Tests
     public void LoadTexture_WhenInvoked_LoadsTextureWithEffectTextureName()
     {
         // Arrange
-        var settings = new EasingRandomBehaviorSettings[]
-        {
-            new (),
-        };
+        var settings = new EasingRandomBehaviorSettings[] { new (), };
         var effect = new ParticleEffect(ParticleTextureName, settings)
         {
-            SpawnLocation = new Vector2(11, 22), SpawnRateMin = 33, SpawnRateMax = 44,
+            SpawnLocation = new Vector2(11, 22),
+            SpawnRateMin = 33,
+            SpawnRateMax = 44,
             TotalParticles = 99,
             UseColorsFromList = true,
         };
@@ -652,7 +898,8 @@ public class ParticlePoolTests : Tests
     }
 
     [Fact]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules",
+    [SuppressMessage(
+        "StyleCop.CSharp.ReadabilityRules",
         "SA1129:Do not use default value type constructor",
         Justification = "Required for proper testing.")]
     public void AddBehavior_WhenInvoked_AddsNewBehavior()
@@ -678,8 +925,7 @@ public class ParticlePoolTests : Tests
         var particleA = new Particle();
         var particleB = new Particle();
 
-        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .ReturnsForAnyArgs(particleA, particleB);
+        MockCreateParticles(particleA, particleB);
 
         var sut = CreateSystemUnderTest(effect);
 
@@ -691,6 +937,32 @@ public class ParticlePoolTests : Tests
         particleB.Behaviors.Should().ContainSingle();
 
         this.mockBehaviorFactory.Received(2).CreateEasingRandomBehavior(settings);
+    }
+
+    [Fact]
+    public void AddBehavior_WhenAddingBehaviorWithTypeThatAlreadyExists_DoesNotAddBehavior()
+    {
+        // Arrange
+        var effect = new ParticleEffect { TotalParticles = 1 };
+
+        var sut = CreateSystemUnderTest(effect);
+
+        var particleA = default(Particle);
+
+        this.mockRandomizerService.GetValue(Arg.Any<float>(), Arg.Any<float>()).Returns(0f);
+        var settings = new EasingRandomBehaviorSettings { ApplyToAttribute = BehaviorAttribute.Angle, };
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
+        this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>())
+            .Returns(behavior);
+        MockCreateParticles(particleA);
+        sut.AddBehavior(settings);
+
+        // Act
+        sut.AddBehavior(settings);
+
+        // Assert
+        sut.Particles.Should().ContainSingle();
+        sut.Particles[0].Behaviors.Should().ContainSingle();
     }
 
     [Fact]
@@ -711,7 +983,8 @@ public class ParticlePoolTests : Tests
     }
 
     [Fact]
-    [SuppressMessage("StyleCop.CSharp.ReadabilityRules",
+    [SuppressMessage(
+        "StyleCop.CSharp.ReadabilityRules",
         "SA1129:Do not use default value type constructor",
         Justification = "Required for proper testing.")]
     public void RemoveBehavior_WhenInvoked_AddsNewBehavior()
@@ -720,8 +993,7 @@ public class ParticlePoolTests : Tests
         var particleA = new Particle();
         var particleB = new Particle();
 
-        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
-            .Returns(particleA, particleB);
+        MockCreateParticles(particleA, particleB);
 
         var effect = new ParticleEffect { TotalParticles = 2 };
         var angleSettings = new EasingRandomBehaviorSettings
@@ -747,7 +1019,8 @@ public class ParticlePoolTests : Tests
         };
 
         this.mockBehaviorFactory.CreateEasingRandomBehavior(Arg.Any<EasingRandomBehaviorSettings>())
-            .Returns(callInfo =>
+            .Returns(
+                callInfo =>
                 {
                     var settings = callInfo.Arg<EasingRandomBehaviorSettings>();
 
@@ -773,6 +1046,7 @@ public class ParticlePoolTests : Tests
 
         // Assert
         particleA.Behaviors.Should().NotBeEmpty();
+
         // Check that the particle does not contain a blue color component behavior
         particleA.Behaviors
             .Should()
@@ -806,9 +1080,27 @@ public class ParticlePoolTests : Tests
     /// </summary>
     /// <returns>The pool instance to return.</returns>
     private ParticlePool<IDisposable> CreateSystemUnderTest(ParticleEffect effect)
-        => new (this.mockTextureLoader,
+        => new (
+            this.mockTextureLoader,
             this.mockRandomizerService,
             this.mockBehaviorFactory,
             this.mockParticleFactory,
             effect);
+
+    /// <summary>
+    /// Mocks the creation of the given particle.
+    /// </summary>
+    /// <param name="p">A first particle to mock.</param>
+    private void MockCreateParticles(Particle p) =>
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(p);
+
+    /// <summary>
+    /// Mocks the creation of the given particles.
+    /// </summary>
+    /// <param name="p1">A first particle to mock.</param>
+    /// <param name="p2">A second particle to mock.</param>
+    private void MockCreateParticles(Particle p1, Particle p2) =>
+        this.mockParticleFactory.Create(Arg.Any<IBehavior[]>())
+            .Returns(p1, p2);
 }
