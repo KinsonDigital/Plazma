@@ -5,9 +5,12 @@
 namespace PlazmaTests;
 
 using System;
+using System.Drawing;
 using System.Numerics;
 using FluentAssertions;
+using NSubstitute;
 using Plazma;
+using Plazma.Behaviors;
 using Xunit;
 
 /// <summary>
@@ -66,6 +69,62 @@ public class ParticleTests : Tests
 
         // Assert
         actual.Should().Be(1234f);
+    }
+
+    [Fact]
+    [Trait(Category, Props)]
+    public void TintColor_WhenSettingValue_ReturnsCorrectResult()
+    {
+        // Arrange
+        var sut = new Particle([])
+        {
+            TintColor = Color.FromArgb(10, 20, 30, 40),
+        };
+
+        // Act
+        var actual = sut.TintColor;
+
+        // Assert
+        actual.Should().Be(Color.FromArgb(10, 20, 30, 40));
+    }
+
+    [Fact]
+    public void Behaviors_WhenGettingValueWithParameterlessCtor_IsEmptyArray()
+    {
+        // Arrange
+#pragma warning disable SA1129 // Do not use default value type constructor
+        var sut = new Particle();
+#pragma warning restore SA1129
+
+        // Act
+        var actual = sut.Behaviors;
+
+        // Assert
+        actual.Should().NotBeNull();
+        actual.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void Behaviors_WhenGettingValueSingleParameterCtor_ReturnsCorrectResult()
+    {
+        // Arrange
+        var mockBehaviorA = Substitute.For<IBehavior>();
+        mockBehaviorA.Enabled.Returns(true);
+        mockBehaviorA.Value.Returns(123);
+
+        var mockBehaviorB = Substitute.For<IBehavior>();
+        mockBehaviorB.Enabled.Returns(false);
+        mockBehaviorB.Value.Returns(456);
+
+        var behaviors = new[] { mockBehaviorA, mockBehaviorB };
+
+        var sut = new Particle(behaviors);
+
+        // Act
+        var actual = sut.Behaviors;
+
+        // Assert
+        actual.Should().BeEquivalentTo(behaviors);
     }
 
     [Fact]
