@@ -16,5 +16,5 @@ internal interface IBehaviorFactory
     /// </summary>
     /// <param name="settings">The settings to apply to the behavior.</param>
     /// <returns>A new <see cref="EasingRandomBehavior"/> instance.</returns>
-    EasingRandomBehavior CreateEasingRandomBehavior(EasingRandomBehaviorSettings settings);
+    IBehavior CreateEasingRandomBehavior(EasingRandomBehaviorSettings settings);
 }
