@@ -22,12 +22,12 @@ public abstract class Behavior : IBehavior
     /// <summary>
     /// Gets or sets the current value of the behavior.
     /// </summary>
-    public double Value { get; protected set; }
+    public float Value { get; protected set; }
 
     /// <summary>
-    /// Gets or sets the current amount of time that has elapsed for the behavior in milliseconds.
+    /// Gets the current amount of time that has elapsed for the behavior in milliseconds.
     /// </summary>
-    public double ElapsedTime { get; protected set; }
+    public float ElapsedTime { get; private set; }
 
     /// <summary>
     /// Gets the particle attribute to apply the behavior value to.
@@ -40,7 +40,7 @@ public abstract class Behavior : IBehavior
     public bool Enabled { get; private set; } = true;
 
     /// <inheritdoc/>
-    public double LifeTime { get; set; }
+    public float LifeTime { get; protected set; }
 
     /// <summary>
     /// Updates the behavior.
@@ -48,7 +48,7 @@ public abstract class Behavior : IBehavior
     /// <param name="timeElapsed">The amount of time that has elapsed since the last frame.</param>
     public virtual void Update(TimeSpan timeElapsed)
     {
-        ElapsedTime += timeElapsed.TotalMilliseconds;
+        ElapsedTime += (float)timeElapsed.TotalMilliseconds;
         Enabled = ElapsedTime < LifeTime;
     }
 
@@ -57,7 +57,7 @@ public abstract class Behavior : IBehavior
     /// </summary>
     public virtual void Reset()
     {
-        Value = 0.0;
+        Value = 0.0f;
         ElapsedTime = 0;
         Enabled = true;
     }

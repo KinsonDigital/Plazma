@@ -28,12 +28,13 @@ public class ColorScene : SceneBase
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
     private readonly ITextureRenderer textureRenderer;
     private readonly IAppInput<MouseState> mouse;
-    private readonly ParticleEngine<ITexture>? engine;
     private readonly IControlFactory ctrlFactory;
+    private ParticleEngine<ITexture>? engine;
     private IControlGroup? ctrlGroup;
     private ILabel? lblInstructions;
     private ILabel? lblSpread;
     private float spread;
+    private MouseState prevMouseState;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ColorScene"/> class.
@@ -42,7 +43,6 @@ public class ColorScene : SceneBase
     {
         this.mouse = HardwareFactory.GetMouse();
         this.textureRenderer = RendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>();
         this.ctrlFactory = new ControlFactory();
     }
 
@@ -51,6 +51,11 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void LoadContent()
     {
+        if (IsLoaded)
+        {
+            return;
+        }
+
         this.spread = WindowSize.Height / 2f;
         var allSettings = CreateSettings();
 
@@ -62,13 +67,18 @@ public class ColorScene : SceneBase
         };
 
         var poolFactory = new ParticlePoolFactory();
+        this.engine = new ParticleEngine<ITexture>();
         this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
-        this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
+        this.engine.ParticlePools[0].Effect = this.engine.ParticlePools[0].Effect with
+        {
+            SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f)
+        };
         this.engine.LoadTextures();
 
         this.lblInstructions = this.ctrlFactory.CreateLabel();
         this.lblInstructions.Text = "Scroll the mouse wheel up to cluster and down to spread.";
+        this.lblInstructions.Text += "\nClick the left mouse button to kill all particles.";
 
         this.lblSpread = this.ctrlFactory.CreateLabel();
         this.lblSpread.Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}";
@@ -88,6 +98,11 @@ public class ColorScene : SceneBase
     /// </summary>
     public override void UnloadContent()
     {
+        if (!IsLoaded)
+        {
+            return;
+        }
+
         this.ctrlGroup.Initialized -= CtrlGroupOnInitialized;
         this.engine?.Dispose();
         this.textureLoader.Dispose();
@@ -103,6 +118,11 @@ public class ColorScene : SceneBase
     {
         var mouseState = this.mouse.GetState();
 
+        if (mouseState.IsLeftButtonUp() && this.prevMouseState.IsLeftButtonDown())
+        {
+            this.engine.KillAllParticles();
+        }
+
         this.spread = mouseState.GetScrollDirection() switch
         {
             MouseScrollDirection.ScrollUp => this.spread - 50 <= 0 ? 0 : this.spread - 50,
@@ -113,6 +133,9 @@ public class ColorScene : SceneBase
         this.lblSpread.Text = $"Spread: {this.spread.ToString(CultureInfo.InvariantCulture)}";
 
         this.engine.Update(frameTime.ElapsedTime);
+
+        this.prevMouseState = mouseState;
+
         base.Update(frameTime);
     }
 
@@ -251,7 +274,7 @@ public class ColorScene : SceneBase
             RandomStartMax = 0.6f,
             RandomChangeMin = -1f,
             RandomChangeMax = -1f,
-            UpdateValue = (value) => value <= 0.0 ? 0.0 : value,
+            UpdateValue = (value) => value <= 0.0f ? 0.0f : value,
         };
 
         return

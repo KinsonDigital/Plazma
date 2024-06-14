@@ -192,6 +192,46 @@ public class ParticleEngineTests
         // Assert
         mockPool.Received(1).Update(timeElapsed);
     }
+
+    [Fact]
+    public void KillAllParticles_WhenInvoked_KillsAllParticles()
+    {
+        // Arrange
+        var mockPoolA = Substitute.For<IParticlePool<FakeTexture>>();
+        var mockPoolB = Substitute.For<IParticlePool<FakeTexture>>();
+
+        var sut = CreateSystemUnderTest();
+        sut.AddPool(mockPoolA);
+        sut.AddPool(mockPoolB);
+
+        // Act
+        sut.KillAllParticles();
+
+        // Assert
+        mockPoolA.Received(1).KillAllParticles();
+        mockPoolB.Received(1).KillAllParticles();
+    }
+
+    [Fact]
+    public void Dispose_WhenInvoked_DisposesOfEngine()
+    {
+        // Arrange
+        var mockPoolA = Substitute.For<IParticlePool<FakeTexture>>();
+        var mockPoolB = Substitute.For<IParticlePool<FakeTexture>>();
+
+        var sut = CreateSystemUnderTest();
+        sut.AddPool(mockPoolA);
+        sut.AddPool(mockPoolB);
+
+        // Act
+        sut.Dispose();
+        sut.Dispose();
+
+        // Assert
+        mockPoolA.Received(1).Dispose();
+        mockPoolB.Received(1).Dispose();
+        sut.ParticlePools.Should().BeEmpty();
+    }
     #endregion
 
     /// <summary>

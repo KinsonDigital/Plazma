@@ -13,14 +13,15 @@ using Behaviors;
 /// <summary>
 /// Holds the particle setup settings data for the <see cref="ParticleEngine{TTexture}"/> to consume.
 /// </summary>
-public class ParticleEffect // : IEnumerable<IBehaviorSettings>
+public readonly record struct ParticleEffect
 {
-    private EasingRandomBehaviorSettings[] behaviorSettings = Array.Empty<EasingRandomBehaviorSettings>();
+    private readonly EasingRandomBehaviorSettings[] behaviorSettings = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
     /// </summary>
     public ParticleEffect()
+        : this(string.Empty, [])
     {
     }
 
@@ -28,7 +29,7 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     /// Initializes a new instance of the <see cref="ParticleEffect"/> class.
     /// </summary>
     /// <param name="particleTextureName">The name of the texture used in the particle effect.</param>
-    /// <param name="settings">The settings used to setup the particle effect.</param>
+    /// <param name="settings">The settings used to set up the particle effect.</param>
     public ParticleEffect(string particleTextureName, EasingRandomBehaviorSettings[] settings)
     {
         this.behaviorSettings = settings ?? throw new ArgumentNullException(nameof(settings), "Parameter must not be null.");
@@ -38,38 +39,38 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     /// <summary>
     /// Gets the name of the particle texture used in the particle effect.
     /// </summary>
-    public string ParticleTextureName { get; private set; } = string.Empty;
+    public string ParticleTextureName { get; private init; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the location on the screen of where to spawn the <see cref="Particle"/>s.
+    /// Gets the location on the screen of where to spawn the <see cref="Particle"/>s.
     /// </summary>
-    public Vector2 SpawnLocation { get; set; }
+    public Vector2 SpawnLocation { get; init; }
 
     /// <summary>
-    /// Gets or sets the total number of particles..
+    /// Gets the total number of particles.
     /// </summary>
     /// <remarks>This takes into account any particle regardless if it is alive or dead.</remarks>
-    public int TotalParticles { get; set; } = 1;
+    public int TotalParticles { get; init; } = 1;
 
     /// <summary>
-    /// Gets or sets the minimum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
+    /// Gets the minimum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
     /// </summary>
     /// <remarks>Decrease this value to spawn particles faster over time.</remarks>
-    public int SpawnRateMin { get; set; } = 250;
+    public float SpawnRateMin { get; init; } = 250;
 
     /// <summary>
-    /// Gets or sets the maximum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
+    /// Gets the maximum spawn rate of the range that a <see cref="Particle"/> will be randomly set to.
     /// </summary>
     /// <remarks>Decrease this value to spawn particles faster over time.</remarks>
-    public int SpawnRateMax { get; set; } = 1000;
+    public float SpawnRateMax { get; init; } = 1000;
 
     /// <summary>
-    /// Gets or sets a value indicating whether particles will spawn at a limited rate.
+    /// Gets a value indicating whether particles will spawn at a limited rate.
     /// </summary>
-    public bool LimitSpawnRate { get; set; } = true;
+    public bool LimitSpawnRate { get; init; } = true;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the bursting effect is enabled or disabled.
+    /// Gets a value indicating whether the bursting effect is enabled or disabled.
     /// </summary>
     /// <remarks>
     ///     If enabled, the engine will spawn particles in a bursting fashion at intervals based on the timings between
@@ -79,41 +80,41 @@ public class ParticleEffect // : IEnumerable<IBehaviorSettings>
     ///     values and if the spawn effect is in its off cycle, it will use the <see cref="ParticleEffect.SpawnRateMin"/>
     ///     <see cref="ParticleEffect.SpawnRateMax"/> values.
     /// </remarks>
-    public bool BurstEnabled { get; set; }
+    public bool BurstEnabled { get; init; }
 
     /// <summary>
-    /// Gets or sets the minimum particle spawn rate that can be randomly generated
+    /// Gets the minimum particle spawn rate that can be randomly generated
     /// when <see cref="BurstEnabled"/> is enabled.
     /// </summary>
-    public int BurstSpawnRateMin { get; set; }
+    public float BurstSpawnRateMin { get; init; }
 
     /// <summary>
-    /// Gets or sets the maximum particle spawn rate that can be randomly generated
+    /// Gets the maximum particle spawn rate that can be randomly generated
     /// when <see cref="BurstEnabled"/> is enabled.
     /// </summary>
-    public int BurstSpawnRateMax { get; set; } = 250;
+    public float BurstSpawnRateMax { get; init; } = 250;
 
     /// <summary>
-    /// Gets or sets the amount of time that the bursting effect will run in it's on cycle.
+    /// Gets the amount of time that the bursting effect will run in its on cycle.
     /// </summary>
-    public int BurstOnMilliseconds { get; set; } = 3000;
+    public float BurstOnMilliseconds { get; init; } = 3000;
 
     /// <summary>
-    /// Gets or sets the amount of time that the bursting effect will run in it's off cycle.
+    /// Gets the amount of time that the bursting effect will run in its off cycle.
     /// </summary>
-    public int BurstOffMilliseconds { get; set; } = 1000;
+    public float BurstOffMilliseconds { get; init; } = 1000;
 
     /// <summary>
-    /// Gets or sets a value indicating whether the colors will be randomly chosen from a list.
+    /// Gets a value indicating whether the colors will be randomly chosen from a list.
     /// </summary>
-    public bool UseColorsFromList { get; set; }
+    public bool UseColorsFromList { get; init; }
 
     /// <summary>
-    /// Gets or sets the list of behavior settings that describe how the particle effect is setup.
+    /// Gets the list of behavior settings that describe how the particle effect is set up.
     /// </summary>
     public ReadOnlyCollection<EasingRandomBehaviorSettings> BehaviorSettings
     {
         get => new (this.behaviorSettings);
-        set => this.behaviorSettings = value.ToArray();
+        init => this.behaviorSettings = value.ToArray();
     }
 }

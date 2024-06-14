@@ -50,7 +50,7 @@ public readonly record struct EasingRandomBehaviorSettings
     /// </para>
     /// </remarks>
     [JsonIgnore]
-    public Func<double, double>? UpdateValue { get; init; }
+    public Func<float, float>? UpdateValue { get; init; }
 
     /// <summary>
     /// Gets a delegate that will give the current value of the behavior and
@@ -65,7 +65,7 @@ public readonly record struct EasingRandomBehaviorSettings
     /// </para>
     /// </remarks>
     [JsonIgnore]
-    public Func<double, float>? UpdateRandomStartMin { get; init; }
+    public Func<float, float>? UpdateRandomStartMin { get; init; }
 
     /// <summary>
     /// Gets a delegate that will give the current value of the behavior and
@@ -80,7 +80,7 @@ public readonly record struct EasingRandomBehaviorSettings
     /// </para>
     /// </remarks>
     [JsonIgnore]
-    public Func<double, float>? UpdateRandomStartMax { get; init; }
+    public Func<float, float>? UpdateRandomStartMax { get; init; }
 
     /// <summary>
     /// Gets the minimum amount of change used in randomization.
@@ -101,12 +101,12 @@ public readonly record struct EasingRandomBehaviorSettings
     /// <summary>
     /// Gets the minimum total amount of time in milliseconds to complete the behavior.
     /// </summary>
-    /// <remarks>A value less then or equal to 0 will result in the behavior not working.</remarks>
+    /// <remarks>A value less than or equal to 0 will result in the behavior not working.</remarks>
     public float LifeTimeMillisecondsMin { get; init; }
 
     /// <summary>
     /// Gets the maximum total amount of time in milliseconds to complete the behavior.
     /// </summary>
-    /// <remarks>A value less then or equal to 0 will result in the behavior not working.</remarks>
+    /// <remarks>A value less than or equal to 0 will result in the behavior not working.</remarks>
     public float LifeTimeMillisecondsMax { get; init; }
 }

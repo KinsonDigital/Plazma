@@ -10,5 +10,5 @@ using Behaviors;
 internal sealed class ParticleFactory : IParticleFactory
 {
     /// <inheritdoc/>
-    public IParticle Create(IBehavior[] behaviors) => new Particle(behaviors);
+    public Particle Create(IBehavior[] behaviors) => new (behaviors);
 }

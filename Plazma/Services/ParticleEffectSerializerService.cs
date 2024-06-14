@@ -4,7 +4,6 @@
 
 namespace Plazma.Services;
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Json;
@@ -28,11 +27,6 @@ public class ParticleEffectSerializerService : ISerializerService<ParticleEffect
     /// <inheritdoc/>
     public void Serialize(string filePath, ParticleEffect effect)
     {
-        if (effect is null)
-        {
-            throw new ArgumentNullException(nameof(effect), "Parameter must not be null.");
-        }
-
         var jsonData = JsonSerializer.Serialize(effect, this.jsonOptions);
 
         File.WriteAllText(filePath, jsonData);

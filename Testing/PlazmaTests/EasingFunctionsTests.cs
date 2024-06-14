@@ -15,11 +15,11 @@ public class EasingFunctionsTests
 {
     #region Method Tests
     [Theory]
-    [InlineData(0.3636, 2.0, 3.0, 3.0, 2.33326667)]
-    [InlineData(0.4, 2.0, 3.0, 1.0, 4.7299999999999995)]
-    [InlineData(0.8, 2.0, 3.0, 1.0, 4.82)]
-    [InlineData(1.0, 2.0, 3.0, 1.0, 5.090511363636364)]
-    public void EaseOutBounce_WhenInvoked_ReturnsCorrectValue(double t, double b, double c, double d, double expected)
+    [InlineData(0.3636f, 2.0f, 3.0f, 3.0f, 2.3332665f)]
+    [InlineData(0.4f, 2.0f, 3.0f, 1.0f, 4.7299999999999995f)]
+    [InlineData(0.8f, 2.0f, 3.0f, 1.0f, 4.8199997f)]
+    [InlineData(1.0f, 2.0f, 3.0f, 1.0f, 5.090511363636364f)]
+    public void EaseOutBounce_WhenInvoked_ReturnsCorrectValue(float t, float b, float c, float d, float expected)
     {
         // Act
         var actual = EasingFunctions.EaseOutBounce(t, b, c, d);
@@ -32,10 +32,10 @@ public class EasingFunctionsTests
     public void EaseInQuad_WhenInvoked_ReturnsCorrectResult()
     {
         // Arrange
-        var expected = 30.444444444444443;
+        var expected = 30.444447F;
 
         // Act
-        var actual = EasingFunctions.EaseInQuad(16, 2.0, 4.0, 6.0);
+        var actual = EasingFunctions.EaseInQuad(16f, 2.0f, 4.0f, 6.0f);
 
         // Assert
         actual.Should().Be(expected);
@@ -45,10 +45,10 @@ public class EasingFunctionsTests
     public void EaseInQuad_WhenUsingNegativeChange_ResultDecreases()
     {
         // Arrange
-        var firstValue = EasingFunctions.EaseInQuad(16, 2.0, -1.0, 6.0);
+        var firstValue = EasingFunctions.EaseInQuad(16f, 2.0f, -1.0f, 6.0f);
 
         // Act
-        var secondValue = EasingFunctions.EaseInQuad(32, 2.0, -1.0, 6.0);
+        var secondValue = EasingFunctions.EaseInQuad(32f, 2.0f, -1.0f, 6.0f);
 
         // Assert
         secondValue.Should().BeLessThan(firstValue);

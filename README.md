@@ -23,7 +23,7 @@
 
 <h2 style="font-weight:bold;border:0" align="center" >!! NOTICE !!</h2>
 
-This library is still under development and is not at v1.0.0 yet!!  However, all of the major features are available, so we encourage you to use the project and provide feedback.  That is what open source is all about. 🥳
+This library is still under development and is not at v1.0.0 yet!!  However, all the major features are available, so we encourage you to use the project and provide feedback.  That is what open source is all about. 🥳
 
 <h2 style="font-weight:bold;border:0" align="center">📖 About Plazma 📖</h2>
 

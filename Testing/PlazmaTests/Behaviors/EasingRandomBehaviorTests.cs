@@ -78,15 +78,15 @@ public class EasingRandomBehaviorTests
 
     #region Method Tests
     [Theory]
-    [InlineData(EasingFunction.EaseOutBounce, 13, 400, 800, 200, 13)]
-    [InlineData(EasingFunction.EaseIn, 100, 600, 1000, 113, 100)]
+    [InlineData(EasingFunction.EaseOutBounce, 13f, 400f, 800f, 200f, 13f)]
+    [InlineData(EasingFunction.EaseIn, 100f, 600f, 1000f, 113f, 100f)]
     public void Update_WhenInvoked_CorrectlySetsBehaviorValue(
         EasingFunction easingFunction,
         int start,
         int change,
         int lifeTime,
         int elapsedTime,
-        double expected)
+        float expected)
     {
         // Arrange
         this.mockRandomizerService.GetValue(11f, 11f).Returns(start);
@@ -141,6 +141,146 @@ public class EasingRandomBehaviorTests
 
         // Assert
         behavior.Enabled.Should().Be(expected);
+    }
+
+    [Fact]
+    public void Update_WhenUpdateValueFuncIsNotNull_InvokesFunc()
+    {
+        // Arrange
+        var invoked = false;
+        var settings = new EasingRandomBehaviorSettings
+        {
+            RandomStartMin = 10,
+            RandomStartMax = 20,
+            RandomChangeMin = 30,
+            RandomChangeMax = 40,
+            LifeTimeMillisecondsMin = 50,
+            LifeTimeMillisecondsMax = 60,
+            EasingFunctionType = EasingFunction.EaseIn,
+            UpdateValue = value =>
+            {
+                value.Should().Be(100f);
+                invoked = true;
+
+                return value;
+            },
+        };
+
+        this.mockRandomizerService.GetValue(10f, 20f).Returns(150);
+        this.mockRandomizerService.GetValue(30f, 40f).Returns(350);
+        this.mockRandomizerService.GetValue(50f, 60f).Returns(550);
+
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
+        behavior.Start = 100;
+        behavior.Change = 20;
+
+        // Act
+        behavior.Update(10.ToMillisecondsTimeSpan());
+
+        // Assert
+        invoked.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Update_WhenUpdateRandomStartMinFuncIsNotNull_InvokesFunc()
+    {
+        // Arrange
+        var invoked = false;
+        var settings = new EasingRandomBehaviorSettings
+        {
+            RandomStartMin = 10,
+            RandomStartMax = 20,
+            RandomChangeMin = 30,
+            RandomChangeMax = 40,
+            LifeTimeMillisecondsMin = 50,
+            LifeTimeMillisecondsMax = 60,
+            EasingFunctionType = EasingFunction.EaseIn,
+            UpdateRandomStartMin = value =>
+            {
+                value.Should().Be(100f);
+                invoked = true;
+
+                return value;
+            },
+        };
+
+        this.mockRandomizerService.GetValue(10f, 20f).Returns(150);
+        this.mockRandomizerService.GetValue(30f, 40f).Returns(350);
+        this.mockRandomizerService.GetValue(50f, 60f).Returns(550);
+
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
+        behavior.Start = 100;
+        behavior.Change = 20;
+
+        // Act
+        behavior.Update(10.ToMillisecondsTimeSpan());
+
+        // Assert
+        invoked.Should().BeTrue();
+        behavior.Value.Should().Be(100);
+        behavior.Settings.RandomStartMin.Should().Be(100);
+        behavior.Settings.RandomStartMax.Should().Be(20);
+    }
+
+    [Fact]
+    public void Update_WhenUpdateRandomStartMaxFuncIsNotNull_InvokesFunc()
+    {
+        // Arrange
+        var invoked = false;
+        var settings = new EasingRandomBehaviorSettings
+        {
+            RandomStartMin = 10,
+            RandomStartMax = 20,
+            RandomChangeMin = 30,
+            RandomChangeMax = 40,
+            LifeTimeMillisecondsMin = 50,
+            LifeTimeMillisecondsMax = 60,
+            EasingFunctionType = EasingFunction.EaseOutBounce,
+            UpdateRandomStartMax = value =>
+            {
+                value.Should().Be(100f);
+                invoked = true;
+
+                return value;
+            },
+        };
+
+        this.mockRandomizerService.GetValue(10f, 20f).Returns(150);
+        this.mockRandomizerService.GetValue(30f, 40f).Returns(350);
+        this.mockRandomizerService.GetValue(50f, 60f).Returns(550);
+
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
+        behavior.Start = 100;
+        behavior.Change = 20;
+
+        // Act
+        behavior.Update(10.ToMillisecondsTimeSpan());
+
+        // Assert
+        invoked.Should().BeTrue();
+        behavior.Value.Should().Be(100);
+        behavior.Settings.RandomStartMin.Should().Be(10);
+        behavior.Settings.RandomStartMax.Should().Be(100);
+    }
+
+    [Fact]
+    public void Update_WithInvalidEasingFunctionType_KeepsValueUnchanged()
+    {
+        // Arrange
+        var settings = new EasingRandomBehaviorSettings
+        {
+            EasingFunctionType = (EasingFunction)800,
+        };
+
+        var behavior = new EasingRandomBehavior(settings, this.mockRandomizerService);
+        behavior.Start = 100;
+        behavior.Change = 20;
+
+        // Act
+        behavior.Update(10.ToMillisecondsTimeSpan());
+
+        // Assert
+        behavior.Value.Should().Be(0);
     }
 
     [Fact]

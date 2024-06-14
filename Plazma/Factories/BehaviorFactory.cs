@@ -11,7 +11,7 @@ using Services;
 internal sealed class BehaviorFactory : IBehaviorFactory
 {
     /// <inheritdoc/>
-    public EasingRandomBehavior CreateEasingRandomBehavior(EasingRandomBehaviorSettings settings)
+    public IBehavior CreateEasingRandomBehavior(EasingRandomBehaviorSettings settings)
     {
         var randomService = IoC.Container.GetInstance<IRandomizerService>();
 

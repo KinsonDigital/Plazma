@@ -2,6 +2,7 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable ForCanBeConvertedToForeach
 #pragma warning disable CA1303 // Do not pass literals as localized parameters
 namespace Plazma;
 
@@ -9,13 +10,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 /// <summary>
 /// Provides extensions to various things to help make better code.
 /// </summary>
 public static class ExtensionMethods
 {
-    private static readonly char[] ValidNumChars = { '-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    private static readonly char[] ValidNumChars = ['-', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
     /// <summary>
     /// Returns a random value between the given <paramref name="minValue"/> and <paramref name="maxValue"/>.
@@ -50,7 +52,7 @@ public static class ExtensionMethods
     /// <typeparam name="T">The type of object in list to count.</typeparam>
     /// <param name="items">The list of items to count based on the predicate.</param>
     /// <param name="predicate">The predicate that when returns true, counts the item.</param>
-    /// <returns>The number of items that match the predicate..</returns>
+    /// <returns>The number of items that match the predicate.</returns>
     [SuppressMessage("csharpsquid", "S3267", Justification = "Not needed.")]
     public static int Count<T>(this List<T>? items, Predicate<T> predicate)
     {
@@ -66,9 +68,9 @@ public static class ExtensionMethods
 
         var result = 0;
 
-        foreach (var t in items)
+        for (var i = 0; i < items.Count; i++)
         {
-            if (predicate(t))
+            if (predicate(items[i]))
             {
                 result++;
             }
@@ -83,7 +85,7 @@ public static class ExtensionMethods
     /// <typeparam name="T">The type of object in list to count.</typeparam>
     /// <param name="items">The list of items to count based on the predicate.</param>
     /// <param name="predicate">The predicate that when returns true, counts the item.</param>
-    /// <returns>The number of items that match the predicate..</returns>
+    /// <returns>The number of items that match the predicate.</returns>
     [SuppressMessage("csharpsquid", "S3267", Justification = "Not needed.")]
     public static int Count<T>(this T[]? items, Predicate<T> predicate)
     {
@@ -99,9 +101,9 @@ public static class ExtensionMethods
 
         var result = 0;
 
-        foreach (var t in items)
+        for (var i = 0; i < items.Length; i++)
         {
-            if (predicate(t))
+            if (predicate(items[i]))
             {
                 result++;
             }
@@ -117,4 +119,25 @@ public static class ExtensionMethods
     /// <returns>True if the string contains non number characters.</returns>
     public static bool ContainsNonNumberCharacters(this string value) =>
         !string.IsNullOrEmpty(value) && Array.Exists(value.ToCharArray(), c => !ValidNumChars.Contains(c));
+
+    /// <summary>
+    /// Loops through the given <paramref name="items"/> in a performant manner and runs the given
+    /// <paramref name="func"/> for each item to run any required custom logic.
+    /// </summary>
+    /// <param name="items">The items to loop over.</param>
+    /// <param name="func">The function invoked to run custom logic.</param>
+    /// <typeparam name="T">The type of items.</typeparam>
+    /// <remarks>
+    ///     WARNING: Do not change the order or add or remove items in the list
+    ///     while this method is running.
+    /// </remarks>
+    public static void ForMarshalAsSpan<T>(this List<T> items, Func<T, T> func)
+    {
+        var particleList = CollectionsMarshal.AsSpan(items);
+
+        for (var i = 0; i < particleList.Length; i++)
+        {
+            particleList[i] = func(particleList[i]);
+        }
+    }
 }

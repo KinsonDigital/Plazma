@@ -25,22 +25,23 @@ public class AngleScene : SceneBase
     private const float TextureHalfHeight = 31.5f;
     private readonly ITextureLoader<ITexture> textureLoader = new ParticleTextureLoader();
     private readonly ITextureRenderer textureRenderer;
-    private readonly ParticleEngine<ITexture>? engine;
+    private ParticleEngine<ITexture>? engine;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AngleScene"/> class.
     /// </summary>
-    public AngleScene()
-    {
-        this.textureRenderer = RendererFactory.CreateTextureRenderer();
-        this.engine = new ParticleEngine<ITexture>();
-    }
+    public AngleScene() => this.textureRenderer = RendererFactory.CreateTextureRenderer();
 
     /// <summary>
     /// Loads the content.
     /// </summary>
     public override void LoadContent()
     {
+        if (IsLoaded)
+        {
+            return;
+        }
+
         var allSettings = CreateSettings();
 
         var effect = new ParticleEffect("drop", allSettings)
@@ -51,9 +52,13 @@ public class AngleScene : SceneBase
         };
 
         var poolFactory = new ParticlePoolFactory();
+        this.engine = new ParticleEngine<ITexture>();
         this.engine.AddPool(poolFactory.Create(effect, this.textureLoader));
 
-        this.engine.ParticlePools[0].Effect.SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f);
+        this.engine.ParticlePools[0].Effect = this.engine.ParticlePools[0].Effect with
+        {
+            SpawnLocation = new Vector2(WindowSize.Width / 2f, WindowSize.Height / 2f)
+        };
         this.engine.LoadTextures();
 
         base.LoadContent();
@@ -64,6 +69,11 @@ public class AngleScene : SceneBase
     /// </summary>
     public override void UnloadContent()
     {
+        if (!IsLoaded)
+        {
+            return;
+        }
+
         this.engine?.Dispose();
         this.textureLoader.Dispose();
 

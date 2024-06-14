@@ -61,12 +61,12 @@ public interface IParticlePool<out TTexture> : IDisposable
     /// <summary>
     /// Gets the list of particle in the pool.
     /// </summary>
-    ImmutableArray<IParticle> Particles { get; }
+    ImmutableArray<Particle> Particles { get; }
 
     /// <summary>
-    /// Gets the particle effect of the pool.
+    /// Gets or sets the particle effect of the pool.
     /// </summary>
-    ParticleEffect Effect { get; }
+    ParticleEffect Effect { get; set; }
 
     /// <summary>
     /// Gets the texture of the particles in the pool.
@@ -86,7 +86,7 @@ public interface IParticlePool<out TTexture> : IDisposable
     void Update(TimeSpan timeElapsed);
 
     /// <summary>
-    /// Kills all of the particles.
+    /// Kills all the particles.
     /// </summary>
     void KillAllParticles();
 
@@ -96,13 +96,13 @@ public interface IParticlePool<out TTexture> : IDisposable
     void LoadTexture();
 
     /// <summary>
-    /// Add a behavior to all of the particles using the given behavior settings.
+    /// Add a behavior to all the particles using the given behavior settings.
     /// </summary>
     /// <param name="behaviorSettings">The behavior settings.</param>
     void AddBehavior(EasingRandomBehaviorSettings behaviorSettings);
 
     /// <summary>
-    /// Removes a behavior from all of the particles that matches the given <paramref name="behaviorType"/>.
+    /// Removes a behavior from all the particles that matches the given <paramref name="behaviorType"/>.
     /// </summary>
     /// <param name="behaviorType">The type of behavior to remove.</param>
     void RemoveBehavior(BehaviorAttribute behaviorType);

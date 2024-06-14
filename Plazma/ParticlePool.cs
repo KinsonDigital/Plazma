@@ -2,14 +2,17 @@
 // Copyright (c) KinsonDigital. All rights reserved.
 // </copyright>
 
+// ReSharper disable ForCanBeConvertedToForeach
 #pragma warning disable CA1303 // Do not pass literals as localized parameters
 namespace Plazma;
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using Behaviors;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using Behaviors;
 using Factories;
 using Services;
 
@@ -21,8 +24,39 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     private readonly ITextureLoader<TTexture> textureLoader;
     private readonly IBehaviorFactory behaviorFactory;
     private readonly IParticleFactory particleFactory;
-    private readonly List<IParticle> particles = new ();
-    private int spawnRate;
+    private readonly List<Particle> particles = [];
+    private readonly Dictionary<BehaviorAttribute, UpdateFunction> updateFunctions = new ()
+    {
+        { BehaviorAttribute.X, (particle, value) => particle with { Position = particle.Position with { X = value } } },
+        { BehaviorAttribute.Y, (particle, value) => particle with { Position = particle.Position with { Y = value } } },
+        { BehaviorAttribute.Angle, (particle, value) => particle with { Angle = value } },
+        { BehaviorAttribute.Size, (particle, value) => particle with { Size = value } },
+        {
+            BehaviorAttribute.AlphaColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb((byte)Math.Clamp(value, 0f, 255f), particle.TintColor.R, particle.TintColor.G, particle.TintColor.B)
+            }
+        },
+        {
+            BehaviorAttribute.RedColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb(particle.TintColor.A, (byte)Math.Clamp(value, 0f, 255f), particle.TintColor.G, particle.TintColor.B)
+            }
+        },
+        {
+            BehaviorAttribute.GreenColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb(particle.TintColor.A, particle.TintColor.R, (byte)Math.Clamp(value, 0f, 255f), particle.TintColor.B)
+            }
+        },
+        {
+            BehaviorAttribute.BlueColorComponent, (particle, value) => particle with
+            {
+                TintColor = Color.FromArgb(particle.TintColor.A, particle.TintColor.R, particle.TintColor.G, (byte)Math.Clamp(value, 0f, 255f))
+            }
+        },
+    };
+    private float spawnRate;
     private double spawnRateElapsed;
     private int burstOnTimeElapsed;
     private int burstOffTimeElapsed;
@@ -36,7 +70,6 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     [ExcludeFromCodeCoverage(Justification = "Uses non-testable IoC container.")]
     public ParticlePool(ParticleEffect effect, ITextureLoader<TTexture> textureLoader)
     {
-        ArgumentNullException.ThrowIfNull(effect);
         ArgumentNullException.ThrowIfNull(textureLoader);
 
         Effect = effect;
@@ -56,7 +89,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     /// <param name="randomizer">Used for generating random values when a particle is spawned.</param>
     /// <param name="behaviorFactory">Creates behaviors.</param>
     /// <param name="particleFactory">Creates particles.</param>
-    /// <param name="effect">The particle effect to be applied to all of the particles in the pool.</param>
+    /// <param name="effect">The particle effect to be applied to all the particles in the pool.</param>
     internal ParticlePool(
         ITextureLoader<TTexture> textureLoader,
         IRandomizerService randomizer,
@@ -80,49 +113,56 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         this.spawnRate = GetRandomSpawnRate();
     }
 
+    private delegate Particle UpdateFunction(Particle particle, float value);
+
     /// <inheritdoc/>
     [SuppressMessage("ReSharper", "EventNeverSubscribedTo.Global", Justification = "Part of the public API.")]
     public event EventHandler<EventArgs>? LivingParticlesCountChanged;
 
     /// <inheritdoc/>
-    public int TotalLivingParticles => this.particles.Count(p => p.IsAlive);
+    public int TotalLivingParticles => this.isDisposed ? 0 : this.particles.Count(p => p.IsAlive);
 
     /// <inheritdoc/>
-    public int TotalDeadParticles => this.particles.Count(p => p.IsAlive is false);
+    public int TotalDeadParticles => this.isDisposed ? 0 : this.particles.Count(p => p.IsAlive is false);
 
     /// <inheritdoc/>
     public bool LimitSpawnRate
     {
         get => Effect.LimitSpawnRate;
-        set => Effect.LimitSpawnRate = value;
+        set => Effect = Effect with { LimitSpawnRate = value };
     }
 
     /// <inheritdoc/>
     public bool BurstEnabled
     {
         get => Effect.BurstEnabled;
-        set => Effect.BurstEnabled = value;
+        set => Effect = Effect with { BurstEnabled = value };
     }
 
     /// <inheritdoc/>
     public bool InBurstMode { get; set; }
 
     /// <inheritdoc/>
-    public ImmutableArray<IParticle> Particles => this.particles.ToImmutableArray();
+    public ImmutableArray<Particle> Particles => this.isDisposed ? [] : [..this.particles];
 
     /// <inheritdoc/>
-    public ParticleEffect Effect { get; private set; }
+    public ParticleEffect Effect { get; set; }
 
     /// <inheritdoc/>
     [SuppressMessage("ReSharper", "MemberCanBePrivate.Global", Justification = "Part of the public API.")]
     public TTexture? PoolTexture { get; private set; }
 
     /// <inheritdoc/>
-    public bool TextureLoaded => PoolTexture != null;
+    public bool TextureLoaded => !this.isDisposed && PoolTexture != null;
 
     /// <inheritdoc/>
     public void Update(TimeSpan timeElapsed)
     {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
         this.spawnRateElapsed += timeElapsed.TotalMilliseconds;
 
         ManageBurstEffectTimings(timeElapsed);
@@ -137,41 +177,111 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
             this.spawnRateElapsed = 0;
         }
 
-        foreach (var t in this.particles)
-        {
-            if (t.IsAlive)
-            {
-                t.Update(timeElapsed);
-            }
-        }
+        this.particles.ForMarshalAsSpan((p) => p.IsAlive ? UpdateParticle(p, timeElapsed) : p);
     }
 
     /// <inheritdoc/>
-    public void KillAllParticles() => this.particles.ForEach(p => p.IsAlive = false);
+    public void KillAllParticles()
+    {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
+        this.particles.ForMarshalAsSpan((p) => p with { IsAlive = false });
+    }
 
     /// <inheritdoc/>
-    public void LoadTexture() => PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
+    public void LoadTexture()
+    {
+        if (this.isDisposed)
+        {
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
+        PoolTexture = this.textureLoader.LoadTexture(Effect.ParticleTextureName);
+    }
 
     /// <inheritdoc/>
     public void AddBehavior(EasingRandomBehaviorSettings behaviorSettings)
     {
-        foreach (var particle in Particles)
+        if (this.isDisposed)
         {
-            particle.AddBehavior(this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings));
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
+        for (var i = 0; i < Particles.Length; i++)
+        {
+            var behavior = this.behaviorFactory.CreateEasingRandomBehavior(behaviorSettings);
+
+            if (Particles[i].Behaviors?.Exists(b => b.BehaviorType == behavior.BehaviorType) ?? false)
+            {
+                return;
+            }
+
+            Particles[i].Behaviors?.Add(behavior);
         }
     }
 
     /// <inheritdoc/>
     public void RemoveBehavior(BehaviorAttribute behaviorType)
     {
-        foreach (var particle in Particles)
+        if (this.isDisposed)
         {
-            particle.RemoveBehavior(behaviorType);
+            throw new ObjectDisposedException(nameof(ParticlePool<TTexture>));
+        }
+
+        for (var i = 0; i < Particles.Length; i++)
+        {
+            var behavior = Particles[i].Behaviors?.Find(b => b.BehaviorType == behaviorType);
+
+            Particles[i].Behaviors?.Remove(behavior!);
         }
     }
 
     /// <inheritdoc cref="IDisposable.Dispose"/>
     public void Dispose() => Dispose(true);
+
+    /// <summary>
+    /// Updates the given <paramref name="particle"/> and returns it updated.
+    /// </summary>
+    /// <param name="particle">The particle to update.</param>
+    /// <param name="timeElapsed">The amount of time that has passed since the last frame.</param>
+    /// <returns>The updated particle.</returns>
+    /// <exception cref="InvalidEnumArgumentException">
+    ///     Thrown if the particle behavior attribute is an invalid enumeration value.
+    /// </exception>
+    private Particle UpdateParticle(Particle particle, TimeSpan timeElapsed)
+    {
+        particle = particle with { IsAlive = false };
+
+        // Apply the behavior values to the particle attributes
+        for (var i = 0; i < particle.Behaviors?.Count; i++)
+        {
+            var behavior = particle.Behaviors[i];
+
+            if (!behavior.Enabled)
+            {
+                continue;
+            }
+
+            behavior.Update(timeElapsed);
+            particle = particle with { IsAlive = true };
+
+            var value = behavior.Value;
+
+            if (this.updateFunctions.TryGetValue(behavior.BehaviorType, out var updateFunction))
+            {
+                particle = updateFunction(particle, value);
+            }
+            else
+            {
+                throw new InvalidEnumArgumentException(nameof(BehaviorAttribute), (int)behavior.BehaviorType, typeof(BehaviorAttribute));
+            }
+        }
+
+        return particle;
+    }
 
     /// <summary>
     /// Manages the timings for the burst effect on and off cycle.
@@ -186,35 +296,51 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
 
         this.burstOffTimeElapsed += (int)timeElapsed.TotalMilliseconds;
 
-        if (this.burstOffTimeElapsed >= Effect.BurstOffMilliseconds)
+        if (this.burstOffTimeElapsed < Effect.BurstOffMilliseconds)
         {
-            this.burstOnTimeElapsed += (int)timeElapsed.TotalMilliseconds;
-
-            InBurstMode = false;
-
-            if (this.burstOnTimeElapsed >= Effect.BurstOnMilliseconds)
-            {
-                InBurstMode = true;
-                this.burstOffTimeElapsed = 0;
-                this.burstOnTimeElapsed = 0;
-            }
+            return;
         }
+
+        this.burstOnTimeElapsed += (int)timeElapsed.TotalMilliseconds;
+
+        InBurstMode = false;
+
+        if (this.burstOnTimeElapsed < Effect.BurstOnMilliseconds)
+        {
+            return;
+        }
+
+        InBurstMode = true;
+        this.burstOffTimeElapsed = 0;
+        this.burstOnTimeElapsed = 0;
     }
 
     /// <summary>
-    /// Resets all of the particles.
+    /// Resets all the particles.
     /// </summary>
     private void SpawnNewParticle()
     {
-        foreach (var t in this.particles)
+        for (var i = 0; i < this.particles.Count; i++)
         {
-            if (t.IsAlive)
+            if (this.particles[i].IsAlive)
             {
                 continue;
             }
 
-            t.Reset();
-            t.Position = Effect.SpawnLocation;
+            for (var j = 0; j < this.particles[i].Behaviors?.Count; j++)
+            {
+                this.particles[i].Behaviors?[j].Reset();
+            }
+
+            this.particles[i] = this.particles[i] with
+            {
+                Size = 1,
+                Angle = 0,
+                TintColor = Color.White,
+                IsAlive = true,
+            };
+
+            this.particles[i] = this.particles[i] with { Position = Effect.SpawnLocation };
 
             this.LivingParticlesCountChanged?.Invoke(this, EventArgs.Empty);
 
@@ -223,10 +349,10 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     }
 
     /// <summary>
-    /// Returns a random time in milliseconds that the <see cref="Particle"/> will be spawned next.
+    /// Returns a random time in milliseconds that a <see cref="Particle"/> will be spawned next.
     /// </summary>
     /// <returns>A randomized spawn rate.</returns>
-    private int GetRandomSpawnRate()
+    private float GetRandomSpawnRate()
     {
         var minRate = BurstEnabled && InBurstMode ? Effect.BurstSpawnRateMin : Effect.SpawnRateMin;
         var maxRate = BurstEnabled && InBurstMode ? Effect.BurstSpawnRateMax : Effect.SpawnRateMax;
@@ -237,7 +363,7 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
     }
 
     /// <summary>
-    /// Generates all of the particles.
+    /// Generates all the particles.
     /// </summary>
     private void CreateAllParticles()
     {
@@ -247,10 +373,9 @@ public sealed class ParticlePool<TTexture> : IParticlePool<TTexture>
         {
             var behaviors = new List<IBehavior>();
 
-            for (var s = 0; s < Effect.BehaviorSettings.Count; s++)
+            for (var j = 0; j < Effect.BehaviorSettings.Count; j++)
             {
-                var settings = Effect.BehaviorSettings[s];
-                var newBehavior = this.behaviorFactory.CreateEasingRandomBehavior(settings);
+                var newBehavior = this.behaviorFactory.CreateEasingRandomBehavior(Effect.BehaviorSettings[j]);
                 behaviors.Add(newBehavior);
             }
 
