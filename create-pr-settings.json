@@ -1,0 +1,6 @@
+{
+  "ownerName": "KinsonDigital",
+  "repoName": "Plazma",
+  "githubTokenEnvVarName": "CICD_TOKEN",
+  "baseBranches": ["main", "preview"]
+}
