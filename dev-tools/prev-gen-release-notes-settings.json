@@ -4,19 +4,23 @@
     "githubTokenEnvVarName": "CICD_TOKEN",
     "milestoneName": "${VERSION}",
     "headerText": "${REPONAME} ${ENVIRONMENT} Release Notes - ${VERSION}",
-    "environment": "Production",
+    "releaseType": "Preview",
+    "extraInfo": {
+        "title": "Quick Reminder",
+        "text": "As with all software, there is always a chance for issues and bugs, especially for preview releases, so your input is greatly appreciated. 🙏🏼"
+    },
     "emojisToRemoveFromTitle": ["🚧", "🐛", "✨", "🚀", "🧪", "🔬"],
     "issueCategoryLabelMappings": {
-        "New Features ✨": "new-feature",
-        "Enhancements ✨": "enhancement",
-        "Bug Fixes 🐛": "bug",
+        "New Features ✨": "✨new-feature",
+        "Enhancements ✨": "💎enhancement",
+        "Bug Fixes 🐛": "🐛bug",
         "Breaking Changes 🧨": "🧨breaking-changes",
         "Dependency Updates 📦": "📦dependency-update"
     },
     "prCategoryLabelMappings": {
         "Dependency Updates 📦": "📦dependency-update"
     },
-    "ignoreLabels": ["🚀production-release"],
+    "ignoreLabels": ["🚀preview-release"],
     "wordReplacements": {
 		"chore(deps): ": ""
 	},

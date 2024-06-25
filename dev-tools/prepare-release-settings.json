@@ -9,9 +9,9 @@
             "assignee": "CalvinWilkinson",
             "headBranch": "prev-release",
             "baseBranch": "preview",
-            "genReleaseSettingsFilePath": "./prev-gen-release-notes-settings.json",
+            "genReleaseSettingsFilePath": "./dev-tools/prev-gen-release-notes-settings.json",
             "releaseNotesDirPath": "./ReleaseNotes",
-            "releasePrTemplateFilePath": "./ReleaseNotes",
+            "releasePrTemplateFilePath": "./templates",
             "releaseLabels": [
                 "🚀preview-release"
             ],
@@ -23,9 +23,9 @@
             "assignee": "CalvinWilkinson",
             "headBranch": "prod-release",
             "baseBranch": "preview",
-            "genReleaseSettingsFilePath": "./prod-gen-release-notes-settings.json",
+            "genReleaseSettingsFilePath": "./dev-tools/prod-gen-release-notes-settings.json",
             "releaseNotesDirPath": "./ReleaseNotes",
-            "releasePrTemplateFilePath": "./ReleaseNotes",
+            "releasePrTemplateFilePath": "./templates",
             "releaseLabels": [
                 "🚀preview-release"
             ],
