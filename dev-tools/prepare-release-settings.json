@@ -1,0 +1,37 @@
+{
+    "ownerName": "KinsonDigital",
+    "repoName": "Plazma",
+    "orgProjectName": "KD-Team",
+    "releaseTypes": [
+        {
+            "name": "Preview",
+            "reviewer": "KinsonDigitalAdmin",
+            "assignee": "CalvinWilkinson",
+            "headBranch": "prev-release",
+            "baseBranch": "preview",
+            "genReleaseSettingsFilePath": "./dev-tools/prev-gen-release-notes-settings.json",
+            "releaseNotesDirPath": "./ReleaseNotes",
+            "releasePrTemplateFilePath": "./templates",
+            "releaseLabels": [
+                "🚀preview-release"
+            ],
+            "prTitle": "🚀Preview Release (${VERSION})"
+        },
+        {
+            "name": "Production",
+            "reviewer": "KinsonDigitalAdmin",
+            "assignee": "CalvinWilkinson",
+            "headBranch": "prod-release",
+            "baseBranch": "preview",
+            "genReleaseSettingsFilePath": "./dev-tools/prod-gen-release-notes-settings.json",
+            "releaseNotesDirPath": "./ReleaseNotes",
+            "releasePrTemplateFilePath": "./templates",
+            "releaseLabels": [
+                "🚀preview-release"
+            ],
+            "prTitle": "🚀Preview Release (${VERSION})"
+        }
+    ],
+    "githubTokenEnvVarName": "CICD_TOKEN",
+    "versionFilePath": "./Plazma/Plazma.csproj"
+}

@@ -1,11 +1,14 @@
 {
     "cSpell.words": [
-        "Kinson",
-        "Plazma",
-        "pwsh",
-        "runsettings"
-    ],
+		"CICD",
+		"Kinson",
+		"Plazma",
+		"pwsh",
+		"REPONAME",
+		"runsettings"
+	],
     "dotnet.defaultSolution": "Plazma.sln",
+	"editor.detectIndentation": false,
     "[csharp]": {
 		"editor.insertSpaces": false,
 		"editor.indentSize": 4,
@@ -13,12 +16,12 @@
 	"[jsonc]": {
 		"editor.insertSpaces": false,
 		"editor.tabSize": 4,
+		"editor.defaultFormatter": "vscode.json-language-features"
 	},
 	"[yaml]": {
 		"editor.insertSpaces": true,
 		"editor.tabSize": 2,
 	},
-	"editor.detectIndentation": false,
 	"[github-actions-workflow]": {
 		"editor.tabSize": 2,
 		"editor.insertSpaces": true
