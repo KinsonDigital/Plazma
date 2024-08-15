@@ -54,8 +54,8 @@ public class MinMax
         this.value.Text = "Value";
         this.value.Visible = true;
         this.value.Min = 0;
-        this.value.Max = 255;
-        this.value.Value = 255;
+        this.value.Max = 100;
+        this.value.Value = 100;
 
         this.lockRanges = ctrlFactory.CreateCheckbox();
         this.lockRanges.IsChecked = true;
@@ -145,6 +145,10 @@ public class MinMax
     public float Right => this.group.Right;
 
     public float Bottom => this.group.Bottom;
+
+    public float Width => this.group.Width;
+
+    public float Height => this.group.Height;
 
     public void Render() => this.group.Render();
 
