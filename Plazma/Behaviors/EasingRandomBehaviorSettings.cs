@@ -39,7 +39,7 @@ public readonly record struct EasingRandomBehaviorSettings
     public float RandomStartMax { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will give the current value and return a value.
+    /// Gets a delegate that will override or manipulate the current value.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -53,8 +53,7 @@ public readonly record struct EasingRandomBehaviorSettings
     public Func<float, float>? UpdateValue { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will give the current value of the behavior and
-    /// returns a value that will be used as the new  <see cref="RandomStartMin"/>.
+    /// Gets a delegate that will override or manipulate the current value.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -68,8 +67,7 @@ public readonly record struct EasingRandomBehaviorSettings
     public Func<float, float>? UpdateRandomStartMin { get; init; }
 
     /// <summary>
-    /// Gets a delegate that will give the current value of the behavior and
-    /// returns a value that will be used as the new  <see cref="RandomStartMax"/>.
+    /// Gets a delegate that will override or manipulate the current value.
     /// </summary>
     /// <remarks>
     /// <para>
@@ -81,6 +79,34 @@ public readonly record struct EasingRandomBehaviorSettings
     /// </remarks>
     [JsonIgnore]
     public Func<float, float>? UpdateRandomStartMax { get; init; }
+
+    /// <summary>
+    /// Gets a delegate that will override or manipulate the current value.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    ///     This is invoked during the behavior update process.
+    /// </para>
+    /// <para>
+    ///     The value returned from the delegate will be used as the new value for the <see cref="RandomStartMax"/>.
+    /// </para>
+    /// </remarks>
+    [JsonIgnore]
+    public Func<float, float>? UpdateRandomChangeMin { get; init; }
+
+    /// <summary>
+    /// Gets a delegate that will override or manipulate the current value.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    ///     This is invoked during the behavior update process.
+    /// </para>
+    /// <para>
+    ///     The value returned from the delegate will be used as the new value for the <see cref="RandomStartMax"/>.
+    /// </para>
+    /// </remarks>
+    [JsonIgnore]
+    public Func<float, float>? UpdateRandomChangeMax { get; init; }
 
     /// <summary>
     /// Gets the minimum amount of change used in randomization.

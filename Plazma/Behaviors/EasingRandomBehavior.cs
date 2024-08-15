@@ -57,19 +57,36 @@ public class EasingRandomBehavior : Behavior
             _ => Value
         };
 
+        // Override the current value between the start and end if the update delegate is set
         if (this.settings.UpdateValue is not null)
         {
             Value = this.settings.UpdateValue.Invoke(Value);
         }
 
+        // Override the random start min value if the update delegate is set
         if (this.settings.UpdateRandomStartMin is not null)
         {
             this.settings = this.settings with { RandomStartMin = this.settings.UpdateRandomStartMin?.Invoke(Value) ?? 0f };
         }
 
+        // Override the random start max value if the update delegate is set
         if (this.settings.UpdateRandomStartMax is not null)
         {
             this.settings = this.settings with { RandomStartMax = this.settings.UpdateRandomStartMax?.Invoke(Value) ?? 0f };
+        }
+
+        // Override the random change min value if the update delegate is set
+        // This is the end value that the easing function is trying to approach
+        if (this.settings.UpdateRandomChangeMin is not null)
+        {
+            this.settings = this.settings with { RandomChangeMin = this.settings.UpdateRandomChangeMin?.Invoke(Value) ?? 0f };
+        }
+
+        // Override the random change max value if the update delegate is set
+        // This is the end value that the easing function is trying to approach
+        if (this.settings.UpdateRandomChangeMax is not null)
+        {
+            this.settings = this.settings with { RandomChangeMax = this.settings.UpdateRandomChangeMax?.Invoke(Value) ?? 0f };
         }
 
         base.Update(timeElapsed);
