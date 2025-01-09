@@ -12,7 +12,7 @@
             "baseBranch": "preview",
             "genReleaseSettingsFilePath": "./dev-tools/prev-gen-release-notes-settings.json",
             "releaseNotesDirPath": "./ReleaseNotes",
-            "releasePrTemplateFilePath": "./templates",
+            "releasePrTemplateFilePath": "./templates/prev-prepare-release-template.md",
             "releaseLabels": [
                 "🚀preview-release"
             ],
@@ -26,7 +26,7 @@
             "baseBranch": "preview",
             "genReleaseSettingsFilePath": "./dev-tools/prod-gen-release-notes-settings.json",
             "releaseNotesDirPath": "./ReleaseNotes",
-            "releasePrTemplateFilePath": "./templates",
+            "releasePrTemplateFilePath": "./templates/prod-prepare-release-template.md",
             "releaseLabels": [
                 "🚀preview-release"
             ],
