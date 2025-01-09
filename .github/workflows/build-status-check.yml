@@ -16,7 +16,7 @@ on:
 jobs:
   build_main_project:
     name: Build Main Project
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v14.1.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}"
       build-config: Debug
@@ -29,7 +29,7 @@ jobs:
 
   build_testing_project:
     name: Build Testing Project
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v14.1.0
     with:
       project-name: "${{ vars.PROJECT_NAME }}Testing"
       build-config: Debug
@@ -42,7 +42,7 @@ jobs:
 
   build_random_perf_app:
     name: Build Random Perf Project
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v14.1.0
     with:
       project-name: "RandomPerf"
       build-config: Debug
@@ -55,7 +55,7 @@ jobs:
 
   build_engine_perf_app:
     name: Build Engine Perf Project
-    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v13.6.3
+    uses: KinsonDigital/Infrastructure/.github/workflows/build-csharp-project.yml@v14.1.0
     with:
       project-name: "EnginePerf"
       build-config: Debug
