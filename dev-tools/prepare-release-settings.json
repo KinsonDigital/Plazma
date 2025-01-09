@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/KinsonDigital/kd-admin/preview/schemas/prepare-release-schema.json",
     "ownerName": "KinsonDigital",
     "repoName": "Plazma",
     "orgProjectName": "KD-Team",
@@ -33,5 +34,6 @@
         }
     ],
     "githubTokenEnvVarName": "CICD_TOKEN",
-    "versionFilePath": "./Plazma/Plazma.csproj"
+    "versionFilePath": "./Plazma/Plazma.csproj",
+    "releaseNotesFilePrefix": "Release-Notes-"
 }
