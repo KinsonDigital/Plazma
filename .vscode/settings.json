@@ -1,13 +1,23 @@
 {
     "cSpell.words": [
+		"benchmarkdotnet",
 		"CICD",
 		"demilestoned",
+		"fluentassertions",
+		"kdadmin",
+		"kdgui",
 		"Kinson",
+		"kinsondigital",
 		"milestoned",
+		"msbuild",
+		"nsubstitute",
 		"Plazma",
 		"pwsh",
 		"REPONAME",
-		"runsettings"
+		"runsettings",
+		"simpleinjector",
+		"velaptor",
+		"xunit"
 	],
     "dotnet.defaultSolution": "Plazma.sln",
 	"editor.detectIndentation": false,
